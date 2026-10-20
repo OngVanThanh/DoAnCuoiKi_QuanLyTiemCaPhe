@@ -1,0 +1,7 @@
+# Bỏ qua thư mục cấu hình nội bộ của Visual Studio
+.vs/
+*.vsidx
+
+# Bỏ qua các thư mục build sinh tự động
+[Bb]in/
+[Oo]bj/
