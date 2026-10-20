@@ -16,5 +16,40 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         {
             InitializeComponent();
         }
+
+        private void AddBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void UpdateBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void DeleteBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void RewriteBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void SearchTxt_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void SearchBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void RefreshBtn_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
