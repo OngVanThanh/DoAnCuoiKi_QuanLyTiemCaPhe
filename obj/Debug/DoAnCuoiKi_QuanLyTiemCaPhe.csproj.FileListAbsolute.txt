@@ -12,3 +12,4 @@ C:\Users\THANH\source\repos\DoAnCuoiKi_QuanLyTiemCaPhe\DoAnCuoiKi_QuanLyTiemCaPh
 C:\Users\THANH\source\repos\DoAnCuoiKi_QuanLyTiemCaPhe\DoAnCuoiKi_QuanLyTiemCaPhe\obj\Debug\DoAnCuoiKi_QuanLyTiemCaPhe.exe.config
 C:\Users\THANH\source\repos\DoAnCuoiKi_QuanLyTiemCaPhe\DoAnCuoiKi_QuanLyTiemCaPhe\obj\Debug\DoAnCuoiKi_QuanLyTiemCaPhe.FrmMain.resources
 C:\Users\THANH\source\repos\DoAnCuoiKi_QuanLyTiemCaPhe\DoAnCuoiKi_QuanLyTiemCaPhe\obj\Debug\DoAnCuoiKi_QuanLyTiemCaPhe.FrmPermission.resources
+C:\Users\THANH\source\repos\DoAnCuoiKi_QuanLyTiemCaPhe\DoAnCuoiKi_QuanLyTiemCaPhe\obj\Debug\DoAnCuoiKi_QuanLyTiemCaPhe.FrmAppConfig.resources

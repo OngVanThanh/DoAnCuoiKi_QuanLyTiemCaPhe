@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="CoffeeShopDB" Class="CoffeeShopDataContextDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=localhost;Initial Catalog=CoffeeShopDB;Integrated Security=True;Trust Server Certificate=True" SettingsObjectName="DoAnCuoiKi_QuanLyTiemCaPhe.Properties.Settings" SettingsPropertyName="CoffeeShopDBConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Areas" Member="Areas">
+    <Type Name="Area">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="AreaName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Association Name="Area_Table" Member="Tables" ThisKey="Id" OtherKey="AreaId" Type="Table" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Categories" Member="Categories">
+    <Type Name="Category">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CategoryName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Association Name="Category_Product" Member="Products" ThisKey="Id" OtherKey="CategoryId" Type="Product" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Customers" Member="Customers">
+    <Type Name="Customer">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CustomerName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Phone" Type="System.String" DbType="VarChar(15) NOT NULL" CanBeNull="false" />
+      <Column Name="RewardPoints" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="MembershipTier" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Association Name="Customer_Order" Member="Orders" ThisKey="Id" OtherKey="CustomerId" Type="Order" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Employees" Member="Employees">
+    <Type Name="Employee">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="FullName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Phone" Type="System.String" DbType="VarChar(15)" CanBeNull="true" />
+      <Column Name="Address" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Position" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Salary" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="HireDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Association Name="Employee_InventoryTransaction" Member="InventoryTransactions" ThisKey="Id" OtherKey="EmployeeId" Type="InventoryTransaction" />
+      <Association Name="Employee_User" Member="Users" ThisKey="Id" OtherKey="EmployeeId" Type="User" />
+      <Association Name="Employee_Order" Member="Orders" ThisKey="Id" OtherKey="EmployeeId" Type="Order" />
+    </Type>
+  </Table>
+  <Table Name="dbo.InventoryTransactions" Member="InventoryTransactions">
+    <Type Name="InventoryTransaction">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="MaterialId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="EmployeeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TransactionType" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="TransactionDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Employee_InventoryTransaction" Member="Employee" ThisKey="EmployeeId" OtherKey="Id" Type="Employee" IsForeignKey="true" />
+      <Association Name="Material_InventoryTransaction" Member="Material" ThisKey="MaterialId" OtherKey="Id" Type="Material" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Materials" Member="Materials">
+    <Type Name="Material">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="MaterialName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Unit" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="QuantityInStock" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="MinThreshold" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="Material_InventoryTransaction" Member="InventoryTransactions" ThisKey="Id" OtherKey="MaterialId" Type="InventoryTransaction" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OrderDetails" Member="OrderDetails">
+    <Type Name="OrderDetail">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="OrderId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UnitPrice" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TotalPrice" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Association Name="Product_OrderDetail" Member="Product" ThisKey="ProductId" OtherKey="Id" Type="Product" IsForeignKey="true" />
+      <Association Name="Order_OrderDetail" Member="Order" ThisKey="OrderId" OtherKey="Id" Type="Order" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Products" Member="Products">
+    <Type Name="Product">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ProductName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="CategoryId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Unit" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="ImagePath" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Product_OrderDetail" Member="OrderDetails" ThisKey="Id" OtherKey="ProductId" Type="OrderDetail" />
+      <Association Name="Category_Product" Member="Category" ThisKey="CategoryId" OtherKey="Id" Type="Category" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Promotions" Member="Promotions">
+    <Type Name="Promotion">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PromoCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="DiscountPercent" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="StartDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="EndDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Promotion_Order" Member="Orders" ThisKey="Id" OtherKey="PromotionId" Type="Order" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Roles" Member="Roles">
+    <Type Name="Role">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="RoleName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Association Name="Role_User" Member="Users" ThisKey="Id" OtherKey="RoleId" Type="User" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Tables" Member="Tables">
+    <Type Name="Table">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TableName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="AreaId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Association Name="Table_Order" Member="Orders" ThisKey="Id" OtherKey="TableId" Type="Order" />
+      <Association Name="Area_Table" Member="Area" ThisKey="AreaId" OtherKey="Id" Type="Area" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Users" Member="Users">
+    <Type Name="User">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="EmployeeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Username" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PasswordHash" Type="System.String" DbType="VarChar(256) NOT NULL" CanBeNull="false" />
+      <Column Name="Salt" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="RoleId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Employee_User" Member="Employee" ThisKey="EmployeeId" OtherKey="Id" Type="Employee" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="Role_User" Member="Role" ThisKey="RoleId" OtherKey="Id" Type="Role" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Orders" Member="Orders">
+    <Type Name="Order">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TableId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="EmployeeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="OrderDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TotalAmount" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="DiscountAmount" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="FinalAmount" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="PromotionId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Order_OrderDetail" Member="OrderDetails" ThisKey="Id" OtherKey="OrderId" Type="OrderDetail" />
+      <Association Name="Customer_Order" Member="Customer" ThisKey="CustomerId" OtherKey="Id" Type="Customer" IsForeignKey="true" />
+      <Association Name="Employee_Order" Member="Employee" ThisKey="EmployeeId" OtherKey="Id" Type="Employee" IsForeignKey="true" />
+      <Association Name="Promotion_Order" Member="Promotion" ThisKey="PromotionId" OtherKey="Id" Type="Promotion" IsForeignKey="true" />
+      <Association Name="Table_Order" Member="Table" ThisKey="TableId" OtherKey="Id" Type="Table" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>
