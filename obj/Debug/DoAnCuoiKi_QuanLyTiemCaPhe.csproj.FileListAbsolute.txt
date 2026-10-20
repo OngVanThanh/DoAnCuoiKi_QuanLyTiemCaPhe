@@ -12,3 +12,19 @@ C:\Users\THANH\source\repos\DoAnCuoiKi_QuanLyTiemCaPhe\DoAnCuoiKi_QuanLyTiemCaPh
 C:\Users\THANH\source\repos\DoAnCuoiKi_QuanLyTiemCaPhe\DoAnCuoiKi_QuanLyTiemCaPhe\obj\Debug\DoAnCuoiKi_QuanLyTiemCaPhe.exe.config
 C:\Users\THANH\source\repos\DoAnCuoiKi_QuanLyTiemCaPhe\DoAnCuoiKi_QuanLyTiemCaPhe\obj\Debug\DoAnCuoiKi_QuanLyTiemCaPhe.FrmMain.resources
 C:\Users\THANH\source\repos\DoAnCuoiKi_QuanLyTiemCaPhe\DoAnCuoiKi_QuanLyTiemCaPhe\obj\Debug\DoAnCuoiKi_QuanLyTiemCaPhe.FrmPermission.resources
+E:\Lap trinh win\Cuoi ki\DoAnCuoiKi_QuanLyTiemCaPhe\obj\Debug\DoAnCuoiKi_QuanLyTiemCaPhe.csproj.AssemblyReference.cache
+E:\Lap trinh win\Cuoi ki\DoAnCuoiKi_QuanLyTiemCaPhe\obj\Debug\DoAnCuoiKi_QuanLyTiemCaPhe.FrmOrder.resources
+E:\Lap trinh win\Cuoi ki\DoAnCuoiKi_QuanLyTiemCaPhe\obj\Debug\DoAnCuoiKi_QuanLyTiemCaPhe.FrmAppConfig.resources
+E:\Lap trinh win\Cuoi ki\DoAnCuoiKi_QuanLyTiemCaPhe\obj\Debug\DoAnCuoiKi_QuanLyTiemCaPhe.FrmLogin.resources
+E:\Lap trinh win\Cuoi ki\DoAnCuoiKi_QuanLyTiemCaPhe\obj\Debug\DoAnCuoiKi_QuanLyTiemCaPhe.FrmMain.resources
+E:\Lap trinh win\Cuoi ki\DoAnCuoiKi_QuanLyTiemCaPhe\obj\Debug\DoAnCuoiKi_QuanLyTiemCaPhe.FrmPermission.resources
+E:\Lap trinh win\Cuoi ki\DoAnCuoiKi_QuanLyTiemCaPhe\obj\Debug\DoAnCuoiKi_QuanLyTiemCaPhe.Properties.Resources.resources
+E:\Lap trinh win\Cuoi ki\DoAnCuoiKi_QuanLyTiemCaPhe\obj\Debug\DoAnCuoiKi_QuanLyTiemCaPhe.csproj.GenerateResource.cache
+E:\Lap trinh win\Cuoi ki\DoAnCuoiKi_QuanLyTiemCaPhe\obj\Debug\DoAnCuoiKi_QuanLyTiemCaPhe.csproj.CoreCompileInputs.cache
+E:\Lap trinh win\Cuoi ki\DoAnCuoiKi_QuanLyTiemCaPhe\obj\Debug\DoAnCuoiKi_QuanLyTiemCaPhe.exe
+E:\Lap trinh win\Cuoi ki\DoAnCuoiKi_QuanLyTiemCaPhe\obj\Debug\DoAnCuoiKi_QuanLyTiemCaPhe.pdb
+E:\Lap trinh win\Cuoi ki\DoAnCuoiKi_QuanLyTiemCaPhe\bin\Debug\DoAnCuoiKi_QuanLyTiemCaPhe.exe.config
+E:\Lap trinh win\Cuoi ki\DoAnCuoiKi_QuanLyTiemCaPhe\bin\Debug\DoAnCuoiKi_QuanLyTiemCaPhe.exe
+E:\Lap trinh win\Cuoi ki\DoAnCuoiKi_QuanLyTiemCaPhe\bin\Debug\DoAnCuoiKi_QuanLyTiemCaPhe.pdb
+E:\Lap trinh win\Cuoi ki\DoAnCuoiKi_QuanLyTiemCaPhe\obj\Debug\DoAnCuoiKi_QuanLyTiemCaPhe.FrmChart.resources
+E:\Lap trinh win\Cuoi ki\DoAnCuoiKi_QuanLyTiemCaPhe\obj\Debug\DoAnCuoiKi_QuanLyTiemCaPhe.FrmReportWord.resources

@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -138,6 +139,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form\QuangHung\FrmChart.resx">
+      <DependentUpon>FrmChart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\QuangHung\FrmReportWord.resx">
+      <DependentUpon>FrmReportWord.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form\TanPhat\FrmOrder.resx">
       <DependentUpon>FrmOrder.cs</DependentUpon>
     </EmbeddedResource>

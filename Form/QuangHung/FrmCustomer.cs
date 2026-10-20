@@ -12,37 +12,29 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 {
     public partial class FrmCustomer : Form
     {
-        private void txtCustomerId_TextChanged(object sender, EventArgs e)
+        
+        public FrmCustomer()
         {
-
+            InitializeComponent();
         }
 
-        private void txtCustomerName_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtPhone_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtRewardPoints_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
+        
         private void btnAdd_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-
+         
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
         {
 
         }
@@ -52,9 +44,21 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private void txtCustomerId_TextChanged(object sender, EventArgs e)
         {
+        }
 
+        private void txtCustomerName_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void txtPhone_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void txtRewardPoints_TextChanged(object sender, EventArgs e)
+        {
         }
     }
 }
+

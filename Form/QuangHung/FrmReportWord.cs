@@ -16,5 +16,25 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         {
             InitializeComponent();
         }
+
+        private void dtpFromDate_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dtpToDate_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cboReportType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnExportWord_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
