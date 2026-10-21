@@ -42,29 +42,38 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         }
 
         // 3. Tạo tài khoản người dùng mới
-/*        public bool CreateUser(string username, string password, int roleId, int employeeId)
+        // 3. Tạo tài khoản người dùng mới
+        public bool CreateUser(string username, string password, int roleId, int employeeId)
         {
             using (var db = GetContext())
             {
+                // Kiểm tra tên đăng nhập đã tồn tại chưa
                 if (db.Users.Any(u => u.Username == username))
                 {
-                    return false; // Username đã tồn tại
+                    return false;
                 }
 
-                string hashedPassword = AuthService.HashPassword(password);
+                // Tạo một chuỗi Salt ngẫu nhiên để thỏa mãn ràng buộc NOT NULL của cơ sở dữ liệu
+                string salt = Guid.NewGuid().ToString();
+
+                // Mã hóa mật khẩu (có thể kết hợp salt hoặc mã hóa cơ bản)
+                //string hashedPassword = AuthService.HashPassword(password);
+
                 User newUser = new User
                 {
                     Username = username,
-                    PasswordHash = hashedPassword,
+                    PasswordHash = password,
+                    Salt = salt, // <--- Bổ sung gán giá trị Salt vào đây
                     RoleId = roleId,
                     EmployeeId = employeeId,
                     IsActive = true
                 };
+
                 db.Users.InsertOnSubmit(newUser);
                 db.SubmitChanges();
                 return true;
             }
-        }*/
+        }
         // 4. Cập nhật phân quyền / vai trò cho tài khoản
         public bool UpdateUserRole(int userId, int newRoleId)
         {

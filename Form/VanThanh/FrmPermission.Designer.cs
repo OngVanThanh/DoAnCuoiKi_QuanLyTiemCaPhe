@@ -139,6 +139,7 @@
             this.dgvUsers.RowTemplate.Height = 24;
             this.dgvUsers.Size = new System.Drawing.Size(450, 220);
             this.dgvUsers.TabIndex = 0;
+            this.dgvUsers.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUsers_CellClick);
             // 
             // grpPermissions
             // 
@@ -203,6 +204,7 @@
             this.Name = "FrmPermission";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Quản lý Tài khoản & Phân quyền hệ thống";
+            this.Load += new System.EventHandler(this.FrmPermission_Load);
             this.grpUsers.ResumeLayout(false);
             this.grpUsers.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsers)).EndInit();
