@@ -179,6 +179,12 @@
     <EmbeddedResource Include="Form\TanPhat\FrmOrder.resx">
       <DependentUpon>FrmOrder.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Form\TanPhat\FrmPrintReview.resx">
+      <DependentUpon>FrmPrintReview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\TanPhat\FrmTable.resx">
+      <DependentUpon>FrmTable.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form\VanThanh\FrmAppConfig.resx">
       <DependentUpon>FrmAppConfig.cs</DependentUpon>
     </EmbeddedResource>

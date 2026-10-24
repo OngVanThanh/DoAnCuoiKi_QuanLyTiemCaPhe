@@ -105,8 +105,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         private void menuItemOrder_Click(object sender, EventArgs e)
         {
-            //FrmOrder frm = new FrmOrder(_currentUser);
-            //frm.ShowDialog();
+            FrmOrder frm = new FrmOrder();
+            frm.ShowDialog();
         }
 
         private void menuItemInventory_Click(object sender, EventArgs e)

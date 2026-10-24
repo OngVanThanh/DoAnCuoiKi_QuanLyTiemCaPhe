@@ -28,12 +28,262 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.pnlTables = new System.Windows.Forms.Panel();
+            this.pnlOrder = new System.Windows.Forms.Panel();
+            this.pnlProducts = new System.Windows.Forms.Panel();
+            this.flpTableList = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnSwitchTable = new System.Windows.Forms.Button();
+            this.cboCategoryFilter = new System.Windows.Forms.ComboBox();
+            this.txtSearchProduct = new System.Windows.Forms.TextBox();
+            this.lblSearchProduct = new System.Windows.Forms.Label();
+            this.dgvProductList = new System.Windows.Forms.DataGridView();
+            this.dgvOrderDetails = new System.Windows.Forms.DataGridView();
+            this.nudQuantity = new System.Windows.Forms.NumericUpDown();
+            this.btnAddProduct = new System.Windows.Forms.Button();
+            this.btnRemoveProduct = new System.Windows.Forms.Button();
+            this.txtDiscount = new System.Windows.Forms.TextBox();
+            this.lblDiscount = new System.Windows.Forms.Label();
+            this.lblTotalAmount = new System.Windows.Forms.Label();
+            this.lblFinalAmount = new System.Windows.Forms.Label();
+            this.btnPayAndPrint = new System.Windows.Forms.Button();
+            this.pnlTables.SuspendLayout();
+            this.pnlOrder.SuspendLayout();
+            this.pnlProducts.SuspendLayout();
+            this.flpTableList.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvProductList)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvOrderDetails)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudQuantity)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // pnlTables
+            // 
+            this.pnlTables.Controls.Add(this.flpTableList);
+            this.pnlTables.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pnlTables.Location = new System.Drawing.Point(0, 0);
+            this.pnlTables.Name = "pnlTables";
+            this.pnlTables.Size = new System.Drawing.Size(300, 450);
+            this.pnlTables.TabIndex = 0;
+            // 
+            // pnlOrder
+            // 
+            this.pnlOrder.Controls.Add(this.btnPayAndPrint);
+            this.pnlOrder.Controls.Add(this.lblFinalAmount);
+            this.pnlOrder.Controls.Add(this.lblTotalAmount);
+            this.pnlOrder.Controls.Add(this.lblDiscount);
+            this.pnlOrder.Controls.Add(this.txtDiscount);
+            this.pnlOrder.Controls.Add(this.btnRemoveProduct);
+            this.pnlOrder.Controls.Add(this.btnAddProduct);
+            this.pnlOrder.Controls.Add(this.nudQuantity);
+            this.pnlOrder.Controls.Add(this.dgvOrderDetails);
+            this.pnlOrder.Dock = System.Windows.Forms.DockStyle.Right;
+            this.pnlOrder.Location = new System.Drawing.Point(571, 0);
+            this.pnlOrder.Name = "pnlOrder";
+            this.pnlOrder.Size = new System.Drawing.Size(450, 450);
+            this.pnlOrder.TabIndex = 1;
+            // 
+            // pnlProducts
+            // 
+            this.pnlProducts.Controls.Add(this.dgvProductList);
+            this.pnlProducts.Controls.Add(this.lblSearchProduct);
+            this.pnlProducts.Controls.Add(this.txtSearchProduct);
+            this.pnlProducts.Controls.Add(this.cboCategoryFilter);
+            this.pnlProducts.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlProducts.Location = new System.Drawing.Point(300, 0);
+            this.pnlProducts.Name = "pnlProducts";
+            this.pnlProducts.Size = new System.Drawing.Size(271, 450);
+            this.pnlProducts.TabIndex = 2;
+            // 
+            // flpTableList
+            // 
+            this.flpTableList.AutoScroll = true;
+            this.flpTableList.Controls.Add(this.btnSwitchTable);
+            this.flpTableList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flpTableList.Location = new System.Drawing.Point(0, 0);
+            this.flpTableList.Name = "flpTableList";
+            this.flpTableList.Size = new System.Drawing.Size(300, 450);
+            this.flpTableList.TabIndex = 0;
+            // 
+            // btnSwitchTable
+            // 
+            this.btnSwitchTable.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.btnSwitchTable.Location = new System.Drawing.Point(3, 3);
+            this.btnSwitchTable.Name = "btnSwitchTable";
+            this.btnSwitchTable.Size = new System.Drawing.Size(75, 40);
+            this.btnSwitchTable.TabIndex = 0;
+            this.btnSwitchTable.Text = "Chuyển / Gộp bàn";
+            this.btnSwitchTable.UseVisualStyleBackColor = true;
+            // 
+            // cboCategoryFilter
+            // 
+            this.cboCategoryFilter.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cboCategoryFilter.FormattingEnabled = true;
+            this.cboCategoryFilter.Location = new System.Drawing.Point(0, 0);
+            this.cboCategoryFilter.Name = "cboCategoryFilter";
+            this.cboCategoryFilter.Size = new System.Drawing.Size(271, 24);
+            this.cboCategoryFilter.TabIndex = 0;
+            // 
+            // txtSearchProduct
+            // 
+            this.txtSearchProduct.Dock = System.Windows.Forms.DockStyle.Top;
+            this.txtSearchProduct.Location = new System.Drawing.Point(0, 24);
+            this.txtSearchProduct.Name = "txtSearchProduct";
+            this.txtSearchProduct.Size = new System.Drawing.Size(271, 22);
+            this.txtSearchProduct.TabIndex = 1;
+            // 
+            // lblSearchProduct
+            // 
+            this.lblSearchProduct.AutoSize = true;
+            this.lblSearchProduct.Location = new System.Drawing.Point(6, 27);
+            this.lblSearchProduct.Name = "lblSearchProduct";
+            this.lblSearchProduct.Size = new System.Drawing.Size(98, 16);
+            this.lblSearchProduct.TabIndex = 2;
+            this.lblSearchProduct.Text = "Tìm nhanh món";
+            // 
+            // dgvProductList
+            // 
+            this.dgvProductList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvProductList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvProductList.Location = new System.Drawing.Point(0, 46);
+            this.dgvProductList.Name = "dgvProductList";
+            this.dgvProductList.RowHeadersWidth = 51;
+            this.dgvProductList.RowTemplate.Height = 24;
+            this.dgvProductList.Size = new System.Drawing.Size(271, 404);
+            this.dgvProductList.TabIndex = 3;
+            // 
+            // dgvOrderDetails
+            // 
+            this.dgvOrderDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvOrderDetails.Dock = System.Windows.Forms.DockStyle.Top;
+            this.dgvOrderDetails.Location = new System.Drawing.Point(0, 0);
+            this.dgvOrderDetails.Name = "dgvOrderDetails";
+            this.dgvOrderDetails.RowHeadersWidth = 51;
+            this.dgvOrderDetails.RowTemplate.Height = 24;
+            this.dgvOrderDetails.Size = new System.Drawing.Size(450, 150);
+            this.dgvOrderDetails.TabIndex = 0;
+            // 
+            // nudQuantity
+            // 
+            this.nudQuantity.Location = new System.Drawing.Point(294, 169);
+            this.nudQuantity.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudQuantity.Name = "nudQuantity";
+            this.nudQuantity.Size = new System.Drawing.Size(120, 22);
+            this.nudQuantity.TabIndex = 1;
+            this.nudQuantity.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // btnAddProduct
+            // 
+            this.btnAddProduct.Location = new System.Drawing.Point(40, 168);
+            this.btnAddProduct.Name = "btnAddProduct";
+            this.btnAddProduct.Size = new System.Drawing.Size(75, 23);
+            this.btnAddProduct.TabIndex = 2;
+            this.btnAddProduct.Text = "Thêm món";
+            this.btnAddProduct.UseVisualStyleBackColor = true;
+            // 
+            // btnRemoveProduct
+            // 
+            this.btnRemoveProduct.Location = new System.Drawing.Point(153, 168);
+            this.btnRemoveProduct.Name = "btnRemoveProduct";
+            this.btnRemoveProduct.Size = new System.Drawing.Size(75, 23);
+            this.btnRemoveProduct.TabIndex = 3;
+            this.btnRemoveProduct.Text = "Xóa món";
+            this.btnRemoveProduct.UseVisualStyleBackColor = true;
+            // 
+            // txtDiscount
+            // 
+            this.txtDiscount.Location = new System.Drawing.Point(294, 265);
+            this.txtDiscount.Name = "txtDiscount";
+            this.txtDiscount.Size = new System.Drawing.Size(100, 22);
+            this.txtDiscount.TabIndex = 4;
+            // 
+            // lblDiscount
+            // 
+            this.lblDiscount.AutoSize = true;
+            this.lblDiscount.Location = new System.Drawing.Point(212, 268);
+            this.lblDiscount.Name = "lblDiscount";
+            this.lblDiscount.Size = new System.Drawing.Size(76, 16);
+            this.lblDiscount.TabIndex = 5;
+            this.lblDiscount.Text = "Khuyến mãi";
+            // 
+            // lblTotalAmount
+            // 
+            this.lblTotalAmount.AutoSize = true;
+            this.lblTotalAmount.Location = new System.Drawing.Point(291, 310);
+            this.lblTotalAmount.Name = "lblTotalAmount";
+            this.lblTotalAmount.Size = new System.Drawing.Size(87, 16);
+            this.lblTotalAmount.TabIndex = 6;
+            this.lblTotalAmount.Text = "Tổng tiền: 0 đ";
+            // 
+            // lblFinalAmount
+            // 
+            this.lblFinalAmount.AutoSize = true;
+            this.lblFinalAmount.Location = new System.Drawing.Point(291, 336);
+            this.lblFinalAmount.Name = "lblFinalAmount";
+            this.lblFinalAmount.Size = new System.Drawing.Size(98, 16);
+            this.lblFinalAmount.TabIndex = 7;
+            this.lblFinalAmount.Text = "Thanh toán: 0 đ";
+            // 
+            // btnPayAndPrint
+            // 
+            this.btnPayAndPrint.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.btnPayAndPrint.Location = new System.Drawing.Point(0, 400);
+            this.btnPayAndPrint.Name = "btnPayAndPrint";
+            this.btnPayAndPrint.Size = new System.Drawing.Size(450, 50);
+            this.btnPayAndPrint.TabIndex = 8;
+            this.btnPayAndPrint.Text = "Thanh toán & In hóa đơn";
+            this.btnPayAndPrint.UseVisualStyleBackColor = true;
+            // 
+            // FrmOrder
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "FrmOrder";
+            this.ClientSize = new System.Drawing.Size(1021, 450);
+            this.Controls.Add(this.pnlProducts);
+            this.Controls.Add(this.pnlOrder);
+            this.Controls.Add(this.pnlTables);
+            this.Name = "FrmOrder";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Hệ thống Bán hàng";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.pnlTables.ResumeLayout(false);
+            this.pnlOrder.ResumeLayout(false);
+            this.pnlOrder.PerformLayout();
+            this.pnlProducts.ResumeLayout(false);
+            this.pnlProducts.PerformLayout();
+            this.flpTableList.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvProductList)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvOrderDetails)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudQuantity)).EndInit();
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        private System.Windows.Forms.Panel pnlTables;
+        private System.Windows.Forms.Panel pnlOrder;
+        private System.Windows.Forms.Panel pnlProducts;
+        private System.Windows.Forms.FlowLayoutPanel flpTableList;
+        private System.Windows.Forms.Button btnSwitchTable;
+        private System.Windows.Forms.DataGridView dgvProductList;
+        private System.Windows.Forms.Label lblSearchProduct;
+        private System.Windows.Forms.TextBox txtSearchProduct;
+        private System.Windows.Forms.ComboBox cboCategoryFilter;
+        private System.Windows.Forms.Label lblTotalAmount;
+        private System.Windows.Forms.Label lblDiscount;
+        private System.Windows.Forms.TextBox txtDiscount;
+        private System.Windows.Forms.Button btnRemoveProduct;
+        private System.Windows.Forms.Button btnAddProduct;
+        private System.Windows.Forms.NumericUpDown nudQuantity;
+        private System.Windows.Forms.DataGridView dgvOrderDetails;
+        private System.Windows.Forms.Button btnPayAndPrint;
+        private System.Windows.Forms.Label lblFinalAmount;
     }
 }

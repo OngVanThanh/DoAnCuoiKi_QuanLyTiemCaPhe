@@ -28,12 +28,31 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.pnlInput = new System.Windows.Forms.Panel();
+            this.SuspendLayout();
+            // 
+            // pnlInput
+            // 
+            this.pnlInput.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pnlInput.Location = new System.Drawing.Point(0, 0);
+            this.pnlInput.Name = "pnlInput";
+            this.pnlInput.Size = new System.Drawing.Size(200, 450);
+            this.pnlInput.TabIndex = 0;
+            // 
+            // FrmTable
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.pnlInput);
+            this.Name = "FrmTable";
             this.Text = "FrmTable";
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        private System.Windows.Forms.Panel pnlInput;
     }
 }
