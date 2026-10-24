@@ -83,7 +83,7 @@
             this.toolStripMenuItem1,
             this.menuItemExit});
             this.menuSystem.Name = "menuSystem";
-            this.menuSystem.Size = new System.Drawing.Size(85, 24);
+            this.menuSystem.Size = new System.Drawing.Size(85, 26);
             this.menuSystem.Text = "&Hệ thống";
             // 
             // menuItemAppConfig
@@ -274,7 +274,7 @@
             this.lblSystemTime.Name = "lblSystemTime";
             this.lblSystemTime.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.lblSystemTime.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.lblSystemTime.Size = new System.Drawing.Size(174, 20);
+            this.lblSystemTime.Size = new System.Drawing.Size(213, 20);
             this.lblSystemTime.Spring = true;
             this.lblSystemTime.Text = "Thời gian: 00/00/0000 00:00:00";
             this.lblSystemTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -32,9 +33,11 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             var user = _authService.ValidateUser(username, password);
             if (user != null)
             {
+
                 // Đăng nhập thành công
                 MessageBox.Show($"Đăng nhập thành công! Chào mừng bạn, {user.Username}.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 FrmMain frmMain = new FrmMain(user);
+                UserSession.Login(user);
                 this.Hide();
                 frmMain.ShowDialog();
                 this.Close();

@@ -37,6 +37,9 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Data.SqlClient, Version=4.6.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Data.SqlClient.4.9.1\lib\net462\System.Data.SqlClient.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -51,11 +54,23 @@
   <ItemGroup>
     <Compile Include="BLL\AppConfigService.cs" />
     <Compile Include="BLL\AuthService.cs" />
+    <Compile Include="CoffeeShopDataContext.cs">
+      <DependentUpon>CoffeeShopDataContext.dbml</DependentUpon>
+    </Compile>
     <Compile Include="CoffeeShopDataContext.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CoffeeShopDataContext.dbml</DependentUpon>
     </Compile>
+    <Compile Include="CoffeeShopDBDataSet1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CoffeeShopDBDataSet1.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\UserRepository.cs" />
+    <Compile Include="DTO\PermissionDTO.cs" />
+    <Compile Include="DTO\RoleDTO.cs" />
+    <Compile Include="DTO\UserDTO.cs" />
     <Compile Include="Form\VanThanh\FrmLogin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -149,6 +164,9 @@
     <Compile Include="BLL\PermissionService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\ConfigHelper.cs" />
+    <Compile Include="Utilities\SecurityHelper.cs" />
+    <Compile Include="Utilities\UserSession.cs" />
     <EmbeddedResource Include="Form\QuangHung\FrmChart.resx">
       <DependentUpon>FrmChart.cs</DependentUpon>
     </EmbeddedResource>
@@ -190,6 +208,18 @@
     <None Include="CoffeeShopDataContext.dbml.layout">
       <DependentUpon>CoffeeShopDataContext.dbml</DependentUpon>
     </None>
+    <None Include="CoffeeShopDBDataSet1.xsc">
+      <DependentUpon>CoffeeShopDBDataSet1.xsd</DependentUpon>
+    </None>
+    <None Include="CoffeeShopDBDataSet1.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>CoffeeShopDBDataSet1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="CoffeeShopDBDataSet1.xss">
+      <DependentUpon>CoffeeShopDBDataSet1.xsd</DependentUpon>
+    </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -207,5 +237,6 @@
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

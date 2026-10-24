@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DoAnCuoiKi_QuanLyTiemCaPhe.DAL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,6 +14,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
     public partial class FrmMain : Form
     {
         private User _currentUser;
+        private Role _currentRole;
         private Timer _systemTimer;
         public FrmMain(User user)
         {
@@ -25,10 +27,12 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             if (_currentUser != null)
             {
                 lblCurrentUser.Text = $"Người dùng: {_currentUser.Username}";
-                lblCurrentRole.Text = $"Vai trò: {_currentUser.RoleId}";
+                var userRepository = new UserRepository();
+                _currentRole = userRepository.GetRoleById(_currentUser.RoleId);
 
+                lblCurrentRole.Text = _currentRole != null ? $"Vai trò: {_currentRole.RoleName}" : "Vai trò: Chưa xác định";
                 // Hiển thị thông tin người dùng hiện tại trên status strip
-                if(_currentUser.RoleId != 1)
+                if (_currentUser.RoleId != 1)
                 {
                     menuItemPermission.Visible = false;
                     menuItemAppConfig.Visible = false;
