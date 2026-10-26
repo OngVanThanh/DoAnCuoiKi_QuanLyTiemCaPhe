@@ -54,6 +54,8 @@
   <ItemGroup>
     <Compile Include="BLL\AppConfigService.cs" />
     <Compile Include="BLL\AuthService.cs" />
+    <Compile Include="BLL\OrderService.cs" />
+    <Compile Include="BLL\TableService.cs" />
     <Compile Include="CoffeeShopDataContext.cs">
       <DependentUpon>CoffeeShopDataContext.dbml</DependentUpon>
     </Compile>
@@ -67,9 +69,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CoffeeShopDBDataSet1.xsd</DependentUpon>
     </Compile>
+    <Compile Include="DAL\OrderRepository.cs" />
+    <Compile Include="DAL\TableRepository.cs" />
     <Compile Include="DAL\UserRepository.cs" />
+    <Compile Include="DTO\AreaDTO.cs" />
+    <Compile Include="DTO\OrderDetailDTO.cs" />
+    <Compile Include="DTO\OrderDTO.cs" />
     <Compile Include="DTO\PermissionDTO.cs" />
     <Compile Include="DTO\RoleDTO.cs" />
+    <Compile Include="DTO\TableDTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />
     <Compile Include="Form\VanThanh\FrmLogin.cs">
       <SubType>Form</SubType>
@@ -165,6 +173,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\ConfigHelper.cs" />
+    <Compile Include="Utilities\PrintHelper.cs" />
     <Compile Include="Utilities\SecurityHelper.cs" />
     <Compile Include="Utilities\UserSession.cs" />
     <EmbeddedResource Include="Form\QuangHung\FrmChart.resx">
