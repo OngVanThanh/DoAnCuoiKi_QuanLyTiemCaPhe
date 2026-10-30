@@ -522,7 +522,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true)]
 		public int Id
 		{
 			get

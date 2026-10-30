@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="CoffeeShopDB" Class="CoffeeShopDataContextDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=localhost;Initial Catalog=CoffeeShopDB;Integrated Security=True;Trust Server Certificate=True" SettingsObjectName="DoAnCuoiKi_QuanLyTiemCaPhe.Properties.Settings" SettingsPropertyName="CoffeeShopDBConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=DESKTOP-GSTKIJ6\MSSQLSERVER01;Initial Catalog=CoffeeShopDB;Integrated Security=True;Trust Server Certificate=True" SettingsObjectName="DoAnCuoiKi_QuanLyTiemCaPhe.Properties.Settings" SettingsPropertyName="CoffeeShopDBConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Areas" Member="Areas">
     <Type Name="Area">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -18,7 +18,7 @@
   </Table>
   <Table Name="dbo.Customers" Member="Customers">
     <Type Name="Customer">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="CustomerName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
       <Column Name="Phone" Type="System.String" DbType="VarChar(15) NOT NULL" CanBeNull="false" />
       <Column Name="RewardPoints" Type="System.Int32" DbType="Int" CanBeNull="true" />

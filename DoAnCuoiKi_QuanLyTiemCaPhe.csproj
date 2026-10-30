@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="BLL\AppConfigService.cs" />
     <Compile Include="BLL\AuthService.cs" />
+    <Compile Include="BLL\CustomerService.cs" />
     <Compile Include="CoffeeShopDataContext.cs">
       <DependentUpon>CoffeeShopDataContext.dbml</DependentUpon>
     </Compile>
@@ -67,8 +68,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CoffeeShopDBDataSet1.xsd</DependentUpon>
     </Compile>
+    <Compile Include="DAL\CustomerRepository.cs" />
     <Compile Include="DAL\UserRepository.cs" />
+    <Compile Include="DTO\CustomerDTO.cs" />
     <Compile Include="DTO\PermissionDTO.cs" />
+    <Compile Include="DTO\RevenueStatisticDTO.cs" />
     <Compile Include="DTO\RoleDTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />
     <Compile Include="Form\VanThanh\FrmLogin.cs">
