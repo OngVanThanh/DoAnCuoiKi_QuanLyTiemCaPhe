@@ -24,7 +24,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             {
                 return null;
             }
-            using (var db = new CoffeeShopDataContextDataContext())
+            using (var db = GetContext())
             {
                 return db.Users.FirstOrDefault(u => u.Username == username);
             }
