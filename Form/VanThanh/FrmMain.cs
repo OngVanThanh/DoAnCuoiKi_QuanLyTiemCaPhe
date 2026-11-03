@@ -23,6 +23,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         }
         private void FrmMain_Load(object sender, EventArgs e)
         {
+
             // 1. Hiển thị thông tin người dùng và quyền lên StatusStrip
             if (_currentUser != null)
             {
@@ -31,12 +32,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 _currentRole = userRepository.GetRoleById(_currentUser.RoleId);
 
                 lblCurrentRole.Text = _currentRole != null ? $"Vai trò: {_currentRole.RoleName}" : "Vai trò: Chưa xác định";
-                // Hiển thị thông tin người dùng hiện tại trên status strip
-                if (_currentUser.RoleId != 1)
-                {
-                    menuItemPermission.Visible = false;
-                    menuItemAppConfig.Visible = false;
-                }
+                ApplyPermisisonsToMenu();
             }
             lblSystemTime.Text = $"Thời gian: {DateTime.Now:dd/MM/yyyy HH:mm:ss}";
             // 2. Khởi tạo đồng hồ hệ thống để hiển thị thời gian thực trên StatusStrip
@@ -48,6 +44,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
             };
             _systemTimer.Start();
+            this.BeginInvoke((MethodInvoker)delegate {
+                FrmOrder frmOrder = new FrmOrder();
+                frmOrder.ShowDialog(); // Hoặc dùng frmOrder.Show(); tùy bạn muốn chặn hay không chặn FrmMain
+            });
         }
         private void OpenChildForm(Form childForm)
         {
@@ -58,7 +58,35 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             pnlContent.Controls.Add(childForm);
             childForm.Show();
         }
-
+        private  void ApplyPermisisonsToMenu()
+        {
+            int roleId = _currentUser.RoleId;
+            if (roleId == 1) // Admin
+            {
+                menuSystem.Visible = true;
+                menuCategory.Visible = true;
+                menuBusiness.Visible = true;
+                menuReport.Visible = true;
+                menuPermission.Visible = true;
+            }
+            else if (roleId == 2)
+            {
+                menuItemAppConfig.Visible = false;
+                menuItemCategory.Visible = false;
+                menuItemProduct.Visible = false;
+                menuItemEmployee.Visible = false;
+                menuItemInventory.Visible = false;
+                menuPermission.Visible = false;
+            }
+            else if (roleId == 3) // Staff
+            {
+                menuItemAppConfig.Visible = false;
+                menuCategory.Visible = false;
+                menuItemPromotion.Visible = false;
+                menuReport.Visible = false;
+                menuPermission.Visible = false;
+            }
+        }
         private void menuItemAppConfig_Click(object sender, EventArgs e)
         {
             FrmAppConfig frm = new FrmAppConfig();

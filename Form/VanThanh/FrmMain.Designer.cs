@@ -41,14 +41,14 @@
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.menuItemEmployee = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemCustomer = new System.Windows.Forms.ToolStripMenuItem();
-            this.nghiệpVụToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuBusiness = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemOrder = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemInventory = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemPromotion = new System.Windows.Forms.ToolStripMenuItem();
             this.menuReport = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemReportWord = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemChart = new System.Windows.Forms.ToolStripMenuItem();
-            this.phânQuyềnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuPermission = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemPermission = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStripMain = new System.Windows.Forms.StatusStrip();
             this.lblCurrentUser = new System.Windows.Forms.ToolStripStatusLabel();
@@ -66,9 +66,9 @@
             this.menuStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuSystem,
             this.menuCategory,
-            this.nghiệpVụToolStripMenuItem,
+            this.menuBusiness,
             this.menuReport,
-            this.phânQuyềnToolStripMenuItem});
+            this.menuPermission});
             this.menuStripMain.Location = new System.Drawing.Point(0, 0);
             this.menuStripMain.Name = "menuStripMain";
             this.menuStripMain.Size = new System.Drawing.Size(800, 30);
@@ -165,15 +165,15 @@
             this.menuItemCustomer.Text = "Quản lý Khách hàng & Tích điểm";
             this.menuItemCustomer.Click += new System.EventHandler(this.menuItemCustomer_Click);
             // 
-            // nghiệpVụToolStripMenuItem
+            // menuBusiness
             // 
-            this.nghiệpVụToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuBusiness.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuItemOrder,
             this.menuItemInventory,
             this.menuItemPromotion});
-            this.nghiệpVụToolStripMenuItem.Name = "nghiệpVụToolStripMenuItem";
-            this.nghiệpVụToolStripMenuItem.Size = new System.Drawing.Size(91, 26);
-            this.nghiệpVụToolStripMenuItem.Text = "&Nghiệp vụ";
+            this.menuBusiness.Name = "menuBusiness";
+            this.menuBusiness.Size = new System.Drawing.Size(91, 26);
+            this.menuBusiness.Text = "&Nghiệp vụ";
             // 
             // menuItemOrder
             // 
@@ -219,13 +219,13 @@
             this.menuItemChart.Text = "Biểu đồ thống kê doanh thu";
             this.menuItemChart.Click += new System.EventHandler(this.menuItemChart_Click);
             // 
-            // phânQuyềnToolStripMenuItem
+            // menuPermission
             // 
-            this.phânQuyềnToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuPermission.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuItemPermission});
-            this.phânQuyềnToolStripMenuItem.Name = "phânQuyềnToolStripMenuItem";
-            this.phânQuyềnToolStripMenuItem.Size = new System.Drawing.Size(99, 26);
-            this.phânQuyềnToolStripMenuItem.Text = "&Phân quyền";
+            this.menuPermission.Name = "menuPermission";
+            this.menuPermission.Size = new System.Drawing.Size(99, 26);
+            this.menuPermission.Text = "&Phân quyền";
             // 
             // menuItemPermission
             // 
@@ -333,14 +333,14 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem menuItemEmployee;
         private System.Windows.Forms.ToolStripMenuItem menuItemCustomer;
-        private System.Windows.Forms.ToolStripMenuItem nghiệpVụToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuBusiness;
         private System.Windows.Forms.ToolStripMenuItem menuItemOrder;
         private System.Windows.Forms.ToolStripMenuItem menuItemInventory;
         private System.Windows.Forms.ToolStripMenuItem menuItemPromotion;
         private System.Windows.Forms.ToolStripMenuItem menuReport;
         private System.Windows.Forms.ToolStripMenuItem menuItemReportWord;
         private System.Windows.Forms.ToolStripMenuItem menuItemChart;
-        private System.Windows.Forms.ToolStripMenuItem phânQuyềnToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuPermission;
         private System.Windows.Forms.ToolStripMenuItem menuItemPermission;
         private System.Windows.Forms.StatusStrip statusStripMain;
         private System.Windows.Forms.Panel pnlContent;
