@@ -4,14 +4,15 @@ using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace DoAnCuoiKi_QuanLyTiemCaPhe
 {
     /// <summary>
-    /// Màn hình Bán hàng & Gọi món tại bàn (FrmOrder).
-    /// Quản lý sơ đồ bàn trực quan, lọc/tìm kiếm món, thêm/xóa món trong hóa đơn,
-    /// áp dụng khuyến mãi, chuyển/gộp bàn và thanh toán kèm in hóa đơn K80.
+    /// Màn hình POS Bán hàng & Đặt món tại bàn (FrmOrder).
+    /// Kết hợp sơ đồ bàn trực quan, danh mục thẻ món ăn/thức uống bằng UserControl (UcProductCard),
+    /// bảng tra cứu nhanh, tính tiền khuyến mãi/VAT tự động, chuyển/gộp bàn và in hóa đơn K80.
     /// </summary>
     public partial class FrmOrder : Form
     {
@@ -20,7 +21,9 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         private int _selectedTableId = -1;
         private string _selectedTableName = string.Empty;
+        private int _selectedProductId = -1;
         private bool _isLoading = false;
+        private Dictionary<int, string> _categoryNameMap = new Dictionary<int, string>();
 
         public FrmOrder()
         {
@@ -33,15 +36,20 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             try
             {
                 _isLoading = true;
-                LoadCategoriesToComboBox();
-                LoadProductsToGrid();
+
+                // Đồng bộ giao diện bảng với UIHelper của nhóm
+                UIHelper.StyleDataGridView(dgvProductList);
+                UIHelper.StyleDataGridView(dgvOrderDetails);
+
+                LoadCategoriesToComboBoxAndPills();
+                LoadProductsToMenuAndGrid();
                 LoadTableButtons();
                 UpdateOrderSummaryDisplay();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    "Đã xảy ra lỗi khi khởi tạo màn hình bán hàng:\n" + ex.Message,
+                    "Đã xảy ra lỗi khi khởi tạo màn hình POS bán hàng:\n" + ex.Message,
                     "Lỗi",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -52,13 +60,15 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
         }
 
-        // 2. Tải danh sách nhóm món vào ComboBox cboCategoryFilter (có mục "Tất cả nhóm món")
-        private void LoadCategoriesToComboBox()
+        // 2. Tải danh sách nhóm món vào ComboBox cboCategoryFilter và tạo các nút lọc nhanh (Pills) như Mộc Cafe
+        private void LoadCategoriesToComboBoxAndPills()
         {
             var categories = _orderService.GetAllCategories();
+            _categoryNameMap = categories.ToDictionary(c => c.Id, c => c.CategoryName);
+
             var filterItems = new List<Category>
             {
-                new Category { Id = 0, CategoryName = "-- Tất cả nhóm món --" }
+                new Category { Id = 0, CategoryName = "Tất cả nhóm món" }
             };
             filterItems.AddRange(categories);
 
@@ -67,22 +77,65 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             cboCategoryFilter.ValueMember = "Id";
             cboCategoryFilter.DataSource = filterItems;
             cboCategoryFilter.SelectedIndex = 0;
+
+            RenderCategoryFilterPills(filterItems, 0);
         }
 
-        // 3. Tải danh sách món đang kinh doanh vào DataGridView dgvProductList
-        private void LoadProductsToGrid()
+        // 3. Tạo thanh nút chọn nhanh nhóm món (Tất cả, Cà phê, Trà & Trà sữa, Nước ép, Bánh ngọt)
+        private void RenderCategoryFilterPills(List<Category> categories, int activeCategoryId)
         {
-            int? categoryId = null;
-            if (cboCategoryFilter.SelectedValue != null &&
-                int.TryParse(cboCategoryFilter.SelectedValue.ToString(), out int selectedCatId) &&
-                selectedCatId > 0)
+            flpCategoryPills.SuspendLayout();
+            flpCategoryPills.Controls.Clear();
+
+            foreach (var cat in categories)
             {
-                categoryId = selectedCatId;
+                bool isActive = (cat.Id == activeCategoryId);
+                Button btnPill = new Button
+                {
+                    Text = cat.CategoryName,
+                    AutoSize = true,
+                    Height = 30,
+                    Margin = new Padding(0, 2, 6, 2),
+                    Padding = new Padding(8, 0, 8, 0),
+                    FlatStyle = FlatStyle.Flat,
+                    Cursor = Cursors.Hand,
+                    Tag = cat.Id,
+                    Font = new Font("Segoe UI", 8.5F, isActive ? FontStyle.Bold : FontStyle.Regular),
+                    BackColor = isActive ? UIHelper.PrimaryCoffee : Color.FromArgb(242, 237, 229),
+                    ForeColor = isActive ? Color.White : UIHelper.PrimaryCoffee,
+                    UseMnemonic = false
+                };
+                btnPill.FlatAppearance.BorderSize = 0;
+                btnPill.Click += CategoryPill_Click;
+                flpCategoryPills.Controls.Add(btnPill);
             }
 
-            string keyword = txtSearchProduct.Text.Trim();
-            var products = _orderService.SearchProducts(categoryId, keyword);
+            flpCategoryPills.ResumeLayout();
+        }
 
+        // 4. Sự kiện khi nhấn vào nút Pill danh mục món
+        private void CategoryPill_Click(object sender, EventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is int catId)
+            {
+                cboCategoryFilter.SelectedValue = catId;
+            }
+        }
+
+        // 5. Tải danh sách món lên cả danh mục UserControl (flpProductMenu) và bảng dgvProductList
+        private void LoadProductsToMenuAndGrid()
+        {
+            int selectedCatId = 0;
+            if (cboCategoryFilter.SelectedValue != null)
+            {
+                int.TryParse(cboCategoryFilter.SelectedValue.ToString(), out selectedCatId);
+            }
+
+            int? categoryFilter = selectedCatId > 0 ? (int?)selectedCatId : null;
+            string keyword = txtSearchProduct.Text.Trim();
+            var products = _orderService.SearchProducts(categoryFilter, keyword);
+
+            // 5a. Nạp dữ liệu vào bảng dgvProductList
             dgvProductList.DataSource = null;
             dgvProductList.DataSource = products;
 
@@ -101,7 +154,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             if (dgvProductList.Columns.Contains("Unit"))
                 dgvProductList.Columns["Unit"].HeaderText = "ĐVT";
 
-            // Ẩn các cột kỹ thuật của LINQ to SQL Entity
             string[] hiddenCols = { "CategoryId", "ImagePath", "IsActive", "Category", "OrderDetails" };
             foreach (string col in hiddenCols)
             {
@@ -109,14 +161,69 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                     dgvProductList.Columns[col].Visible = false;
             }
 
-            dgvProductList.ReadOnly = true;
-            dgvProductList.AllowUserToAddRows = false;
-            dgvProductList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvProductList.MultiSelect = false;
-            dgvProductList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            // 5b. Nạp danh sách thẻ UserControl UcProductCard vào flpProductMenu
+            flpProductMenu.SuspendLayout();
+            flpProductMenu.Controls.Clear();
+
+            foreach (var prod in products)
+            {
+                string catName = _categoryNameMap.ContainsKey(prod.CategoryId)
+                    ? _categoryNameMap[prod.CategoryId]
+                    : "Thực đơn";
+
+                UcProductCard card = new UcProductCard();
+                card.BindData(prod, catName);
+                card.SetSelected(prod.Id == _selectedProductId);
+                card.ProductSelected += UcProductCard_ProductSelected;
+                card.ProductAddClicked += UcProductCard_ProductAddClicked;
+
+                flpProductMenu.Controls.Add(card);
+            }
+
+            flpProductMenu.ResumeLayout();
         }
 
-        // 4. Hiển thị danh sách bàn dưới dạng các Button trực quan trên FlowLayoutPanel flpTableList
+        // 6. Sự kiện khi click chọn 1 thẻ món UcProductCard trên menu
+        private void UcProductCard_ProductSelected(object sender, Product product)
+        {
+            if (product == null)
+                return;
+
+            _selectedProductId = product.Id;
+
+            // Đánh dấu thẻ đang chọn
+            foreach (Control ctrl in flpProductMenu.Controls)
+            {
+                if (ctrl is UcProductCard card && card.ProductData != null)
+                {
+                    card.SetSelected(card.ProductData.Id == _selectedProductId);
+                }
+            }
+
+            // Đồng bộ dòng tương ứng trên dgvProductList
+            foreach (DataGridViewRow row in dgvProductList.Rows)
+            {
+                if (row.Cells["Id"].Value != null &&
+                    Convert.ToInt32(row.Cells["Id"].Value) == _selectedProductId)
+                {
+                    row.Selected = true;
+                    dgvProductList.CurrentCell = row.Cells["ProductName"];
+                    break;
+                }
+            }
+        }
+
+        // 7. Sự kiện khi nhấn nút "+ Thêm" ngay trên thẻ món UcProductCard
+        private void UcProductCard_ProductAddClicked(object sender, Product product)
+        {
+            if (product == null)
+                return;
+
+            _selectedProductId = product.Id;
+            AddProductByIdToCurrentTable(product.Id, (int)nudQuantity.Value);
+        }
+
+        // 8. Hiển thị danh sách bàn dưới dạng các thẻ Button trực quan trên flpTableList
         private void LoadTableButtons()
         {
             flpTableList.SuspendLayout();
@@ -128,37 +235,42 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             {
                 Button btnTable = new Button
                 {
-                    Width = 132,
-                    Height = 76,
+                    Width = 124,
+                    Height = 78,
                     Margin = new Padding(5),
                     Tag = table,
+                    Cursor = Cursors.Hand,
                     Font = new Font("Segoe UI", 9F, FontStyle.Bold),
-                    Text = $"{table.TableName}\n({table.Status})",
+                    Text = $"{table.TableName}\n{table.AreaName}\n[{table.Status}]",
                     FlatStyle = FlatStyle.Flat
                 };
 
                 // Tô màu trực quan theo trạng thái bàn và bàn đang được chọn
                 if (table.Id == _selectedTableId)
                 {
-                    btnTable.BackColor = Color.FromArgb(41, 128, 185);
+                    btnTable.BackColor = UIHelper.PrimaryCoffee;
                     btnTable.ForeColor = Color.White;
-                    btnTable.FlatAppearance.BorderColor = Color.Navy;
+                    btnTable.FlatAppearance.BorderColor = Color.Gold;
                     btnTable.FlatAppearance.BorderSize = 2;
                 }
                 else if (string.Equals(table.Status, "Có khách", StringComparison.OrdinalIgnoreCase))
                 {
-                    btnTable.BackColor = Color.FromArgb(243, 156, 18); // Cam nổi bật cho bàn đang có khách
+                    btnTable.BackColor = Color.FromArgb(230, 126, 34); // Cam đậm cho bàn đang có khách
                     btnTable.ForeColor = Color.White;
+                    btnTable.FlatAppearance.BorderSize = 0;
                 }
                 else if (string.Equals(table.Status, "Đặt trước", StringComparison.OrdinalIgnoreCase))
                 {
-                    btnTable.BackColor = Color.FromArgb(174, 214, 241); // Xanh nhạt cho bàn đặt trước
-                    btnTable.ForeColor = Color.Black;
+                    btnTable.BackColor = Color.FromArgb(52, 152, 219); // Xanh dương cho bàn đặt trước
+                    btnTable.ForeColor = Color.White;
+                    btnTable.FlatAppearance.BorderSize = 0;
                 }
                 else
                 {
-                    btnTable.BackColor = Color.FromArgb(212, 239, 223); // Xanh lá nhạt cho bàn trống
-                    btnTable.ForeColor = Color.DarkGreen;
+                    btnTable.BackColor = Color.FromArgb(212, 239, 223); // Xanh lá dịu cho bàn trống
+                    btnTable.ForeColor = Color.FromArgb(20, 90, 50);
+                    btnTable.FlatAppearance.BorderColor = Color.FromArgb(169, 223, 191);
+                    btnTable.FlatAppearance.BorderSize = 1;
                 }
 
                 btnTable.Click += TableButton_Click;
@@ -168,7 +280,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             flpTableList.ResumeLayout();
         }
 
-        // 5. Sự kiện khi nhân viên click chọn một bàn trên sơ đồ
+        // 9. Sự kiện khi nhân viên click chọn một bàn trên sơ đồ
         private void TableButton_Click(object sender, EventArgs e)
         {
             Button clickedBtn = sender as Button;
@@ -176,19 +288,22 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             {
                 _selectedTableId = table.Id;
                 _selectedTableName = table.TableName;
-                this.Text = $"Hệ thống Bán hàng & Gọi món - Đang chọn: {_selectedTableName} ({table.AreaName})";
+
+                lblSelectedTableBanner.Text = $"Đang chọn: {table.TableName} ({table.AreaName}) · {table.Status}";
+                lblOrderHeaderTitle.Text = $"ĐƠN HÀNG · {table.TableName.ToUpper()}";
 
                 LoadTableButtons();
                 LoadOrderDetailsForSelectedTable();
             }
         }
 
-        // 6. Tải chi tiết hóa đơn hiện tại của bàn đang chọn lên dgvOrderDetails
+        // 10. Tải chi tiết hóa đơn hiện tại của bàn đang chọn lên dgvOrderDetails
         private void LoadOrderDetailsForSelectedTable()
         {
             if (_selectedTableId <= 0)
             {
                 dgvOrderDetails.DataSource = null;
+                lblOrderStatusBadge.Text = "Chưa chọn bàn";
                 UpdateOrderSummaryDisplay();
                 return;
             }
@@ -196,6 +311,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             List<OrderDetailDTO> details = _orderService.GetOrderDetailsByTable(_selectedTableId);
             dgvOrderDetails.DataSource = null;
             dgvOrderDetails.DataSource = details;
+
+            lblOrderStatusBadge.Text = details.Count > 0
+                ? $"Đang phục vụ ({details.Count} món)"
+                : "Bàn đang trống";
 
             if (dgvOrderDetails.Columns.Contains("Id"))
                 dgvOrderDetails.Columns["Id"].Visible = false;
@@ -227,16 +346,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 dgvOrderDetails.Columns["TotalPrice"].DefaultCellStyle.Format = "N0";
             }
 
-            dgvOrderDetails.ReadOnly = true;
-            dgvOrderDetails.AllowUserToAddRows = false;
-            dgvOrderDetails.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvOrderDetails.MultiSelect = false;
-            dgvOrderDetails.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
             UpdateOrderSummaryDisplay();
         }
 
-        // 7. Cập nhật hiển thị Tổng tiền hàng và Tổng thanh toán (sau Giảm giá & VAT)
+        // 11. Cập nhật hiển thị Tổng tiền hàng và Tổng thanh toán (sau Giảm giá & VAT)
         private void UpdateOrderSummaryDisplay()
         {
             if (_selectedTableId <= 0)
@@ -265,29 +378,64 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 ? $" | VAT ({vatPercent:0.##}%): +{vatAmount:N0} đ"
                 : string.Empty;
 
-            lblTotalAmount.Text = $"Tổng tiền: {totalAmount:N0} đ{discountText}{vatText}";
+            lblTotalAmount.Text = $"Tạm tính: {totalAmount:N0} đ{discountText}{vatText}";
             lblFinalAmount.Text = $"Thanh toán: {finalAmount:N0} đ";
         }
 
-        // 8. Sự kiện lọc món theo danh mục
+        // 12. Sự kiện lọc món theo danh mục trên ComboBox
         private void cboCategoryFilter_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (_isLoading)
                 return;
 
-            LoadProductsToGrid();
+            int selectedCatId = 0;
+            if (cboCategoryFilter.SelectedValue != null)
+            {
+                int.TryParse(cboCategoryFilter.SelectedValue.ToString(), out selectedCatId);
+            }
+
+            // Cập nhật trạng thái sáng của các nút Pill danh mục
+            foreach (Control ctrl in flpCategoryPills.Controls)
+            {
+                if (ctrl is Button btn && btn.Tag is int pillCatId)
+                {
+                    bool active = (pillCatId == selectedCatId);
+                    btn.BackColor = active ? UIHelper.PrimaryCoffee : Color.FromArgb(242, 237, 229);
+                    btn.ForeColor = active ? Color.White : UIHelper.PrimaryCoffee;
+                    btn.Font = new Font("Segoe UI", 8.5F, active ? FontStyle.Bold : FontStyle.Regular);
+                }
+            }
+
+            LoadProductsToMenuAndGrid();
         }
 
-        // 9. Sự kiện tìm kiếm nhanh tên món
+        // 13. Sự kiện tìm kiếm nhanh tên món
         private void txtSearchProduct_TextChanged(object sender, EventArgs e)
         {
             if (_isLoading)
                 return;
 
-            LoadProductsToGrid();
+            LoadProductsToMenuAndGrid();
         }
 
-        // 10. Sự kiện double-click vào món trong thực đơn để thêm nhanh vào bàn
+        // 14. Sự kiện click chọn dòng trên bảng dgvProductList (đồng bộ với thẻ UcProductCard)
+        private void dgvProductList_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0 || dgvProductList.Rows[e.RowIndex].Cells["Id"].Value == null)
+                return;
+
+            _selectedProductId = Convert.ToInt32(dgvProductList.Rows[e.RowIndex].Cells["Id"].Value);
+
+            foreach (Control ctrl in flpProductMenu.Controls)
+            {
+                if (ctrl is UcProductCard card && card.ProductData != null)
+                {
+                    card.SetSelected(card.ProductData.Id == _selectedProductId);
+                }
+            }
+        }
+
+        // 15. Sự kiện double-click vào món trong bảng để thêm nhanh vào bàn
         private void dgvProductList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
@@ -296,8 +444,20 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
         }
 
-        // 11. Sự kiện nút "Thêm món" (btnAddProduct)
+        // 16. Sự kiện nút "+ Thêm món" (btnAddProduct)
         private void btnAddProduct_Click(object sender, EventArgs e)
+        {
+            int productId = _selectedProductId;
+            if (productId <= 0 && dgvProductList.CurrentRow != null && dgvProductList.CurrentRow.Cells["Id"].Value != null)
+            {
+                productId = Convert.ToInt32(dgvProductList.CurrentRow.Cells["Id"].Value);
+            }
+
+            AddProductByIdToCurrentTable(productId, (int)nudQuantity.Value);
+        }
+
+        // 17. Hàm dùng chung để thêm món vào bàn đang chọn (gọi từ nút "+ Thêm" trên UcProductCard hoặc nút btnAddProduct)
+        private void AddProductByIdToCurrentTable(int productId, int quantity)
         {
             if (_selectedTableId <= 0)
             {
@@ -309,18 +469,16 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 return;
             }
 
-            if (dgvProductList.CurrentRow == null || dgvProductList.CurrentRow.Cells["Id"].Value == null)
+            if (productId <= 0)
             {
                 MessageBox.Show(
-                    "Vui lòng chọn một món trong danh sách thực đơn!",
+                    "Vui lòng chọn một món trên thẻ Menu hoặc bảng thực đơn!",
                     "Cảnh báo",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
                 return;
             }
 
-            int productId = Convert.ToInt32(dgvProductList.CurrentRow.Cells["Id"].Value);
-            int quantity = (int)nudQuantity.Value;
             int employeeId = UserSession.CurrentUser != null ? UserSession.CurrentUser.EmployeeId : 1;
 
             try
@@ -352,7 +510,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
         }
 
-        // 12. Sự kiện nút "Xóa món" (btnRemoveProduct)
+        // 18. Sự kiện nút "Xóa món" (btnRemoveProduct)
         private void btnRemoveProduct_Click(object sender, EventArgs e)
         {
             if (_selectedTableId <= 0)
@@ -412,7 +570,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
         }
 
-        // 13. Sự kiện khi nhập mã khuyến mãi hoặc số tiền giảm giá (txtDiscount)
+        // 19. Sự kiện khi nhập mã khuyến mãi hoặc số tiền giảm giá (txtDiscount)
         private void txtDiscount_TextChanged(object sender, EventArgs e)
         {
             if (_isLoading)
@@ -421,7 +579,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             UpdateOrderSummaryDisplay();
         }
 
-        // 14. Sự kiện nút "Chuyển / Gộp bàn" (btnSwitchTable)
+        // 20. Sự kiện nút "Chuyển / Gộp bàn" (btnSwitchTable)
         private void btnSwitchTable_Click(object sender, EventArgs e)
         {
             if (_selectedTableId <= 0)
@@ -445,7 +603,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 return;
             }
 
-            // Hiển thị hộp thoại chọn bàn đích
             var allTables = _tableService.GetAllTables();
             var targetCandidates = allTables.FindAll(t => t.Id != _selectedTableId);
 
@@ -458,11 +615,12 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             using (Form dialog = new Form())
             {
                 dialog.Text = $"Chuyển / Gộp từ {_selectedTableName}";
-                dialog.Size = new Size(380, 190);
+                dialog.Size = new Size(390, 195);
                 dialog.FormBorderStyle = FormBorderStyle.FixedDialog;
                 dialog.StartPosition = FormStartPosition.CenterParent;
                 dialog.MaximizeBox = false;
                 dialog.MinimizeBox = false;
+                dialog.BackColor = UIHelper.LightCream;
 
                 Label lblPrompt = new Label
                 {
@@ -474,7 +632,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 ComboBox cboTarget = new ComboBox
                 {
                     Location = new Point(16, 48),
-                    Width = 330,
+                    Width = 340,
                     DropDownStyle = ComboBoxStyle.DropDownList,
                     DisplayMember = "TableName",
                     ValueMember = "Id",
@@ -485,16 +643,22 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 {
                     Text = "Thực hiện",
                     DialogResult = DialogResult.OK,
-                    Location = new Point(170, 95),
-                    Size = new Size(85, 32)
+                    BackColor = UIHelper.SuccessColor,
+                    ForeColor = Color.White,
+                    FlatStyle = FlatStyle.Flat,
+                    Location = new Point(180, 96),
+                    Size = new Size(85, 34)
                 };
 
                 Button btnCancel = new Button
                 {
                     Text = "Hủy",
                     DialogResult = DialogResult.Cancel,
-                    Location = new Point(261, 95),
-                    Size = new Size(85, 32)
+                    BackColor = UIHelper.GrayColor,
+                    ForeColor = Color.White,
+                    FlatStyle = FlatStyle.Flat,
+                    Location = new Point(271, 96),
+                    Size = new Size(85, 34)
                 };
 
                 dialog.Controls.AddRange(new Control[] { lblPrompt, cboTarget, btnConfirm, btnCancel });
@@ -521,6 +685,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                     {
                         _selectedTableId = targetTableId;
                         _selectedTableName = targetDto != null ? targetDto.TableName : $"Bàn #{targetTableId}";
+                        lblSelectedTableBanner.Text = $"Đang chọn: {_selectedTableName} · Có khách";
                         LoadTableButtons();
                         LoadOrderDetailsForSelectedTable();
                     }
@@ -528,7 +693,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
         }
 
-        // 15. Sự kiện nút "Thanh toán & In hóa đơn" (btnPayAndPrint)
+        // 21. Sự kiện nút "Thanh toán & In hóa đơn" (btnPayAndPrint)
         private void btnPayAndPrint_Click(object sender, EventArgs e)
         {
             if (_selectedTableId <= 0)
@@ -576,7 +741,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                     return;
                 }
 
-                // Làm mới lại giao diện bàn và hóa đơn sau khi thanh toán thành công
                 txtDiscount.Clear();
                 LoadTableButtons();
                 LoadOrderDetailsForSelectedTable();

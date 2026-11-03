@@ -28,63 +28,97 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         /// </summary>
         private void InitializeComponent()
         {
+            this.pnlHeader = new System.Windows.Forms.Panel();
+            this.lblHeaderTitle = new System.Windows.Forms.Label();
             this.printPreviewControl = new System.Windows.Forms.PrintPreviewControl();
             this.pnlBottom = new System.Windows.Forms.Panel();
             this.lblPrinter = new System.Windows.Forms.Label();
             this.cboPrinters = new System.Windows.Forms.ComboBox();
             this.btnPrint = new System.Windows.Forms.Button();
             this.printDocumentInvoice = new System.Drawing.Printing.PrintDocument();
+            this.pnlHeader.SuspendLayout();
             this.pnlBottom.SuspendLayout();
             this.SuspendLayout();
             // 
+            // pnlHeader
+            // 
+            this.pnlHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(44)))), ((int)(((byte)(42)))));
+            this.pnlHeader.Controls.Add(this.lblHeaderTitle);
+            this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlHeader.Location = new System.Drawing.Point(0, 0);
+            this.pnlHeader.Name = "pnlHeader";
+            this.pnlHeader.Size = new System.Drawing.Size(820, 48);
+            this.pnlHeader.TabIndex = 2;
+            // 
+            // lblHeaderTitle
+            // 
+            this.lblHeaderTitle.AutoSize = true;
+            this.lblHeaderTitle.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHeaderTitle.ForeColor = System.Drawing.Color.White;
+            this.lblHeaderTitle.Location = new System.Drawing.Point(16, 10);
+            this.lblHeaderTitle.Name = "lblHeaderTitle";
+            this.lblHeaderTitle.Size = new System.Drawing.Size(415, 28);
+            this.lblHeaderTitle.TabIndex = 0;
+            this.lblHeaderTitle.Text = "XEM TRƯỚC & IN HÓA ĐƠN NHIỆT (KHỔ K80)";
+            this.lblHeaderTitle.UseMnemonic = false;
+            // 
             // printPreviewControl
             // 
+            this.printPreviewControl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(82)))), ((int)(((byte)(86)))), ((int)(((byte)(89)))));
             this.printPreviewControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.printPreviewControl.Location = new System.Drawing.Point(0, 0);
+            this.printPreviewControl.Location = new System.Drawing.Point(0, 48);
             this.printPreviewControl.Name = "printPreviewControl";
-            this.printPreviewControl.Size = new System.Drawing.Size(800, 520);
+            this.printPreviewControl.Size = new System.Drawing.Size(820, 508);
             this.printPreviewControl.TabIndex = 0;
             this.printPreviewControl.Zoom = 1D;
             // 
             // pnlBottom
             // 
-            this.pnlBottom.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.pnlBottom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(247)))), ((int)(((byte)(242)))));
             this.pnlBottom.Controls.Add(this.lblPrinter);
             this.pnlBottom.Controls.Add(this.btnPrint);
             this.pnlBottom.Controls.Add(this.cboPrinters);
             this.pnlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlBottom.Location = new System.Drawing.Point(0, 520);
+            this.pnlBottom.Location = new System.Drawing.Point(0, 556);
             this.pnlBottom.Name = "pnlBottom";
-            this.pnlBottom.Size = new System.Drawing.Size(800, 60);
+            this.pnlBottom.Size = new System.Drawing.Size(820, 64);
             this.pnlBottom.TabIndex = 1;
             // 
             // lblPrinter
             // 
             this.lblPrinter.AutoSize = true;
+            this.lblPrinter.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPrinter.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(44)))), ((int)(((byte)(42)))));
             this.lblPrinter.Location = new System.Drawing.Point(24, 21);
             this.lblPrinter.Name = "lblPrinter";
-            this.lblPrinter.Size = new System.Drawing.Size(92, 16);
+            this.lblPrinter.Size = new System.Drawing.Size(102, 21);
             this.lblPrinter.TabIndex = 2;
             this.lblPrinter.Text = "Chọn máy in:";
             // 
             // cboPrinters
             // 
             this.cboPrinters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboPrinters.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cboPrinters.FormattingEnabled = true;
-            this.cboPrinters.Location = new System.Drawing.Point(122, 17);
+            this.cboPrinters.Location = new System.Drawing.Point(134, 17);
             this.cboPrinters.Name = "cboPrinters";
-            this.cboPrinters.Size = new System.Drawing.Size(340, 24);
+            this.cboPrinters.Size = new System.Drawing.Size(370, 29);
             this.cboPrinters.TabIndex = 0;
             // 
             // btnPrint
             // 
-            this.btnPrint.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPrint.Location = new System.Drawing.Point(490, 13);
+            this.btnPrint.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(111)))), ((int)(((byte)(67)))));
+            this.btnPrint.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnPrint.FlatAppearance.BorderSize = 0;
+            this.btnPrint.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPrint.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPrint.ForeColor = System.Drawing.Color.White;
+            this.btnPrint.Location = new System.Drawing.Point(524, 12);
             this.btnPrint.Name = "btnPrint";
-            this.btnPrint.Size = new System.Drawing.Size(220, 34);
+            this.btnPrint.Size = new System.Drawing.Size(266, 40);
             this.btnPrint.TabIndex = 1;
-            this.btnPrint.Text = "Thực hiện in";
-            this.btnPrint.UseVisualStyleBackColor = true;
+            this.btnPrint.Text = "✔  Thực hiện in hóa đơn";
+            this.btnPrint.UseVisualStyleBackColor = false;
             this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
             // 
             // printDocumentInvoice
@@ -94,15 +128,18 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             // 
             // FrmPrintReview
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 580);
+            this.ClientSize = new System.Drawing.Size(820, 620);
             this.Controls.Add(this.printPreviewControl);
             this.Controls.Add(this.pnlBottom);
+            this.Controls.Add(this.pnlHeader);
             this.Name = "FrmPrintReview";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Xem trước & In hóa đơn (K80)";
             this.Load += new System.EventHandler(this.FrmPrintReview_Load);
+            this.pnlHeader.ResumeLayout(false);
+            this.pnlHeader.PerformLayout();
             this.pnlBottom.ResumeLayout(false);
             this.pnlBottom.PerformLayout();
             this.ResumeLayout(false);
@@ -111,6 +148,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         #endregion
 
+        private System.Windows.Forms.Panel pnlHeader;
+        private System.Windows.Forms.Label lblHeaderTitle;
         private System.Windows.Forms.PrintPreviewControl printPreviewControl;
         private System.Windows.Forms.Panel pnlBottom;
         private System.Windows.Forms.Label lblPrinter;

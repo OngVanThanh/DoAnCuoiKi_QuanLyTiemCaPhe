@@ -1,12 +1,16 @@
 using DoAnCuoiKi_QuanLyTiemCaPhe.BLL;
+using DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
+using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace DoAnCuoiKi_QuanLyTiemCaPhe
 {
     /// <summary>
     /// Màn hình Quản lý Sơ đồ bàn & Khu vực (FrmTable).
-    /// Cho phép xem danh sách bàn, lọc theo khu vực, thêm mới, cập nhật và xóa bàn.
+    /// Đồng bộ phong cách Warm Coffee với UIHelper của nhóm, hỗ trợ lọc bàn theo khu vực và CRUD.
     /// </summary>
     public partial class FrmTable : Form
     {
@@ -25,6 +29,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             try
             {
                 _isLoading = true;
+                UIHelper.StyleDataGridView(dgvTable);
+
                 LoadAreasToComboBox();
                 LoadStatusesToComboBox();
                 LoadTablesToGrid();
@@ -71,7 +77,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
         }
 
-        // 4. Tải danh sách bàn lên DataGridView dgvTable (hỗ trợ lọc theo khu vực nếu tích chọn)
+        // 4. Tải danh sách bàn lên DataGridView dgvTable và cập nhật thống kê trạng thái
         private void LoadTablesToGrid()
         {
             int filterAreaId = -1;
@@ -80,8 +86,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 filterAreaId = selectedAreaId;
             }
 
+            List<TableDTO> tables = _tableService.GetTablesByArea(filterAreaId);
+
             dgvTable.DataSource = null;
-            dgvTable.DataSource = _tableService.GetTablesByArea(filterAreaId);
+            dgvTable.DataSource = tables;
 
             if (dgvTable.Columns.Contains("Id"))
                 dgvTable.Columns["Id"].HeaderText = "Mã bàn";
@@ -98,12 +106,13 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             if (dgvTable.Columns.Contains("Status"))
                 dgvTable.Columns["Status"].HeaderText = "Trạng thái";
 
-            dgvTable.ReadOnly = true;
-            dgvTable.AllowUserToAddRows = false;
-            dgvTable.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvTable.MultiSelect = false;
-            dgvTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvTable.ClearSelection();
+
+            // Cập nhật thống kê nhanh trên thanh tiêu đề
+            int total = tables.Count;
+            int emptyCount = tables.Count(t => string.Equals(t.Status, "Trống", StringComparison.OrdinalIgnoreCase));
+            int occupiedCount = tables.Count(t => string.Equals(t.Status, "Có khách", StringComparison.OrdinalIgnoreCase));
+            lblSummaryStats.Text = $"Tổng: {total} bàn | Trống: {emptyCount} | Có khách: {occupiedCount}";
         }
 
         // 5. Lấy AreaId đang được chọn trên ComboBox cboArea
@@ -116,7 +125,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             return int.TryParse(cboArea.SelectedValue.ToString(), out areaId);
         }
 
-        // 6. Đặt lại các ô nhập liệu về trạng thái mặc định (chuẩn bị thêm mới)
+        // 6. Đặt lại các ô nhập liệu về trạng thái mặc định
         private void ResetInputFields()
         {
             _selectedTableId = -1;
@@ -125,7 +134,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
             if (cboTableStatus.Items.Count > 0)
             {
-                cboTableStatus.SelectedIndex = 0; // Mặc định là "Trống"
+                cboTableStatus.SelectedIndex = 0;
             }
 
             dgvTable.ClearSelection();
@@ -188,7 +197,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         // 10. Sự kiện nút Thêm bàn (btnAdd)
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            // Nếu đang chọn một bàn cũ trên lưới và chưa nhập tên bàn mới, chuyển sang chế độ nhập mới
             if (_selectedTableId > 0 && string.IsNullOrWhiteSpace(txtTableName.Text))
             {
                 ResetInputFields();
@@ -354,8 +362,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         // 13. Sự kiện nút Lưu / Làm mới (btnSave)
         private void btnSave_Click(object sender, EventArgs e)
         {
-            // Nếu người dùng đã nhập thông tin bàn mới (chưa chọn bàn cũ) thì thực hiện lưu mới,
-            // ngược lại sẽ làm mới các trường nhập liệu và tải lại danh sách bàn.
             if (_selectedTableId <= 0 && !string.IsNullOrWhiteSpace(txtTableName.Text))
             {
                 btnAdd_Click(sender, e);

@@ -54,7 +54,11 @@
   <ItemGroup>
     <Compile Include="BLL\AppConfigService.cs" />
     <Compile Include="BLL\AuthService.cs" />
+    <Compile Include="BLL\EmployeeService.cs" />
+    <Compile Include="BLL\InventoryService.cs" />
     <Compile Include="BLL\OrderService.cs" />
+    <Compile Include="BLL\ProductService.cs" />
+    <Compile Include="BLL\PromotionService.cs" />
     <Compile Include="BLL\TableService.cs" />
     <Compile Include="CoffeeShopDataContext.cs">
       <DependentUpon>CoffeeShopDataContext.dbml</DependentUpon>
@@ -69,13 +73,23 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CoffeeShopDBDataSet1.xsd</DependentUpon>
     </Compile>
+    <Compile Include="DAL\EmployeeRepository.cs" />
+    <Compile Include="DAL\InventoryRepository.cs" />
     <Compile Include="DAL\OrderRepository.cs" />
+    <Compile Include="DAL\ProductRepository.cs" />
+    <Compile Include="DAL\PromotionRepository.cs" />
     <Compile Include="DAL\TableRepository.cs" />
     <Compile Include="DAL\UserRepository.cs" />
     <Compile Include="DTO\AreaDTO.cs" />
+    <Compile Include="DTO\Category.cs" />
+    <Compile Include="DTO\EmployeeDTO.cs" />
+    <Compile Include="DTO\InventoryDTO.cs" />
+    <Compile Include="DTO\InventoryTransactionDTO.cs" />
     <Compile Include="DTO\OrderDetailDTO.cs" />
     <Compile Include="DTO\OrderDTO.cs" />
     <Compile Include="DTO\PermissionDTO.cs" />
+    <Compile Include="DTO\ProductDTO.cs" />
+    <Compile Include="DTO\PromotionDTO.cs" />
     <Compile Include="DTO\RoleDTO.cs" />
     <Compile Include="DTO\TableDTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />
@@ -102,6 +116,12 @@
     </Compile>
     <Compile Include="Form\VanThanh\FrmAppConfig.Designer.cs">
       <DependentUpon>FrmAppConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\TanPhat\UcProductCard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Form\TanPhat\UcProductCard.Designer.cs">
+      <DependentUpon>UcProductCard.cs</DependentUpon>
     </Compile>
     <Compile Include="Form\TanPhat\FrmOrder.cs">
       <SubType>Form</SubType>
@@ -175,6 +195,7 @@
     <Compile Include="Utilities\ConfigHelper.cs" />
     <Compile Include="Utilities\PrintHelper.cs" />
     <Compile Include="Utilities\SecurityHelper.cs" />
+    <Compile Include="Utilities\UIHelper.cs" />
     <Compile Include="Utilities\UserSession.cs" />
     <EmbeddedResource Include="Form\QuangHung\FrmChart.resx">
       <DependentUpon>FrmChart.cs</DependentUpon>
@@ -193,6 +214,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form\TanPhat\FrmTable.resx">
       <DependentUpon>FrmTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\TuanHung\FrmCategory.resx">
+      <DependentUpon>FrmCategory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\TuanHung\FrmProduct.resx">
+      <DependentUpon>FrmProduct.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\VanThanh\FrmAppConfig.resx">
       <DependentUpon>FrmAppConfig.cs</DependentUpon>

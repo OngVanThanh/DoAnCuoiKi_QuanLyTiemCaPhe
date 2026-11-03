@@ -10,7 +10,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.Utilities
     /// Lớp tiện ích hỗ trợ vẽ và định dạng Hóa đơn bán hàng khổ K80 (80mm) trên đối tượng Graphics.
     /// Đọc thông tin cửa hàng (ShopName, ShopAddress, ShopPhone) trực tiếp từ App.config.
     /// </summary>
-    internal static class PrintHelper
+    public static class PrintHelper
     {
         // Chiều rộng chuẩn của hóa đơn nhiệt K80 (khoảng 280px - 300px ở 96 DPI)
         private const int ReceiptWidth = 285;
