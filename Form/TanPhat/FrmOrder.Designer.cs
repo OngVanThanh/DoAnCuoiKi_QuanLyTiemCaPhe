@@ -262,7 +262,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             // 
             this.colDetailId.DataPropertyName = "Id";
             this.colDetailId.HeaderText = "ID";
-            this.colDetailId.Name = "Id";
+            this.colDetailId.Name = "colDetailId";
             this.colDetailId.ReadOnly = true;
             this.colDetailId.Visible = false;
             // 
@@ -270,7 +270,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             // 
             this.colDetailOrderId.DataPropertyName = "OrderId";
             this.colDetailOrderId.HeaderText = "Mã HĐ";
-            this.colDetailOrderId.Name = "OrderId";
+            this.colDetailOrderId.Name = "colDetailOrderId";
             this.colDetailOrderId.ReadOnly = true;
             this.colDetailOrderId.Visible = false;
             // 
@@ -278,7 +278,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             // 
             this.colDetailProductId.DataPropertyName = "ProductId";
             this.colDetailProductId.HeaderText = "Mã món";
-            this.colDetailProductId.Name = "ProductId";
+            this.colDetailProductId.Name = "colDetailProductId";
             this.colDetailProductId.ReadOnly = true;
             this.colDetailProductId.Visible = false;
             // 
@@ -287,7 +287,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.colDetailProductName.DataPropertyName = "ProductName";
             this.colDetailProductName.FillWeight = 140F;
             this.colDetailProductName.HeaderText = "Tên món";
-            this.colDetailProductName.Name = "ProductName";
+            this.colDetailProductName.Name = "colDetailProductName";
             this.colDetailProductName.ReadOnly = true;
             // 
             // colDetailUnit
@@ -295,7 +295,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.colDetailUnit.DataPropertyName = "Unit";
             this.colDetailUnit.FillWeight = 55F;
             this.colDetailUnit.HeaderText = "ĐVT";
-            this.colDetailUnit.Name = "Unit";
+            this.colDetailUnit.Name = "colDetailUnit";
             this.colDetailUnit.ReadOnly = true;
             // 
             // colDetailQuantity
@@ -303,7 +303,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.colDetailQuantity.DataPropertyName = "Quantity";
             this.colDetailQuantity.FillWeight = 45F;
             this.colDetailQuantity.HeaderText = "SL";
-            this.colDetailQuantity.Name = "Quantity";
+            this.colDetailQuantity.Name = "colDetailQuantity";
             this.colDetailQuantity.ReadOnly = true;
             // 
             // colDetailUnitPrice
@@ -313,7 +313,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.colDetailUnitPrice.DefaultCellStyle = dataGridViewCellStyleUnitPrice;
             this.colDetailUnitPrice.FillWeight = 80F;
             this.colDetailUnitPrice.HeaderText = "Đơn giá";
-            this.colDetailUnitPrice.Name = "UnitPrice";
+            this.colDetailUnitPrice.Name = "colDetailUnitPrice";
             this.colDetailUnitPrice.ReadOnly = true;
             // 
             // colDetailTotalPrice
@@ -323,7 +323,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.colDetailTotalPrice.DefaultCellStyle = dataGridViewCellStyleTotalPrice;
             this.colDetailTotalPrice.FillWeight = 90F;
             this.colDetailTotalPrice.HeaderText = "Thành tiền";
-            this.colDetailTotalPrice.Name = "TotalPrice";
+            this.colDetailTotalPrice.Name = "colDetailTotalPrice";
             this.colDetailTotalPrice.ReadOnly = true;
             // 
             // pnlOrderActions
@@ -600,7 +600,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.colProdId.DataPropertyName = "Id";
             this.colProdId.FillWeight = 50F;
             this.colProdId.HeaderText = "Mã";
-            this.colProdId.Name = "Id";
+            this.colProdId.Name = "colProdId";
             this.colProdId.ReadOnly = true;
             // 
             // colProdName
@@ -608,7 +608,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.colProdName.DataPropertyName = "ProductName";
             this.colProdName.FillWeight = 150F;
             this.colProdName.HeaderText = "Tên món";
-            this.colProdName.Name = "ProductName";
+            this.colProdName.Name = "colProdName";
             this.colProdName.ReadOnly = true;
             // 
             // colProdPrice
@@ -618,7 +618,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.colProdPrice.DefaultCellStyle = dataGridViewCellStylePrice;
             this.colProdPrice.FillWeight = 90F;
             this.colProdPrice.HeaderText = "Đơn giá";
-            this.colProdPrice.Name = "Price";
+            this.colProdPrice.Name = "colProdPrice";
             this.colProdPrice.ReadOnly = true;
             // 
             // colProdUnit
@@ -626,7 +626,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.colProdUnit.DataPropertyName = "Unit";
             this.colProdUnit.FillWeight = 60F;
             this.colProdUnit.HeaderText = "ĐVT";
-            this.colProdUnit.Name = "Unit";
+            this.colProdUnit.Name = "colProdUnit";
             this.colProdUnit.ReadOnly = true;
             // 
             // pnlMenuFilter

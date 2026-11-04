@@ -317,7 +317,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.colTableId.DataPropertyName = "Id";
             this.colTableId.FillWeight = 60F;
             this.colTableId.HeaderText = "Mã bàn";
-            this.colTableId.Name = "Id";
+            this.colTableId.Name = "colTableId";
             this.colTableId.ReadOnly = true;
             // 
             // colTableName
@@ -325,14 +325,14 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.colTableName.DataPropertyName = "TableName";
             this.colTableName.FillWeight = 110F;
             this.colTableName.HeaderText = "Tên bàn";
-            this.colTableName.Name = "TableName";
+            this.colTableName.Name = "colTableName";
             this.colTableName.ReadOnly = true;
             // 
             // colAreaId
             // 
             this.colAreaId.DataPropertyName = "AreaId";
             this.colAreaId.HeaderText = "Mã khu vực";
-            this.colAreaId.Name = "AreaId";
+            this.colAreaId.Name = "colAreaId";
             this.colAreaId.ReadOnly = true;
             this.colAreaId.Visible = false;
             // 
@@ -341,7 +341,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.colAreaName.DataPropertyName = "AreaName";
             this.colAreaName.FillWeight = 140F;
             this.colAreaName.HeaderText = "Khu vực";
-            this.colAreaName.Name = "AreaName";
+            this.colAreaName.Name = "colAreaName";
             this.colAreaName.ReadOnly = true;
             // 
             // colStatus
@@ -349,7 +349,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.colStatus.DataPropertyName = "Status";
             this.colStatus.FillWeight = 90F;
             this.colStatus.HeaderText = "Trạng thái";
-            this.colStatus.Name = "Status";
+            this.colStatus.Name = "colStatus";
             this.colStatus.ReadOnly = true;
             // 
             // FrmTable
