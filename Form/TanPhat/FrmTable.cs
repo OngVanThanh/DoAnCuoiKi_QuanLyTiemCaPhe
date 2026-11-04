@@ -90,22 +90,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
             dgvTable.DataSource = null;
             dgvTable.DataSource = tables;
-
-            if (dgvTable.Columns.Contains("Id"))
-                dgvTable.Columns["Id"].HeaderText = "Mã bàn";
-
-            if (dgvTable.Columns.Contains("TableName"))
-                dgvTable.Columns["TableName"].HeaderText = "Tên bàn";
-
-            if (dgvTable.Columns.Contains("AreaId"))
-                dgvTable.Columns["AreaId"].Visible = false;
-
-            if (dgvTable.Columns.Contains("AreaName"))
-                dgvTable.Columns["AreaName"].HeaderText = "Khu vực";
-
-            if (dgvTable.Columns.Contains("Status"))
-                dgvTable.Columns["Status"].HeaderText = "Trạng thái";
-
             dgvTable.ClearSelection();
 
             // Cập nhật thống kê nhanh trên thanh tiêu đề
@@ -169,25 +153,25 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 return;
 
             DataGridViewRow row = dgvTable.Rows[e.RowIndex];
-            if (row.Cells["Id"].Value == null)
+            if (row.Cells["colTableId"].Value == null)
                 return;
 
-            if (!int.TryParse(row.Cells["Id"].Value.ToString(), out int tableId))
+            if (!int.TryParse(row.Cells["colTableId"].Value.ToString(), out int tableId))
                 return;
 
             _selectedTableId = tableId;
             txtTableId.Text = tableId.ToString();
-            txtTableName.Text = row.Cells["TableName"].Value?.ToString() ?? string.Empty;
+            txtTableName.Text = row.Cells["colTableName"].Value?.ToString() ?? string.Empty;
 
             _isLoading = true;
 
-            if (row.Cells["AreaId"].Value != null &&
-                int.TryParse(row.Cells["AreaId"].Value.ToString(), out int areaId))
+            if (row.Cells["colAreaId"].Value != null &&
+                int.TryParse(row.Cells["colAreaId"].Value.ToString(), out int areaId))
             {
                 cboArea.SelectedValue = areaId;
             }
 
-            string status = row.Cells["Status"].Value?.ToString() ?? "Trống";
+            string status = row.Cells["colStatus"].Value?.ToString() ?? "Trống";
             int statusIndex = cboTableStatus.FindStringExact(status);
             cboTableStatus.SelectedIndex = statusIndex >= 0 ? statusIndex : 0;
 

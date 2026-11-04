@@ -135,31 +135,9 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             string keyword = txtSearchProduct.Text.Trim();
             var products = _orderService.SearchProducts(categoryFilter, keyword);
 
-            // 5a. Nạp dữ liệu vào bảng dgvProductList
+            // 5a. Nạp dữ liệu vào bảng dgvProductList (các cột đã được thiết kế sẵn trong FrmOrder.Designer.cs)
             dgvProductList.DataSource = null;
             dgvProductList.DataSource = products;
-
-            if (dgvProductList.Columns.Contains("Id"))
-                dgvProductList.Columns["Id"].HeaderText = "Mã";
-
-            if (dgvProductList.Columns.Contains("ProductName"))
-                dgvProductList.Columns["ProductName"].HeaderText = "Tên món";
-
-            if (dgvProductList.Columns.Contains("Price"))
-            {
-                dgvProductList.Columns["Price"].HeaderText = "Đơn giá";
-                dgvProductList.Columns["Price"].DefaultCellStyle.Format = "N0";
-            }
-
-            if (dgvProductList.Columns.Contains("Unit"))
-                dgvProductList.Columns["Unit"].HeaderText = "ĐVT";
-
-            string[] hiddenCols = { "CategoryId", "ImagePath", "IsActive", "Category", "OrderDetails" };
-            foreach (string col in hiddenCols)
-            {
-                if (dgvProductList.Columns.Contains(col))
-                    dgvProductList.Columns[col].Visible = false;
-            }
 
             // 5b. Nạp danh sách thẻ UserControl UcProductCard vào flpProductMenu
             flpProductMenu.SuspendLayout();
@@ -203,11 +181,11 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             // Đồng bộ dòng tương ứng trên dgvProductList
             foreach (DataGridViewRow row in dgvProductList.Rows)
             {
-                if (row.Cells["Id"].Value != null &&
-                    Convert.ToInt32(row.Cells["Id"].Value) == _selectedProductId)
+                if (row.Cells["colProdId"].Value != null &&
+                    Convert.ToInt32(row.Cells["colProdId"].Value) == _selectedProductId)
                 {
                     row.Selected = true;
-                    dgvProductList.CurrentCell = row.Cells["ProductName"];
+                    dgvProductList.CurrentCell = row.Cells["colProdName"];
                     break;
                 }
             }
@@ -316,36 +294,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 ? $"Đang phục vụ ({details.Count} món)"
                 : "Bàn đang trống";
 
-            if (dgvOrderDetails.Columns.Contains("Id"))
-                dgvOrderDetails.Columns["Id"].Visible = false;
-
-            if (dgvOrderDetails.Columns.Contains("OrderId"))
-                dgvOrderDetails.Columns["OrderId"].Visible = false;
-
-            if (dgvOrderDetails.Columns.Contains("ProductId"))
-                dgvOrderDetails.Columns["ProductId"].Visible = false;
-
-            if (dgvOrderDetails.Columns.Contains("ProductName"))
-                dgvOrderDetails.Columns["ProductName"].HeaderText = "Tên món";
-
-            if (dgvOrderDetails.Columns.Contains("Unit"))
-                dgvOrderDetails.Columns["Unit"].HeaderText = "ĐVT";
-
-            if (dgvOrderDetails.Columns.Contains("Quantity"))
-                dgvOrderDetails.Columns["Quantity"].HeaderText = "SL";
-
-            if (dgvOrderDetails.Columns.Contains("UnitPrice"))
-            {
-                dgvOrderDetails.Columns["UnitPrice"].HeaderText = "Đơn giá";
-                dgvOrderDetails.Columns["UnitPrice"].DefaultCellStyle.Format = "N0";
-            }
-
-            if (dgvOrderDetails.Columns.Contains("TotalPrice"))
-            {
-                dgvOrderDetails.Columns["TotalPrice"].HeaderText = "Thành tiền";
-                dgvOrderDetails.Columns["TotalPrice"].DefaultCellStyle.Format = "N0";
-            }
-
             UpdateOrderSummaryDisplay();
         }
 
@@ -421,10 +369,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         // 14. Sự kiện click chọn dòng trên bảng dgvProductList (đồng bộ với thẻ UcProductCard)
         private void dgvProductList_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0 || dgvProductList.Rows[e.RowIndex].Cells["Id"].Value == null)
+            if (e.RowIndex < 0 || dgvProductList.Rows[e.RowIndex].Cells["colProdId"].Value == null)
                 return;
 
-            _selectedProductId = Convert.ToInt32(dgvProductList.Rows[e.RowIndex].Cells["Id"].Value);
+            _selectedProductId = Convert.ToInt32(dgvProductList.Rows[e.RowIndex].Cells["colProdId"].Value);
 
             foreach (Control ctrl in flpProductMenu.Controls)
             {
@@ -448,9 +396,9 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         private void btnAddProduct_Click(object sender, EventArgs e)
         {
             int productId = _selectedProductId;
-            if (productId <= 0 && dgvProductList.CurrentRow != null && dgvProductList.CurrentRow.Cells["Id"].Value != null)
+            if (productId <= 0 && dgvProductList.CurrentRow != null && dgvProductList.CurrentRow.Cells["colProdId"].Value != null)
             {
-                productId = Convert.ToInt32(dgvProductList.CurrentRow.Cells["Id"].Value);
+                productId = Convert.ToInt32(dgvProductList.CurrentRow.Cells["colProdId"].Value);
             }
 
             AddProductByIdToCurrentTable(productId, (int)nudQuantity.Value);
@@ -523,7 +471,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 return;
             }
 
-            if (dgvOrderDetails.CurrentRow == null || dgvOrderDetails.CurrentRow.Cells["ProductId"].Value == null)
+            if (dgvOrderDetails.CurrentRow == null || dgvOrderDetails.CurrentRow.Cells["colDetailProductId"].Value == null)
             {
                 MessageBox.Show(
                     "Vui lòng chọn món cần xóa trong bảng chi tiết hóa đơn!",
@@ -533,8 +481,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 return;
             }
 
-            int productId = Convert.ToInt32(dgvOrderDetails.CurrentRow.Cells["ProductId"].Value);
-            string productName = dgvOrderDetails.CurrentRow.Cells["ProductName"].Value?.ToString() ?? "món này";
+            int productId = Convert.ToInt32(dgvOrderDetails.CurrentRow.Cells["colDetailProductId"].Value);
+            string productName = dgvOrderDetails.CurrentRow.Cells["colDetailProductName"].Value?.ToString() ?? "món này";
 
             DialogResult confirm = MessageBox.Show(
                 $"Bạn có chắc muốn xóa '{productName}' khỏi hóa đơn của {_selectedTableName}?",
@@ -759,6 +707,11 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
+        }
+
+        private void lblHeaderTitle_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

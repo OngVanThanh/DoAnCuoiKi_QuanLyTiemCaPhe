@@ -47,6 +47,11 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.txtTableId = new System.Windows.Forms.TextBox();
             this.lblTableId = new System.Windows.Forms.Label();
             this.dgvTable = new System.Windows.Forms.DataGridView();
+            this.colTableId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colTableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colAreaId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colAreaName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlHeader.SuspendLayout();
             this.pnlInput.SuspendLayout();
             this.grpTableInfo.SuspendLayout();
@@ -284,15 +289,68 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             // 
             // dgvTable
             // 
+            this.dgvTable.AllowUserToAddRows = false;
+            this.dgvTable.AllowUserToDeleteRows = false;
+            this.dgvTable.AutoGenerateColumns = false;
+            this.dgvTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvTable.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colTableId,
+            this.colTableName,
+            this.colAreaId,
+            this.colAreaName,
+            this.colStatus});
             this.dgvTable.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvTable.Location = new System.Drawing.Point(335, 52);
             this.dgvTable.Name = "dgvTable";
+            this.dgvTable.ReadOnly = true;
+            this.dgvTable.RowHeadersVisible = false;
             this.dgvTable.RowHeadersWidth = 51;
             this.dgvTable.RowTemplate.Height = 28;
+            this.dgvTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvTable.Size = new System.Drawing.Size(585, 458);
             this.dgvTable.TabIndex = 1;
             this.dgvTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTable_CellClick);
+            // 
+            // colTableId
+            // 
+            this.colTableId.DataPropertyName = "Id";
+            this.colTableId.FillWeight = 60F;
+            this.colTableId.HeaderText = "Mã bàn";
+            this.colTableId.Name = "Id";
+            this.colTableId.ReadOnly = true;
+            // 
+            // colTableName
+            // 
+            this.colTableName.DataPropertyName = "TableName";
+            this.colTableName.FillWeight = 110F;
+            this.colTableName.HeaderText = "Tên bàn";
+            this.colTableName.Name = "TableName";
+            this.colTableName.ReadOnly = true;
+            // 
+            // colAreaId
+            // 
+            this.colAreaId.DataPropertyName = "AreaId";
+            this.colAreaId.HeaderText = "Mã khu vực";
+            this.colAreaId.Name = "AreaId";
+            this.colAreaId.ReadOnly = true;
+            this.colAreaId.Visible = false;
+            // 
+            // colAreaName
+            // 
+            this.colAreaName.DataPropertyName = "AreaName";
+            this.colAreaName.FillWeight = 140F;
+            this.colAreaName.HeaderText = "Khu vực";
+            this.colAreaName.Name = "AreaName";
+            this.colAreaName.ReadOnly = true;
+            // 
+            // colStatus
+            // 
+            this.colStatus.DataPropertyName = "Status";
+            this.colStatus.FillWeight = 90F;
+            this.colStatus.HeaderText = "Trạng thái";
+            this.colStatus.Name = "Status";
+            this.colStatus.ReadOnly = true;
             // 
             // FrmTable
             // 
@@ -337,5 +395,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.DataGridView dgvTable;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colTableId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colTableName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colAreaId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colAreaName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
     }
 }
