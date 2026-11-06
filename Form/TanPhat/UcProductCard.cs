@@ -1,4 +1,4 @@
-using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
+﻿using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;

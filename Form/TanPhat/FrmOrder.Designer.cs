@@ -1,4 +1,4 @@
-namespace DoAnCuoiKi_QuanLyTiemCaPhe
+﻿namespace DoAnCuoiKi_QuanLyTiemCaPhe
 {
     partial class FrmOrder
     {
