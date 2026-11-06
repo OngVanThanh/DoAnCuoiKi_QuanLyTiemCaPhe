@@ -28,12 +28,17 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            Microsoft.Reporting.WinForms.ReportDataSource reportDataSource1 = new Microsoft.Reporting.WinForms.ReportDataSource();
+            this.orderDetailDTOBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.pnlHeader = new System.Windows.Forms.Panel();
             this.lblHeaderTitle = new System.Windows.Forms.Label();
             this.pnlBottom = new System.Windows.Forms.Panel();
             this.lblPrinter = new System.Windows.Forms.Label();
             this.cboPrinters = new System.Windows.Forms.ComboBox();
             this.btnPrint = new System.Windows.Forms.Button();
+            this.tabControlInvoice = new System.Windows.Forms.TabControl();
+            this.tabVisualPreview = new System.Windows.Forms.TabPage();
             this.pnlReceiptContainer = new System.Windows.Forms.Panel();
             this.pnlPaper = new System.Windows.Forms.Panel();
             this.lblThanks = new System.Windows.Forms.Label();
@@ -60,14 +65,24 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.lblShopPhone = new System.Windows.Forms.Label();
             this.lblShopAddress = new System.Windows.Forms.Label();
             this.lblShopName = new System.Windows.Forms.Label();
+            this.tabRdlcReport = new System.Windows.Forms.TabPage();
+            this.reportViewerInvoice = new Microsoft.Reporting.WinForms.ReportViewer();
             this.printDocumentInvoice = new System.Drawing.Printing.PrintDocument();
+            ((System.ComponentModel.ISupportInitialize)(this.orderDetailDTOBindingSource)).BeginInit();
             this.pnlHeader.SuspendLayout();
             this.pnlBottom.SuspendLayout();
+            this.tabControlInvoice.SuspendLayout();
+            this.tabVisualPreview.SuspendLayout();
             this.pnlReceiptContainer.SuspendLayout();
             this.pnlPaper.SuspendLayout();
             this.pnlTotals.SuspendLayout();
             this.pnlOrderMeta.SuspendLayout();
+            this.tabRdlcReport.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // orderDetailDTOBindingSource
+            // 
+            this.orderDetailDTOBindingSource.DataSource = typeof(DoAnCuoiKi_QuanLyTiemCaPhe.DTO.OrderDetailDTO);
             // 
             // pnlHeader
             // 
@@ -76,7 +91,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlHeader.Location = new System.Drawing.Point(0, 0);
             this.pnlHeader.Name = "pnlHeader";
-            this.pnlHeader.Size = new System.Drawing.Size(820, 48);
+            this.pnlHeader.Size = new System.Drawing.Size(860, 48);
             this.pnlHeader.TabIndex = 2;
             // 
             // lblHeaderTitle
@@ -86,7 +101,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.lblHeaderTitle.ForeColor = System.Drawing.Color.White;
             this.lblHeaderTitle.Location = new System.Drawing.Point(16, 10);
             this.lblHeaderTitle.Name = "lblHeaderTitle";
-            this.lblHeaderTitle.Size = new System.Drawing.Size(415, 28);
+            this.lblHeaderTitle.Size = new System.Drawing.Size(465, 28);
             this.lblHeaderTitle.TabIndex = 0;
             this.lblHeaderTitle.Text = "XEM TRƯỚC & IN HÓA ĐƠN NHIỆT (KHỔ K80)";
             this.lblHeaderTitle.UseMnemonic = false;
@@ -98,9 +113,9 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.pnlBottom.Controls.Add(this.btnPrint);
             this.pnlBottom.Controls.Add(this.cboPrinters);
             this.pnlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlBottom.Location = new System.Drawing.Point(0, 560);
+            this.pnlBottom.Location = new System.Drawing.Point(0, 600);
             this.pnlBottom.Name = "pnlBottom";
-            this.pnlBottom.Size = new System.Drawing.Size(820, 60);
+            this.pnlBottom.Size = new System.Drawing.Size(860, 60);
             this.pnlBottom.TabIndex = 1;
             // 
             // lblPrinter
@@ -121,7 +136,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.cboPrinters.FormattingEnabled = true;
             this.cboPrinters.Location = new System.Drawing.Point(128, 16);
             this.cboPrinters.Name = "cboPrinters";
-            this.cboPrinters.Size = new System.Drawing.Size(370, 29);
+            this.cboPrinters.Size = new System.Drawing.Size(390, 29);
             this.cboPrinters.TabIndex = 0;
             // 
             // btnPrint
@@ -132,13 +147,36 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.btnPrint.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPrint.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPrint.ForeColor = System.Drawing.Color.White;
-            this.btnPrint.Location = new System.Drawing.Point(518, 11);
+            this.btnPrint.Location = new System.Drawing.Point(540, 11);
             this.btnPrint.Name = "btnPrint";
-            this.btnPrint.Size = new System.Drawing.Size(280, 38);
+            this.btnPrint.Size = new System.Drawing.Size(300, 38);
             this.btnPrint.TabIndex = 1;
             this.btnPrint.Text = "✔  Thực hiện in hóa đơn";
             this.btnPrint.UseVisualStyleBackColor = false;
             this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
+            // 
+            // tabControlInvoice
+            // 
+            this.tabControlInvoice.Controls.Add(this.tabVisualPreview);
+            this.tabControlInvoice.Controls.Add(this.tabRdlcReport);
+            this.tabControlInvoice.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControlInvoice.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tabControlInvoice.Location = new System.Drawing.Point(0, 48);
+            this.tabControlInvoice.Name = "tabControlInvoice";
+            this.tabControlInvoice.SelectedIndex = 0;
+            this.tabControlInvoice.Size = new System.Drawing.Size(860, 552);
+            this.tabControlInvoice.TabIndex = 0;
+            // 
+            // tabVisualPreview
+            // 
+            this.tabVisualPreview.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(82)))), ((int)(((byte)(86)))), ((int)(((byte)(89)))));
+            this.tabVisualPreview.Controls.Add(this.pnlReceiptContainer);
+            this.tabVisualPreview.Location = new System.Drawing.Point(4, 30);
+            this.tabVisualPreview.Name = "tabVisualPreview";
+            this.tabVisualPreview.Padding = new System.Windows.Forms.Padding(3);
+            this.tabVisualPreview.Size = new System.Drawing.Size(852, 518);
+            this.tabVisualPreview.TabIndex = 0;
+            this.tabVisualPreview.Text = "📄 Xem trước Phiếu K80 Trực quan";
             // 
             // pnlReceiptContainer
             // 
@@ -146,10 +184,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.pnlReceiptContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(82)))), ((int)(((byte)(86)))), ((int)(((byte)(89)))));
             this.pnlReceiptContainer.Controls.Add(this.pnlPaper);
             this.pnlReceiptContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlReceiptContainer.Location = new System.Drawing.Point(0, 48);
+            this.pnlReceiptContainer.Location = new System.Drawing.Point(3, 3);
             this.pnlReceiptContainer.Name = "pnlReceiptContainer";
             this.pnlReceiptContainer.Padding = new System.Windows.Forms.Padding(0, 20, 0, 20);
-            this.pnlReceiptContainer.Size = new System.Drawing.Size(820, 512);
+            this.pnlReceiptContainer.Size = new System.Drawing.Size(846, 512);
             this.pnlReceiptContainer.TabIndex = 0;
             this.pnlReceiptContainer.Resize += new System.EventHandler(this.pnlReceiptContainer_Resize);
             // 
@@ -170,7 +208,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.pnlPaper.Controls.Add(this.lblShopPhone);
             this.pnlPaper.Controls.Add(this.lblShopAddress);
             this.pnlPaper.Controls.Add(this.lblShopName);
-            this.pnlPaper.Location = new System.Drawing.Point(235, 15);
+            this.pnlPaper.Location = new System.Drawing.Point(253, 15);
             this.pnlPaper.Name = "pnlPaper";
             this.pnlPaper.Padding = new System.Windows.Forms.Padding(12, 14, 12, 14);
             this.pnlPaper.Size = new System.Drawing.Size(340, 480);
@@ -222,7 +260,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.lblFinalValue.Name = "lblFinalValue";
             this.lblFinalValue.Size = new System.Drawing.Size(150, 22);
             this.lblFinalValue.TabIndex = 5;
-            this.lblFinalValue.Text = "120,600 đ";
+            this.lblFinalValue.Text = "130,248 đ";
             this.lblFinalValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblFinalCaption
@@ -297,7 +335,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.lblItemDetails.Name = "lblItemDetails";
             this.lblItemDetails.Size = new System.Drawing.Size(316, 70);
             this.lblItemDetails.TabIndex = 9;
-            this.lblItemDetails.Text = "Bạc xỉu                        2      32,000      64,000\r\nTrà đào cam sả           1      40,000      40,000\r\nBánh Croissant bơ tỏi        1      30,000      30,000";
+            this.lblItemDetails.Text = "Bạc xỉu đá                     2      32,000      64,000\r\nTrà đào cam sả           1      40,000      40,000\r\nBánh Croissant bơ tỏi        1      30,000      30,000";
             // 
             // lblDash3
             // 
@@ -444,6 +482,32 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.lblShopName.Text = "THE COFFEE HOUSE";
             this.lblShopName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // tabRdlcReport
+            // 
+            this.tabRdlcReport.Controls.Add(this.reportViewerInvoice);
+            this.tabRdlcReport.Location = new System.Drawing.Point(4, 30);
+            this.tabRdlcReport.Name = "tabRdlcReport";
+            this.tabRdlcReport.Padding = new System.Windows.Forms.Padding(3);
+            this.tabRdlcReport.Size = new System.Drawing.Size(852, 518);
+            this.tabRdlcReport.TabIndex = 1;
+            this.tabRdlcReport.Text = "📊 Báo cáo RDLC (ReportViewer)";
+            this.tabRdlcReport.UseVisualStyleBackColor = true;
+            // 
+            // reportViewerInvoice
+            // 
+            this.reportViewerInvoice.Dock = System.Windows.Forms.DockStyle.Fill;
+            reportDataSource1.Name = "DataSetInvoiceDetails";
+            reportDataSource1.Value = this.orderDetailDTOBindingSource;
+            this.reportViewerInvoice.LocalReport.DataSources.Add(reportDataSource1);
+            this.reportViewerInvoice.LocalReport.ReportEmbeddedResource = "DoAnCuoiKi_QuanLyTiemCaPhe.Form.TanPhat.RptInvoiceK80.rdlc";
+            this.reportViewerInvoice.Location = new System.Drawing.Point(3, 3);
+            this.reportViewerInvoice.Name = "reportViewerInvoice";
+            this.reportViewerInvoice.ServerReport.BearerToken = null;
+            this.reportViewerInvoice.Size = new System.Drawing.Size(846, 512);
+            this.reportViewerInvoice.TabIndex = 0;
+            this.reportViewerInvoice.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.Percent;
+            this.reportViewerInvoice.ZoomPercent = 100;
+            // 
             // printDocumentInvoice
             // 
             this.printDocumentInvoice.DocumentName = "HoaDonThanhToan_K80";
@@ -454,37 +518,46 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(237)))), ((int)(((byte)(228)))));
-            this.ClientSize = new System.Drawing.Size(820, 620);
-            this.Controls.Add(this.pnlReceiptContainer);
+            this.ClientSize = new System.Drawing.Size(860, 660);
+            this.Controls.Add(this.tabControlInvoice);
             this.Controls.Add(this.pnlBottom);
             this.Controls.Add(this.pnlHeader);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "FrmPrintReview";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Xem trước & In hóa đơn (K80) - Tấn Phát";
+            this.Text = "Xem trước & In hóa đơn K80 (Canvas + RDLC) - Tấn Phát";
             this.Load += new System.EventHandler(this.FrmPrintReview_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.orderDetailDTOBindingSource)).EndInit();
             this.pnlHeader.ResumeLayout(false);
             this.pnlHeader.PerformLayout();
             this.pnlBottom.ResumeLayout(false);
             this.pnlBottom.PerformLayout();
+            this.tabControlInvoice.ResumeLayout(false);
+            this.tabVisualPreview.ResumeLayout(false);
             this.pnlReceiptContainer.ResumeLayout(false);
             this.pnlPaper.ResumeLayout(false);
             this.pnlTotals.ResumeLayout(false);
             this.pnlTotals.PerformLayout();
             this.pnlOrderMeta.ResumeLayout(false);
             this.pnlOrderMeta.PerformLayout();
+            this.tabRdlcReport.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
+        private System.Windows.Forms.BindingSource orderDetailDTOBindingSource;
         private System.Windows.Forms.Panel pnlHeader;
         private System.Windows.Forms.Label lblHeaderTitle;
         private System.Windows.Forms.Panel pnlBottom;
         private System.Windows.Forms.Label lblPrinter;
         private System.Windows.Forms.Button btnPrint;
         private System.Windows.Forms.ComboBox cboPrinters;
+        private System.Windows.Forms.TabControl tabControlInvoice;
+        private System.Windows.Forms.TabPage tabVisualPreview;
+        private System.Windows.Forms.TabPage tabRdlcReport;
+        private Microsoft.Reporting.WinForms.ReportViewer reportViewerInvoice;
         private System.Drawing.Printing.PrintDocument printDocumentInvoice;
         private System.Windows.Forms.Panel pnlReceiptContainer;
         private System.Windows.Forms.Panel pnlPaper;

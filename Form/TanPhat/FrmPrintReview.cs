@@ -1,9 +1,11 @@
 using DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
 using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
+using Microsoft.Reporting.WinForms;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
@@ -11,7 +13,9 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 {
     /// <summary>
     /// Màn hình Xem trước và In hóa đơn thanh toán khổ K80 (FrmPrintReview).
-    /// Thiết kế chuẩn K80 trực quan ngay trên màn hình thiết kế Designer và hỗ trợ in thực tế.
+    /// Tích hợp cả 2 chế độ:
+    ///   - Tab 1: Phiếu in K80 Canvas trực quan (Visual WinForms Controls).
+    ///   - Tab 2: Báo cáo RDLC chuẩn Microsoft ReportViewer kết nối trực tiếp với RptInvoiceK80.rdlc.
     /// </summary>
     public partial class FrmPrintReview : Form
     {
@@ -58,7 +62,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
         }
 
-        // 3. Sự kiện khi Form tải lên: Nạp danh sách máy in, căn giữa tờ hóa đơn và hiển thị chi tiết đơn hàng
+        // 3. Sự kiện khi Form tải lên: Nạp máy in, hiển thị dữ liệu lên cả 2 Tab (Canvas & RDLC)
         private void FrmPrintReview_Load(object sender, EventArgs e)
         {
             try
@@ -67,6 +71,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 ConfigureInvoiceDocument();
                 CenterReceiptPaper();
                 BindReceiptDataToVisualPaper();
+                LoadRdlcReport();
             }
             catch (Exception ex)
             {
@@ -78,7 +83,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
         }
 
-        // 4. Căn giữa tờ giấy hóa đơn K80 trên vùng nền xám
+        // 4. Căn giữa tờ giấy hóa đơn K80 trên Tab 1
         private void CenterReceiptPaper()
         {
             if (pnlPaper != null && pnlReceiptContainer != null)
@@ -92,7 +97,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             CenterReceiptPaper();
         }
 
-        // 5. Hiển thị dữ liệu hóa đơn thật lên tờ giấy in trực quan
+        // 5. Hiển thị dữ liệu lên tờ giấy in trực quan ở Tab 1
         private void BindReceiptDataToVisualPaper()
         {
             string shopName = ConfigHelper.GetAppSetting("ShopName") ?? "THE COFFEE HOUSE";
@@ -107,7 +112,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             {
                 lblOrderNo.Text = $"Số HĐ: #{_order.Id:D5}";
                 lblTableName.Text = $"Bàn: {_order.TableName}";
-                lblOrderDate.Text = $"Ngày: {_order.OrderDate:dd/MM/yyyy HH:mm}";
+                lblOrderDate.Text = $"Ngày: {(_order.OrderDate ?? DateTime.Now):dd/MM/yyyy HH:mm}";
                 lblCashier.Text = $"TN: {_order.EmployeeName}";
 
                 lblTotalValue.Text = $"{_order.TotalAmount:N0} đ";
@@ -139,7 +144,72 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
         }
 
-        // 6. Tải danh sách các máy in hiện có trên hệ thống vào ComboBox cboPrinters
+        // 6. Nạp dữ liệu vào báo cáo RDLC (RptInvoiceK80.rdlc) ở Tab 2
+        private void LoadRdlcReport()
+        {
+            try
+            {
+                string shopName = ConfigHelper.GetAppSetting("ShopName") ?? "THE COFFEE HOUSE";
+                string shopAddress = ConfigHelper.GetAppSetting("ShopAddress") ?? "86-88 Cao Thắng, Quận 3, TP.HCM";
+                string shopPhone = ConfigHelper.GetAppSetting("ShopPhone") ?? "1800 6936 - 0909 123 456";
+
+                reportViewerInvoice.ProcessingMode = ProcessingMode.Local;
+                reportViewerInvoice.LocalReport.ReportEmbeddedResource = "DoAnCuoiKi_QuanLyTiemCaPhe.Form.TanPhat.RptInvoiceK80.rdlc";
+
+                string localRdlcPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Form", "TanPhat", "RptInvoiceK80.rdlc");
+                if (File.Exists(localRdlcPath))
+                {
+                    reportViewerInvoice.LocalReport.ReportPath = localRdlcPath;
+                }
+
+                // Gán nguồn dữ liệu danh sách món vào DataSetInvoiceDetails
+                orderDetailDTOBindingSource.DataSource = _orderDetails;
+                reportViewerInvoice.LocalReport.DataSources.Clear();
+                ReportDataSource rds = new ReportDataSource("DataSetInvoiceDetails", _orderDetails);
+                reportViewerInvoice.LocalReport.DataSources.Add(rds);
+
+                // Tính toán tiền giảm và VAT
+                string discountDisplay = _order.DiscountAmount > 0
+                    ? (!string.IsNullOrWhiteSpace(_order.PromoCode)
+                        ? $"-{_order.DiscountAmount:N0} đ ({_order.PromoCode})"
+                        : $"-{_order.DiscountAmount:N0} đ")
+                    : "0 đ";
+
+                decimal vatAmount = _order.VATAmount;
+                if (vatAmount <= 0 && _order.FinalAmount > (_order.TotalAmount - _order.DiscountAmount))
+                {
+                    vatAmount = _order.FinalAmount - (_order.TotalAmount - _order.DiscountAmount);
+                }
+
+                string vatDisplay = vatAmount > 0 ? $"+{vatAmount:N0} đ" : "0 đ";
+                DateTime orderDateValue = _order.OrderDate ?? DateTime.Now;
+
+                ReportParameter[] parameters = new ReportParameter[]
+                {
+                    new ReportParameter("pShopName", shopName.ToUpper()),
+                    new ReportParameter("pShopAddress", "Đ/c: " + shopAddress),
+                    new ReportParameter("pShopPhone", "Hotline: " + shopPhone),
+                    new ReportParameter("pOrderId", $"#HD{_order.Id:D5}"),
+                    new ReportParameter("pTableName", _order.TableName ?? "Mang về"),
+                    new ReportParameter("pOrderDate", orderDateValue.ToString("dd/MM/yyyy HH:mm")),
+                    new ReportParameter("pCashier", _order.EmployeeName ?? "Thu ngân"),
+                    new ReportParameter("pTotalAmount", $"{_order.TotalAmount:N0} đ"),
+                    new ReportParameter("pDiscountAmount", discountDisplay),
+                    new ReportParameter("pVatAmount", vatDisplay),
+                    new ReportParameter("pFinalAmount", $"{_order.FinalAmount:N0} đ"),
+                    new ReportParameter("pWifiInfo", "Wifi: TheCoffeeHouse_Free  |  Pass: 12345678")
+                };
+
+                reportViewerInvoice.LocalReport.SetParameters(parameters);
+                reportViewerInvoice.RefreshReport();
+            }
+            catch
+            {
+                // Nếu máy chưa cài ReportViewer runtime thì Tab 1 trực quan vẫn hoạt động bình thường
+            }
+        }
+
+        // 7. Tải danh sách máy in vào ComboBox
         private void LoadInstalledPrinters()
         {
             cboPrinters.Items.Clear();
@@ -154,7 +224,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 cboPrinters.Items.Add("Microsoft Print to PDF");
             }
 
-            // Ưu tiên chọn Microsoft Print to PDF
             int pdfIdx = cboPrinters.FindString("Microsoft Print to PDF");
             if (pdfIdx >= 0)
             {
@@ -170,7 +239,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             cboPrinters.SelectedIndex = defaultIdx >= 0 ? defaultIdx : 0;
         }
 
-        // 7. Cấu hình khổ giấy in K80 cho PrintDocument
+        // 8. Cấu hình khổ giấy in nhiệt K80
         private void ConfigureInvoiceDocument()
         {
             int itemCount = _orderDetails != null ? _orderDetails.Count : 0;
@@ -186,7 +255,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
         }
 
-        // 8. Sự kiện vẽ nội dung hóa đơn lên trang in thật (PrintPage)
+        // 9. Sự kiện vẽ nội dung hóa đơn khi in
         private void printDocumentInvoice_PrintPage(object sender, PrintPageEventArgs e)
         {
             PrintHelper.DrawInvoiceK80(
@@ -198,7 +267,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             e.HasMorePages = false;
         }
 
-        // 9. Sự kiện khi nhấn nút "Thực hiện in" (btnPrint)
+        // 10. Sự kiện nút "Thực hiện in" (btnPrint)
         private void btnPrint_Click(object sender, EventArgs e)
         {
             if (cboPrinters.SelectedItem == null)
