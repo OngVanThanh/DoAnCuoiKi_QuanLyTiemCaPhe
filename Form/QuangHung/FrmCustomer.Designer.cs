@@ -30,8 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             this.dgvCustomer = new System.Windows.Forms.DataGridView();
-            this.coffeeShopDBDataSetBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.coffeeShopDBDataSetBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.coffeeShopDBDataSet = new DoAnCuoiKi_QuanLyTiemCaPhe.CoffeeShopDBDataSet();
+            this.coffeeShopDBDataSetBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.txtCustomerId = new System.Windows.Forms.TextBox();
             this.txtRewardPoints = new System.Windows.Forms.TextBox();
             this.txtCustomerName = new System.Windows.Forms.TextBox();
@@ -39,8 +40,9 @@
             this.lblMembershipTier = new System.Windows.Forms.Label();
             this.pnlAddData = new System.Windows.Forms.Panel();
             this.txtMembershipTier = new System.Windows.Forms.TextBox();
+            this.btnSearch = new System.Windows.Forms.Button();
             this.lblCreatedDate = new System.Windows.Forms.Label();
-            this.txtCreatedDate = new System.Windows.Forms.TextBox();
+            this.txtRegistrationDate = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -48,19 +50,19 @@
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
-            this.btnSearch = new System.Windows.Forms.Button();
             this.txtSearch = new System.Windows.Forms.TextBox();
-            this.coffeeShopDBDataSetBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.btnRefresh = new System.Windows.Forms.Button();
             this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CustomerName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Phone = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.RewardPoints = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MembershipTier = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RegistrationDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCustomer)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.coffeeShopDBDataSetBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.coffeeShopDBDataSet)).BeginInit();
-            this.pnlAddData.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.coffeeShopDBDataSetBindingSource1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.coffeeShopDBDataSet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.coffeeShopDBDataSetBindingSource)).BeginInit();
+            this.pnlAddData.SuspendLayout();
             this.SuspendLayout();
             // 
             // dgvCustomer
@@ -74,25 +76,31 @@
             this.CustomerName,
             this.Phone,
             this.RewardPoints,
-            this.MembershipTier});
+            this.MembershipTier,
+            this.RegistrationDate});
             this.dgvCustomer.DataSource = this.coffeeShopDBDataSetBindingSource1;
             this.dgvCustomer.Location = new System.Drawing.Point(365, 30);
             this.dgvCustomer.Name = "dgvCustomer";
             this.dgvCustomer.ReadOnly = true;
-            this.dgvCustomer.Size = new System.Drawing.Size(438, 271);
+            this.dgvCustomer.Size = new System.Drawing.Size(624, 271);
             this.dgvCustomer.TabIndex = 0;
             this.dgvCustomer.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCustomer_CellClick);
             this.dgvCustomer.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCustomer_CellContentClick);
             // 
-            // coffeeShopDBDataSetBindingSource
+            // coffeeShopDBDataSetBindingSource1
             // 
-            this.coffeeShopDBDataSetBindingSource.DataSource = this.coffeeShopDBDataSet;
-            this.coffeeShopDBDataSetBindingSource.Position = 0;
+            this.coffeeShopDBDataSetBindingSource1.DataSource = this.coffeeShopDBDataSet;
+            this.coffeeShopDBDataSetBindingSource1.Position = 0;
             // 
             // coffeeShopDBDataSet
             // 
             this.coffeeShopDBDataSet.DataSetName = "CoffeeShopDBDataSet";
             this.coffeeShopDBDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // coffeeShopDBDataSetBindingSource
+            // 
+            this.coffeeShopDBDataSetBindingSource.DataSource = this.coffeeShopDBDataSet;
+            this.coffeeShopDBDataSetBindingSource.Position = 0;
             // 
             // txtCustomerId
             // 
@@ -138,9 +146,10 @@
             // 
             // pnlAddData
             // 
+            this.pnlAddData.Controls.Add(this.btnRefresh);
             this.pnlAddData.Controls.Add(this.txtMembershipTier);
             this.pnlAddData.Controls.Add(this.lblCreatedDate);
-            this.pnlAddData.Controls.Add(this.txtCreatedDate);
+            this.pnlAddData.Controls.Add(this.txtRegistrationDate);
             this.pnlAddData.Controls.Add(this.label4);
             this.pnlAddData.Controls.Add(this.label3);
             this.pnlAddData.Controls.Add(this.label2);
@@ -166,6 +175,16 @@
             this.txtMembershipTier.TabIndex = 15;
             this.txtMembershipTier.TextChanged += new System.EventHandler(this.txtMembershipTier_TextChanged);
             // 
+            // btnSearch
+            // 
+            this.btnSearch.Location = new System.Drawing.Point(530, 4);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(75, 23);
+            this.btnSearch.TabIndex = 9;
+            this.btnSearch.Text = "Tìm kiếm";
+            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            // 
             // lblCreatedDate
             // 
             this.lblCreatedDate.AutoSize = true;
@@ -175,13 +194,13 @@
             this.lblCreatedDate.TabIndex = 14;
             this.lblCreatedDate.Text = "Ngày đăng ký:";
             // 
-            // txtCreatedDate
+            // txtRegistrationDate
             // 
-            this.txtCreatedDate.Location = new System.Drawing.Point(95, 133);
-            this.txtCreatedDate.Name = "txtCreatedDate";
-            this.txtCreatedDate.Size = new System.Drawing.Size(100, 20);
-            this.txtCreatedDate.TabIndex = 13;
-            this.txtCreatedDate.TextChanged += new System.EventHandler(this.txtCreatedDate_TextChanged);
+            this.txtRegistrationDate.Location = new System.Drawing.Point(95, 133);
+            this.txtRegistrationDate.Name = "txtRegistrationDate";
+            this.txtRegistrationDate.Size = new System.Drawing.Size(100, 20);
+            this.txtRegistrationDate.TabIndex = 13;
+            this.txtRegistrationDate.TextChanged += new System.EventHandler(this.txtRegistrationDate_TextChanged);
             // 
             // label4
             // 
@@ -250,16 +269,6 @@
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
-            // btnSearch
-            // 
-            this.btnSearch.Location = new System.Drawing.Point(530, 4);
-            this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(75, 23);
-            this.btnSearch.TabIndex = 9;
-            this.btnSearch.Text = "Tìm kiếm";
-            this.btnSearch.UseVisualStyleBackColor = true;
-            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
-            // 
             // txtSearch
             // 
             this.txtSearch.Location = new System.Drawing.Point(365, 4);
@@ -268,10 +277,15 @@
             this.txtSearch.TabIndex = 13;
             this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
             // 
-            // coffeeShopDBDataSetBindingSource1
+            // btnRefresh
             // 
-            this.coffeeShopDBDataSetBindingSource1.DataSource = this.coffeeShopDBDataSet;
-            this.coffeeShopDBDataSetBindingSource1.Position = 0;
+            this.btnRefresh.Location = new System.Drawing.Point(247, 173);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(75, 23);
+            this.btnRefresh.TabIndex = 16;
+            this.btnRefresh.Text = "Làm mới";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // Id
             // 
@@ -308,11 +322,18 @@
             this.MembershipTier.Name = "MembershipTier";
             this.MembershipTier.ReadOnly = true;
             // 
+            // RegistrationDate
+            // 
+            this.RegistrationDate.DataPropertyName = "RegistrationDate";
+            this.RegistrationDate.HeaderText = "Ngày đăng ký";
+            this.RegistrationDate.Name = "RegistrationDate";
+            this.RegistrationDate.ReadOnly = true;
+            // 
             // FrmCustomer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1001, 450);
             this.Controls.Add(this.txtSearch);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.pnlAddData);
@@ -320,11 +341,11 @@
             this.Name = "FrmCustomer";
             this.Text = "FrmCustomer";
             ((System.ComponentModel.ISupportInitialize)(this.dgvCustomer)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.coffeeShopDBDataSetBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.coffeeShopDBDataSetBindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.coffeeShopDBDataSet)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.coffeeShopDBDataSetBindingSource)).EndInit();
             this.pnlAddData.ResumeLayout(false);
             this.pnlAddData.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.coffeeShopDBDataSetBindingSource1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -349,15 +370,17 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.Label lblCreatedDate;
-        private System.Windows.Forms.TextBox txtCreatedDate;
+        private System.Windows.Forms.TextBox txtRegistrationDate;
         private System.Windows.Forms.BindingSource coffeeShopDBDataSetBindingSource;
         private CoffeeShopDBDataSet coffeeShopDBDataSet;
         private System.Windows.Forms.TextBox txtMembershipTier;
         private System.Windows.Forms.BindingSource coffeeShopDBDataSetBindingSource1;
+        private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.DataGridViewTextBoxColumn Id;
         private System.Windows.Forms.DataGridViewTextBoxColumn CustomerName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Phone;
         private System.Windows.Forms.DataGridViewTextBoxColumn RewardPoints;
         private System.Windows.Forms.DataGridViewTextBoxColumn MembershipTier;
+        private System.Windows.Forms.DataGridViewTextBoxColumn RegistrationDate;
     }
 }

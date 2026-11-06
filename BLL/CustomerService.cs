@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using DoAnCuoiKi_QuanLyTiemCaPhe.DAL;
 using DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
 
@@ -14,38 +15,18 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.BLL
             return _repository.GetAllCustomers();
         }
 
+        // Xếp hạng tự động theo điểm thưởng
         public string CalculateRank(int points)
         {
             if (points >= 500) return "Kim Cương";
             if (points >= 300) return "Vàng";
             if (points >= 100) return "Bạc";
-            return "Thường"; // Mặc định ban đầu
+            return "Thường";
         }
 
-        public bool Add(CustomerDTO dto, out string errorMsg)
+        private bool ValidateCustomerData(CustomerDTO dto, bool isUpdate, out string errorMsg)
         {
             errorMsg = string.Empty;
-
-            // 1. Kiểm tra rỗng trước
-            if (string.IsNullOrWhiteSpace(dto.Id))
-            {
-                errorMsg = "Mã khách hàng không được để trống!";
-                return false;
-            }
-
-            // 2. Kiểm tra xem có đúng định dạng số nguyên dương không
-            if (!int.TryParse(dto.Id, out int id) || id <= 0)
-            {
-                errorMsg = "Mã khách hàng phải là chữ số nguyên dương lớn hơn 0!";
-                return false;
-            }
-
-            // 3. Kiểm tra xem ID đã tồn tại trong Database chưa
-            if (_repository.IsIdExists(id))
-            {
-                errorMsg = $"Mã ID [{dto.Id}] đã tồn tại trong hệ thống! Vui lòng chọn ID khác.";
-                return false;
-            }
 
             if (string.IsNullOrWhiteSpace(dto.CustomerName))
             {
@@ -53,28 +34,45 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.BLL
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(dto.Phone) || dto.Phone.Length < 9)
+            // Kiểm tra SĐT có bắt đầu bằng số 0 và đúng 10 số hay không
+            if (string.IsNullOrWhiteSpace(dto.Phone) || !Regex.IsMatch(dto.Phone.Trim(), @"^0[0-9]{9}$"))
             {
-                errorMsg = "Số điện thoại không hợp lệ!";
+                errorMsg = "Số điện thoại không hợp lệ! Phải bắt đầu bằng số 0 và có đúng 10 chữ số.";
                 return false;
             }
 
-            if (_repository.IsCustomerExists(dto.Id, dto.Phone))
+            // Kiểm tra trùng lặp SĐT trong hệ thống
+            if (_repository.IsPhoneExists(dto.Phone.Trim(), isUpdate ? dto.Id : null))
             {
-                errorMsg = "Số điện thoại đã tồn tại trong hệ thống!";
+                errorMsg = "Số điện thoại này đã được sử dụng cho một khách hàng khác!";
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool Add(CustomerDTO dto, out string errorMsg)
+        {
+            if (!ValidateCustomerData(dto, false, out errorMsg))
+            {
                 return false;
             }
 
             dto.MembershipTier = CalculateRank(dto.RewardPoints);
+            dto.RegistrationDate = DateTime.Now;
             return _repository.InsertCustomer(dto);
         }
 
         public bool Update(CustomerDTO dto, out string errorMsg)
         {
-            errorMsg = string.Empty;
             if (string.IsNullOrWhiteSpace(dto.Id))
             {
-                errorMsg = "Vui lòng chọn khách hàng cần sửa!";
+                errorMsg = "Vui lòng chọn khách hàng cần chỉnh sửa từ bảng!";
+                return false;
+            }
+
+            if (!ValidateCustomerData(dto, true, out errorMsg))
+            {
                 return false;
             }
 
@@ -87,7 +85,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.BLL
             errorMsg = string.Empty;
             if (string.IsNullOrWhiteSpace(customerId))
             {
-                errorMsg = "Vui lòng chọn khách hàng cần xóa!";
+                errorMsg = "Vui lòng chọn khách hàng muốn xóa!";
                 return false;
             }
             return _repository.DeleteCustomer(customerId);
@@ -97,7 +95,13 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.BLL
         {
             if (string.IsNullOrWhiteSpace(keyword))
                 return _repository.GetAllCustomers();
+
             return _repository.SearchCustomers(keyword.Trim());
+        }
+        // Tìm khách hàng theo ID
+        public CustomerDTO GetById(int id)
+        {
+            return _repository.GetCustomerById(id);
         }
     }
 }

@@ -36,9 +36,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
     partial void InsertCategory(Category instance);
     partial void UpdateCategory(Category instance);
     partial void DeleteCategory(Category instance);
-    partial void InsertCustomer(Customer instance);
-    partial void UpdateCustomer(Customer instance);
-    partial void DeleteCustomer(Customer instance);
     partial void InsertEmployee(Employee instance);
     partial void UpdateEmployee(Employee instance);
     partial void DeleteEmployee(Employee instance);
@@ -69,6 +66,9 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
     partial void InsertOrder(Order instance);
     partial void UpdateOrder(Order instance);
     partial void DeleteOrder(Order instance);
+    partial void InsertCustomer(Customer instance);
+    partial void UpdateCustomer(Customer instance);
+    partial void DeleteCustomer(Customer instance);
     #endregion
 		
 		public CoffeeShopDataContextDataContext() : 
@@ -114,14 +114,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 			get
 			{
 				return this.GetTable<Category>();
-			}
-		}
-		
-		public System.Data.Linq.Table<Customer> Customers
-		{
-			get
-			{
-				return this.GetTable<Customer>();
 			}
 		}
 		
@@ -202,6 +194,14 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 			get
 			{
 				return this.GetTable<Order>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Customer> Customers
+		{
+			get
+			{
+				return this.GetTable<Customer>();
 			}
 		}
 	}
@@ -479,192 +479,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 		{
 			this.SendPropertyChanging();
 			entity.Category = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Customers")]
-	public partial class Customer : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private string _CustomerName;
-		
-		private string _Phone;
-		
-		private System.Nullable<int> _RewardPoints;
-		
-		private string _MembershipTier;
-		
-		private EntitySet<Order> _Orders;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnCustomerNameChanging(string value);
-    partial void OnCustomerNameChanged();
-    partial void OnPhoneChanging(string value);
-    partial void OnPhoneChanged();
-    partial void OnRewardPointsChanging(System.Nullable<int> value);
-    partial void OnRewardPointsChanged();
-    partial void OnMembershipTierChanging(string value);
-    partial void OnMembershipTierChanged();
-    #endregion
-		
-		public Customer()
-		{
-			this._Orders = new EntitySet<Order>(new Action<Order>(this.attach_Orders), new Action<Order>(this.detach_Orders));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CustomerName", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
-		public string CustomerName
-		{
-			get
-			{
-				return this._CustomerName;
-			}
-			set
-			{
-				if ((this._CustomerName != value))
-				{
-					this.OnCustomerNameChanging(value);
-					this.SendPropertyChanging();
-					this._CustomerName = value;
-					this.SendPropertyChanged("CustomerName");
-					this.OnCustomerNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Phone", DbType="VarChar(15) NOT NULL", CanBeNull=false)]
-		public string Phone
-		{
-			get
-			{
-				return this._Phone;
-			}
-			set
-			{
-				if ((this._Phone != value))
-				{
-					this.OnPhoneChanging(value);
-					this.SendPropertyChanging();
-					this._Phone = value;
-					this.SendPropertyChanged("Phone");
-					this.OnPhoneChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RewardPoints", DbType="Int")]
-		public System.Nullable<int> RewardPoints
-		{
-			get
-			{
-				return this._RewardPoints;
-			}
-			set
-			{
-				if ((this._RewardPoints != value))
-				{
-					this.OnRewardPointsChanging(value);
-					this.SendPropertyChanging();
-					this._RewardPoints = value;
-					this.SendPropertyChanged("RewardPoints");
-					this.OnRewardPointsChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MembershipTier", DbType="NVarChar(20)")]
-		public string MembershipTier
-		{
-			get
-			{
-				return this._MembershipTier;
-			}
-			set
-			{
-				if ((this._MembershipTier != value))
-				{
-					this.OnMembershipTierChanging(value);
-					this.SendPropertyChanging();
-					this._MembershipTier = value;
-					this.SendPropertyChanged("MembershipTier");
-					this.OnMembershipTierChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Customer_Order", Storage="_Orders", ThisKey="Id", OtherKey="CustomerId")]
-		public EntitySet<Order> Orders
-		{
-			get
-			{
-				return this._Orders;
-			}
-			set
-			{
-				this._Orders.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_Orders(Order entity)
-		{
-			this.SendPropertyChanging();
-			entity.Customer = this;
-		}
-		
-		private void detach_Orders(Order entity)
-		{
-			this.SendPropertyChanging();
-			entity.Customer = null;
 		}
 	}
 	
@@ -2814,13 +2628,13 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 		
 		private EntitySet<OrderDetail> _OrderDetails;
 		
-		private EntityRef<Customer> _Customer;
-		
 		private EntityRef<Employee> _Employee;
 		
 		private EntityRef<Promotion> _Promotion;
 		
 		private EntityRef<Table> _Table;
+		
+		private EntityRef<Customer> _Customer;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -2851,10 +2665,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 		public Order()
 		{
 			this._OrderDetails = new EntitySet<OrderDetail>(new Action<OrderDetail>(this.attach_OrderDetails), new Action<OrderDetail>(this.detach_OrderDetails));
-			this._Customer = default(EntityRef<Customer>);
 			this._Employee = default(EntityRef<Employee>);
 			this._Promotion = default(EntityRef<Promotion>);
 			this._Table = default(EntityRef<Table>);
+			this._Customer = default(EntityRef<Customer>);
 			OnCreated();
 		}
 		
@@ -3087,40 +2901,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Customer_Order", Storage="_Customer", ThisKey="CustomerId", OtherKey="Id", IsForeignKey=true)]
-		public Customer Customer
-		{
-			get
-			{
-				return this._Customer.Entity;
-			}
-			set
-			{
-				Customer previousValue = this._Customer.Entity;
-				if (((previousValue != value) 
-							|| (this._Customer.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Customer.Entity = null;
-						previousValue.Orders.Remove(this);
-					}
-					this._Customer.Entity = value;
-					if ((value != null))
-					{
-						value.Orders.Add(this);
-						this._CustomerId = value.Id;
-					}
-					else
-					{
-						this._CustomerId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("Customer");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_Order", Storage="_Employee", ThisKey="EmployeeId", OtherKey="Id", IsForeignKey=true)]
 		public Employee Employee
 		{
@@ -3223,6 +3003,40 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Customer_Order", Storage="_Customer", ThisKey="CustomerId", OtherKey="Id", IsForeignKey=true)]
+		public Customer Customer
+		{
+			get
+			{
+				return this._Customer.Entity;
+			}
+			set
+			{
+				Customer previousValue = this._Customer.Entity;
+				if (((previousValue != value) 
+							|| (this._Customer.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Customer.Entity = null;
+						previousValue.Orders.Remove(this);
+					}
+					this._Customer.Entity = value;
+					if ((value != null))
+					{
+						value.Orders.Add(this);
+						this._CustomerId = value.Id;
+					}
+					else
+					{
+						this._CustomerId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Customer");
+				}
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -3253,6 +3067,216 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 		{
 			this.SendPropertyChanging();
 			entity.Order = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Customers")]
+	public partial class Customer : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _CustomerName;
+		
+		private string _Phone;
+		
+		private System.Nullable<int> _RewardPoints;
+		
+		private string _MembershipTier;
+		
+		private System.Nullable<System.DateTime> _RegistrationDate;
+		
+		private EntitySet<Order> _Orders;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnCustomerNameChanging(string value);
+    partial void OnCustomerNameChanged();
+    partial void OnPhoneChanging(string value);
+    partial void OnPhoneChanged();
+    partial void OnRewardPointsChanging(System.Nullable<int> value);
+    partial void OnRewardPointsChanged();
+    partial void OnMembershipTierChanging(string value);
+    partial void OnMembershipTierChanged();
+    partial void OnRegistrationDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnRegistrationDateChanged();
+    #endregion
+		
+		public Customer()
+		{
+			this._Orders = new EntitySet<Order>(new Action<Order>(this.attach_Orders), new Action<Order>(this.detach_Orders));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CustomerName", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string CustomerName
+		{
+			get
+			{
+				return this._CustomerName;
+			}
+			set
+			{
+				if ((this._CustomerName != value))
+				{
+					this.OnCustomerNameChanging(value);
+					this.SendPropertyChanging();
+					this._CustomerName = value;
+					this.SendPropertyChanged("CustomerName");
+					this.OnCustomerNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Phone", DbType="VarChar(15) NOT NULL", CanBeNull=false)]
+		public string Phone
+		{
+			get
+			{
+				return this._Phone;
+			}
+			set
+			{
+				if ((this._Phone != value))
+				{
+					this.OnPhoneChanging(value);
+					this.SendPropertyChanging();
+					this._Phone = value;
+					this.SendPropertyChanged("Phone");
+					this.OnPhoneChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RewardPoints", DbType="Int")]
+		public System.Nullable<int> RewardPoints
+		{
+			get
+			{
+				return this._RewardPoints;
+			}
+			set
+			{
+				if ((this._RewardPoints != value))
+				{
+					this.OnRewardPointsChanging(value);
+					this.SendPropertyChanging();
+					this._RewardPoints = value;
+					this.SendPropertyChanged("RewardPoints");
+					this.OnRewardPointsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MembershipTier", DbType="NVarChar(20)")]
+		public string MembershipTier
+		{
+			get
+			{
+				return this._MembershipTier;
+			}
+			set
+			{
+				if ((this._MembershipTier != value))
+				{
+					this.OnMembershipTierChanging(value);
+					this.SendPropertyChanging();
+					this._MembershipTier = value;
+					this.SendPropertyChanged("MembershipTier");
+					this.OnMembershipTierChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RegistrationDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> RegistrationDate
+		{
+			get
+			{
+				return this._RegistrationDate;
+			}
+			set
+			{
+				if ((this._RegistrationDate != value))
+				{
+					this.OnRegistrationDateChanging(value);
+					this.SendPropertyChanging();
+					this._RegistrationDate = value;
+					this.SendPropertyChanged("RegistrationDate");
+					this.OnRegistrationDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Customer_Order", Storage="_Orders", ThisKey="Id", OtherKey="CustomerId")]
+		public EntitySet<Order> Orders
+		{
+			get
+			{
+				return this._Orders;
+			}
+			set
+			{
+				this._Orders.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Orders(Order entity)
+		{
+			this.SendPropertyChanging();
+			entity.Customer = this;
+		}
+		
+		private void detach_Orders(Order entity)
+		{
+			this.SendPropertyChanging();
+			entity.Customer = null;
 		}
 	}
 }

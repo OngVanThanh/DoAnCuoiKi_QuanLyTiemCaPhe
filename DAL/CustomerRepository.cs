@@ -7,20 +7,13 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
 {
     public class CustomerRepository
     {
-        public bool IsIdExists(int id)
-        {
-            using (var db = new CoffeeShopDataContextDataContext()) // Đổi tên DataContext của bạn
-            {
-                // Trả về true nếu trong DB đang có ID này, false nếu chưa có hoặc đã bị xóa
-                return db.Customers.Any(c => c.Id == id);
-            }
-        }
-        // 1. Lấy toàn bộ danh sách khách hàng dùng LINQ
+        // 1. Lấy toàn bộ danh sách khách hàng
         public List<CustomerDTO> GetAllCustomers()
         {
-            using (var db = new CoffeeShopDataContextDataContext()) // Đổi tên DataContext theo project của bạn
+            using (var db = new CoffeeShopDataContextDataContext())
             {
                 var query = from c in db.Customers
+                            orderby c.RegistrationDate ascending
                             select new CustomerDTO
                             {
                                 Id = c.Id.ToString(),
@@ -28,48 +21,52 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                                 Phone = c.Phone,
                                 RewardPoints = c.RewardPoints ?? 0,
                                 MembershipTier = c.MembershipTier,
-                                
+                                RegistrationDate = (c.RegistrationDate ?? DateTime.Now).Date
                             };
                 return query.ToList();
             }
         }
 
-        // 2. Kiểm tra xem Mã KH hoặc SĐT đã tồn tại chưa bằng LINQ (Any)
-        public bool IsCustomerExists(string customerId, string phone)
+        // 2. Kiểm tra trùng số điện thoại
+        public bool IsPhoneExists(string phone, string excludeId = null)
         {
             using (var db = new CoffeeShopDataContextDataContext())
             {
-                return db.Customers.Any(c => c.Id.ToString() == customerId || c.Phone == phone);
+                if (string.IsNullOrEmpty(excludeId))
+                {
+                    return db.Customers.Any(c => c.Phone == phone);
+                }
+                // Khi Sửa: Cho phép giữ nguyên SĐT của chính khách hàng đó
+                return db.Customers.Any(c => c.Phone == phone && c.Id.ToString() != excludeId);
             }
         }
 
-        // 3. THÊM khách hàng (Insert)
+        // 3. Thêm mới khách hàng
         public bool InsertCustomer(CustomerDTO dto)
         {
             using (var db = new CoffeeShopDataContextDataContext())
             {
                 var entity = new Customer
                 {
-                    Id = int.Parse(dto.Id),
+                    Id = int.Parse(dto.Id), // Gán ID từ DTO mà người dùng đã nhập
                     CustomerName = dto.CustomerName,
                     Phone = dto.Phone,
                     RewardPoints = dto.RewardPoints,
-                    MembershipTier = dto.MembershipTier,
-                    
+                    MembershipTier = string.IsNullOrWhiteSpace(dto.MembershipTier) ? "Thường" : dto.MembershipTier,
+                    RegistrationDate = dto.RegistrationDate.Date
                 };
 
-                db.Customers.InsertOnSubmit(entity); // Nếu dùng EF thì là: db.KhachHangs.Add(entity);
-                db.SubmitChanges();                   // Nếu dùng EF thì là: db.SaveChanges();
+                db.Customers.InsertOnSubmit(entity);
+                db.SubmitChanges();
                 return true;
             }
         }
 
-        // 4. SỬA thông tin khách hàng bằng LINQ (SingleOrDefault / FirstOrDefault)
+        // 4. Sửa khách hàng
         public bool UpdateCustomer(CustomerDTO dto)
         {
             using (var db = new CoffeeShopDataContextDataContext())
             {
-                // Dùng LINQ tìm đúng bản ghi cần sửa theo MaKH
                 var customer = db.Customers.SingleOrDefault(c => c.Id.ToString() == dto.Id);
                 if (customer != null)
                 {
@@ -77,23 +74,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                     customer.Phone = dto.Phone;
                     customer.RewardPoints = dto.RewardPoints;
                     customer.MembershipTier = dto.MembershipTier;
+                    // Không cần cập nhật RegistrationDate để giữ nguyên ngày đăng ký ban đầu
 
-                    db.SubmitChanges(); // Lưu thay đổi xuống SQL Server
-                    return true;
-                }
-                return false;
-            }
-        }
-
-        // 5. XÓA khách hàng bằng LINQ
-        public bool DeleteCustomer(string customerId)
-        {
-            using (var db = new CoffeeShopDataContextDataContext())
-            {
-                var customer = db.Customers.SingleOrDefault(c => c.Id.ToString() == customerId);
-                if (customer != null)
-                {
-                    db.Customers.DeleteOnSubmit(customer); // Nếu dùng EF thì là: db.KhachHangs.Remove(customer);
                     db.SubmitChanges();
                     return true;
                 }
@@ -101,13 +83,30 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             }
         }
 
-        // 6. TÌM KIẾM khách hàng theo Tên hoặc Số điện thoại bằng LINQ
+        // 5. Xóa khách hàng
+        public bool DeleteCustomer(string id)
+        {
+            using (var db = new CoffeeShopDataContextDataContext())
+            {
+                var customer = db.Customers.SingleOrDefault(c => c.Id.ToString() == id);
+                if (customer != null)
+                {
+                    db.Customers.DeleteOnSubmit(customer);
+                    db.SubmitChanges();
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        // 6. Tìm kiếm theo SĐT hoặc Tên
         public List<CustomerDTO> SearchCustomers(string keyword)
         {
             using (var db = new CoffeeShopDataContextDataContext())
             {
                 var query = from c in db.Customers
-                            where c.CustomerName.Contains(keyword) || c.Phone.Contains(keyword) || c.Id.ToString().Contains(keyword)
+                            where c.Phone.Contains(keyword) || c.CustomerName.Contains(keyword)
+                            orderby c.Id descending
                             select new CustomerDTO
                             {
                                 Id = c.Id.ToString(),
@@ -115,9 +114,30 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                                 Phone = c.Phone,
                                 RewardPoints = c.RewardPoints ?? 0,
                                 MembershipTier = c.MembershipTier,
-                                
+                                RegistrationDate = c.RegistrationDate ?? DateTime.Now
                             };
                 return query.ToList();
+            }
+        }
+        // Tìm kiếm chính xác khách hàng theo Id
+        public CustomerDTO GetCustomerById(int id)
+        {
+            using (var db = new CoffeeShopDataContextDataContext()) // Đổi theo tên DataContext của bạn
+            {
+                var customer = db.Customers.SingleOrDefault(c => c.Id == id);
+                if (customer != null)
+                {
+                    return new CustomerDTO
+                    {
+                        Id = customer.Id.ToString(),
+                        CustomerName = customer.CustomerName,
+                        Phone = customer.Phone,
+                        RewardPoints = customer.RewardPoints ?? 0,
+                        MembershipTier = customer.MembershipTier,
+                        RegistrationDate = customer.RegistrationDate ?? DateTime.Now
+                    };
+                }
+                return null;
             }
         }
     }

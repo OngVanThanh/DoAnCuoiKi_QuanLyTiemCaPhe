@@ -33,10 +33,13 @@
             this.cboReportType = new System.Windows.Forms.ComboBox();
             this.btnExportWord = new System.Windows.Forms.Button();
             this.saveFileDialogWord = new System.Windows.Forms.SaveFileDialog();
+            this.reportViewer1 = new Microsoft.Reporting.WinForms.ReportViewer();
             this.SuspendLayout();
             // 
             // dtpFromDate
             // 
+            this.dtpFromDate.CustomFormat = "dd/MM/yyyy";
+            this.dtpFromDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpFromDate.Location = new System.Drawing.Point(29, 23);
             this.dtpFromDate.Name = "dtpFromDate";
             this.dtpFromDate.Size = new System.Drawing.Size(200, 20);
@@ -45,6 +48,8 @@
             // 
             // dtpToDate
             // 
+            this.dtpToDate.CustomFormat = "dd/mm/yyyy";
+            this.dtpToDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpToDate.Location = new System.Drawing.Point(244, 23);
             this.dtpToDate.Name = "dtpToDate";
             this.dtpToDate.Size = new System.Drawing.Size(200, 20);
@@ -70,17 +75,28 @@
             this.btnExportWord.UseVisualStyleBackColor = true;
             this.btnExportWord.Click += new System.EventHandler(this.btnExportWord_Click);
             // 
+            // reportViewer1
+            // 
+            this.reportViewer1.LocalReport.ReportEmbeddedResource = "DoAnCuoiKi_QuanLyTiemCaPhe.Form.QuangHung.Report1.rdlc";
+            this.reportViewer1.Location = new System.Drawing.Point(29, 63);
+            this.reportViewer1.Name = "reportViewer1";
+            this.reportViewer1.ServerReport.BearerToken = null;
+            this.reportViewer1.Size = new System.Drawing.Size(877, 383);
+            this.reportViewer1.TabIndex = 4;
+            // 
             // FrmReportWord
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(941, 450);
+            this.ClientSize = new System.Drawing.Size(1044, 450);
+            this.Controls.Add(this.reportViewer1);
             this.Controls.Add(this.btnExportWord);
             this.Controls.Add(this.cboReportType);
             this.Controls.Add(this.dtpToDate);
             this.Controls.Add(this.dtpFromDate);
             this.Name = "FrmReportWord";
             this.Text = "FrmReportWord";
+            this.Load += new System.EventHandler(this.FrmReportWord_Load);
             this.ResumeLayout(false);
 
         }
@@ -92,5 +108,6 @@
         private System.Windows.Forms.ComboBox cboReportType;
         private System.Windows.Forms.Button btnExportWord;
         private System.Windows.Forms.SaveFileDialog saveFileDialogWord;
+        private Microsoft.Reporting.WinForms.ReportViewer reportViewer1;
     }
 }

@@ -32,7 +32,17 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             {
                 List<CustomerDTO> list = _customerService.GetAll();
 
+
                 dgvCustomer.AutoGenerateColumns = false;
+                if (dgvCustomer.Columns.Contains("colRegistrationDate"))
+                {
+                    dgvCustomer.Columns["colRegistrationDate"].DefaultCellStyle.Format = "dd/MM/yyyy";
+                }
+                else if (dgvCustomer.Columns.Count > 5)
+                {
+                    // Nếu bạn đang dùng vị trí cột (index 5)
+                    dgvCustomer.Columns[5].DefaultCellStyle.Format = "dd/MM/yyyy";
+                }
                 dgvCustomer.DataSource = null; // Xóa nguồn cũ
                 dgvCustomer.DataSource = list; // Gán nguồn mới
             }
@@ -52,7 +62,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 CustomerName = txtCustomerName.Text.Trim(),
                 Phone = txtPhone.Text.Trim(),
                 RewardPoints = points,
-                CreatedDate = DateTime.Now
+                MembershipTier = _customerService.CalculateRank(points),
+                RegistrationDate = DateTime.Today // Chỉ lấy ngày hiện tại (không có giờ)
             };
 
             if (_customerService.Add(newCustomer, out string error))
@@ -76,7 +87,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 Id = txtCustomerId.Text.Trim(),
                 CustomerName = txtCustomerName.Text.Trim(),
                 Phone = txtPhone.Text.Trim(),
-                RewardPoints = points
+                RewardPoints = points,
+                MembershipTier = _customerService.CalculateRank(points)
             };
 
             if (_customerService.Update(customer, out string error))
@@ -123,9 +135,47 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            string keyword = txtCustomerName.Text.Trim(); // Hoặc lấy từ txtSearch nếu có ô tìm riêng
-            dgvCustomer.DataSource = null;
-            dgvCustomer.DataSource = _customerService.Search(keyword);
+            string searchKeyword = txtSearch.Text.Trim();
+
+            // 1. Bắt buộc người dùng phải nhập thông tin trước khi tìm
+            if (string.IsNullOrWhiteSpace(searchKeyword))
+            {
+                MessageBox.Show("Vui lòng nhập Mã khách hàng (ID) vào ô tìm kiếm!",
+                                "Thông báo",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+                txtSearch.Focus();
+                return;
+            }
+
+            // 2. Kiểm tra xem người dùng có nhập đúng định dạng số không
+            if (!int.TryParse(searchKeyword, out int customerId))
+            {
+                MessageBox.Show("Mã khách hàng tìm kiếm phải là chữ số!",
+                                "Lỗi định dạng",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+                txtSearch.SelectAll();
+                txtSearch.Focus();
+                return;
+            }
+
+            // 3. Thực hiện tìm kiếm
+            CustomerDTO result = _customerService.GetById(customerId);
+
+            if (result != null)
+            {
+                // Hiển thị khách hàng tìm thấy lên bảng DataGridView
+                dgvCustomer.DataSource = null;
+                dgvCustomer.DataSource = new List<CustomerDTO> { result };
+            }
+            else
+            {
+                MessageBox.Show($"Không tìm thấy khách hàng nào có Mã ID: {customerId}!",
+                                "Kết quả tìm kiếm",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+            }
         }
 
         private void dgvCustomer_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -148,6 +198,14 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         private void txtRewardPoints_TextChanged(object sender, EventArgs e)
         {
+            if (int.TryParse(txtRewardPoints.Text.Trim(), out int points))
+            {
+                txtMembershipTier.Text = _customerService.CalculateRank(points);
+            }
+            else
+            {
+                txtMembershipTier.Text = "Thường";
+            }
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -157,13 +215,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
-
+            btnSearch.Enabled = !string.IsNullOrWhiteSpace(txtSearch.Text);
         }
 
-        private void txtCreatedDate_TextChanged(object sender, EventArgs e)
-        {
-
-        }
+        
 
         private void lblMembershipTier_Click(object sender, EventArgs e)
         {
@@ -179,15 +234,59 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             if (e.RowIndex >= 0 && dgvCustomer.CurrentRow != null)
             {
                 var row = dgvCustomer.CurrentRow;
-                txtCustomerId.Text = row.Cells["Id"].Value?.ToString() ?? "";
-                txtCustomerName.Text = row.Cells["CustomerName"].Value?.ToString() ?? "";
-                txtPhone.Text = row.Cells["Phone"].Value?.ToString() ?? "";
-                txtRewardPoints.Text = row.Cells["RewardPoints"].Value?.ToString() ?? "0";
-                lblMembershipTier.Text = row.Cells["MembershipTier"].Value?.ToString() ?? "Đồng";
 
-                // Khóa ô Mã khách hàng lại để tránh sửa nhầm Primary Key
+                // Cột 0: Mã Khách hàng (Id)
+                txtCustomerId.Text = row.Cells[0].Value?.ToString() ?? "";
+
+                // Cột 1: Tên Khách hàng (CustomerName)
+                if (row.Cells.Count > 1)
+                    txtCustomerName.Text = row.Cells[1].Value?.ToString() ?? "";
+
+                // Cột 2: Số điện thoại (Phone)
+                if (row.Cells.Count > 2)
+                    txtPhone.Text = row.Cells[2].Value?.ToString() ?? "";
+
+                // Cột 3: Điểm tích lũy (RewardPoints)
+                if (row.Cells.Count > 3)
+                    txtRewardPoints.Text = row.Cells[3].Value?.ToString() ?? "0";
+
+                // Cột 4: Hạng thành viên (MembershipTier)
+                if (row.Cells.Count > 4)
+                    txtMembershipTier.Text = row.Cells[4].Value?.ToString() ?? "Bronze";
+
+                // Cột 5: Ngày đăng ký (RegistrationDate)
+                if (row.Cells.Count > 5)
+                {
+                    object regVal = row.Cells[5].Value;
+                    if (regVal != null && DateTime.TryParse(regVal.ToString(), out DateTime regDate))
+                    {
+                        txtRegistrationDate.Text = regDate.ToString("dd/MM/yyyy");
+                    }
+                    else
+                    {
+                        txtRegistrationDate.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                    }
+                }
+
+                // Khóa mã ID lại khi xem
                 txtCustomerId.ReadOnly = true;
             }
+        }
+        
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            // 1. Tải lại toàn bộ dữ liệu từ Database lên bảng
+            LoadCustomerList();
+
+            // 2. Xóa ô tìm kiếm
+            txtSearch.Clear();
+
+            // 3. Xóa trắng các ô thông tin nhập liệu
+            ClearInputs();
+
+            // 4. Focus lại ô tìm kiếm hoặc ô nhập tên
+            txtSearch.Focus();
         }
         private void ClearInputs()
         {
@@ -196,8 +295,15 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             txtCustomerName.Clear();
             txtPhone.Clear();
             txtRewardPoints.Clear();
-            lblMembershipTier.Text = "Đồng";
+            txtMembershipTier.Text = "";
+            if (txtRegistrationDate != null) txtRegistrationDate.Clear();
+            if (txtSearch != null) txtSearch.Clear();
             txtCustomerId.Focus();
+        }
+
+        private void txtRegistrationDate_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
