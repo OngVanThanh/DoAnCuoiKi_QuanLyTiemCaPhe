@@ -203,8 +203,14 @@
     <EmbeddedResource Include="Form\TuanHung\FrmCategory.resx">
       <DependentUpon>FrmCategory.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Form\TuanHung\FrmInventory.resx">
+      <DependentUpon>FrmInventory.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form\TuanHung\FrmProduct.resx">
       <DependentUpon>FrmProduct.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\TuanHung\FrmPromotion.resx">
+      <DependentUpon>FrmPromotion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\VanThanh\FrmAppConfig.resx">
       <DependentUpon>FrmAppConfig.cs</DependentUpon>
