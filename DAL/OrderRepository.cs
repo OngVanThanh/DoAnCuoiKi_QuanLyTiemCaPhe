@@ -3,13 +3,15 @@ using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 
 namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
 {
     /// <summary>
     /// Lớp truy xuất dữ liệu (DAL) phục vụ nghiệp vụ Gọi món (Order), Chi tiết hóa đơn (OrderDetails),
     /// Thực đơn (Products/Categories), Khuyến mãi (Promotions) và Chuyển/Gộp bàn.
-    /// Hỗ trợ đầy đủ cả SQL Server (LINQ to SQL) và dữ liệu mẫu từ CoffeeShopDB.sql khi chạy offline.
+    /// Sử dụng TransactionScope trong LINQ to SQL để đảm bảo tính toàn vẹn giao dịch (Commit / Rollback),
+    /// đồng thời hỗ trợ dữ liệu mẫu từ CoffeeShopDB.sql khi chạy offline.
     /// </summary>
     internal class OrderRepository
     {
@@ -238,7 +240,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             }
         }
 
-        // 9. Tạo mới đơn hàng cho bàn và cập nhật trạng thái bàn thành "Có khách"
+        // 9. Tạo mới đơn hàng cho bàn và cập nhật trạng thái bàn thành "Có khách" (bọc TransactionScope toàn vẹn)
         public int CreateOrder(int tableId, int employeeId, int? customerId = null)
         {
             if (!_tableRepo.IsDatabaseOnline())
@@ -266,39 +268,43 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                 return newOrder.Id;
             }
 
-            using (var db = GetContext())
+            using (var scope = new TransactionScope())
             {
-                int validEmployeeId = employeeId;
-                if (!db.Employees.Any(e => e.Id == validEmployeeId))
+                using (var db = GetContext())
                 {
-                    var firstEmp = db.Employees.FirstOrDefault();
-                    if (firstEmp != null)
-                        validEmployeeId = firstEmp.Id;
+                    int validEmployeeId = employeeId;
+                    if (!db.Employees.Any(e => e.Id == validEmployeeId))
+                    {
+                        var firstEmp = db.Employees.FirstOrDefault();
+                        if (firstEmp != null)
+                            validEmployeeId = firstEmp.Id;
+                    }
+
+                    var newOrder = new Order
+                    {
+                        TableId = tableId,
+                        EmployeeId = validEmployeeId,
+                        CustomerId = customerId,
+                        OrderDate = DateTime.Now,
+                        TotalAmount = 0m,
+                        DiscountAmount = 0m,
+                        FinalAmount = 0m,
+                        Status = "Chưa thanh toán",
+                        PromotionId = null
+                    };
+
+                    db.Orders.InsertOnSubmit(newOrder);
+
+                    var table = db.Tables.FirstOrDefault(t => t.Id == tableId);
+                    if (table != null)
+                    {
+                        table.Status = "Có khách";
+                    }
+
+                    db.SubmitChanges();
+                    scope.Complete();
+                    return newOrder.Id;
                 }
-
-                var newOrder = new Order
-                {
-                    TableId = tableId,
-                    EmployeeId = validEmployeeId,
-                    CustomerId = customerId,
-                    OrderDate = DateTime.Now,
-                    TotalAmount = 0m,
-                    DiscountAmount = 0m,
-                    FinalAmount = 0m,
-                    Status = "Chưa thanh toán",
-                    PromotionId = null
-                };
-
-                db.Orders.InsertOnSubmit(newOrder);
-
-                var table = db.Tables.FirstOrDefault(t => t.Id == tableId);
-                if (table != null)
-                {
-                    table.Status = "Có khách";
-                }
-
-                db.SubmitChanges();
-                return newOrder.Id;
             }
         }
 
@@ -348,7 +354,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             }
         }
 
-        // 11. Thêm món hoặc cộng dồn số lượng món vào đơn hàng, đồng thời tính lại tổng tiền đơn hàng
+        // 11. Thêm món hoặc cộng dồn số lượng món vào đơn hàng, đồng thời tính lại tổng tiền đơn hàng (bọc TransactionScope)
         public bool AddOrUpdateOrderDetail(int orderId, int productId, int quantityToAdd)
         {
             if (quantityToAdd <= 0)
@@ -388,44 +394,48 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                 return true;
             }
 
-            using (var db = GetContext())
+            using (var scope = new TransactionScope())
             {
-                var order = db.Orders.FirstOrDefault(o => o.Id == orderId);
-                var product = db.Products.FirstOrDefault(p => p.Id == productId);
-
-                if (order == null || product == null)
-                    return false;
-
-                var existingDetail = db.OrderDetails.FirstOrDefault(d =>
-                    d.OrderId == orderId &&
-                    d.ProductId == productId);
-
-                if (existingDetail != null)
+                using (var db = GetContext())
                 {
-                    existingDetail.Quantity += quantityToAdd;
-                    existingDetail.UnitPrice = product.Price;
-                    existingDetail.TotalPrice = existingDetail.Quantity * existingDetail.UnitPrice;
-                }
-                else
-                {
-                    var newDetail = new OrderDetail
+                    var order = db.Orders.FirstOrDefault(o => o.Id == orderId);
+                    var product = db.Products.FirstOrDefault(p => p.Id == productId);
+
+                    if (order == null || product == null)
+                        return false;
+
+                    var existingDetail = db.OrderDetails.FirstOrDefault(d =>
+                        d.OrderId == orderId &&
+                        d.ProductId == productId);
+
+                    if (existingDetail != null)
                     {
-                        OrderId = orderId,
-                        ProductId = productId,
-                        Quantity = quantityToAdd,
-                        UnitPrice = product.Price,
-                        TotalPrice = quantityToAdd * product.Price
-                    };
-                    db.OrderDetails.InsertOnSubmit(newDetail);
-                }
+                        existingDetail.Quantity += quantityToAdd;
+                        existingDetail.UnitPrice = product.Price;
+                        existingDetail.TotalPrice = existingDetail.Quantity * existingDetail.UnitPrice;
+                    }
+                    else
+                    {
+                        var newDetail = new OrderDetail
+                        {
+                            OrderId = orderId,
+                            ProductId = productId,
+                            Quantity = quantityToAdd,
+                            UnitPrice = product.Price,
+                            TotalPrice = quantityToAdd * product.Price
+                        };
+                        db.OrderDetails.InsertOnSubmit(newDetail);
+                    }
 
-                db.SubmitChanges();
-                RecalculateOrderTotalInternal(db, orderId);
-                return true;
+                    db.SubmitChanges();
+                    RecalculateOrderTotalInternal(db, orderId);
+                    scope.Complete();
+                    return true;
+                }
             }
         }
 
-        // 12. Xóa món khỏi đơn hàng
+        // 12. Xóa món khỏi đơn hàng (bọc TransactionScope đảm bảo đồng bộ Hóa đơn & Bàn nếu xóa hết món)
         public bool RemoveOrderDetail(int orderId, int productId)
         {
             if (!_tableRepo.IsDatabaseOnline())
@@ -454,40 +464,44 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                 return true;
             }
 
-            using (var db = GetContext())
+            using (var scope = new TransactionScope())
             {
-                var detail = db.OrderDetails.FirstOrDefault(d =>
-                    d.OrderId == orderId &&
-                    d.ProductId == productId);
-
-                if (detail == null)
-                    return false;
-
-                db.OrderDetails.DeleteOnSubmit(detail);
-                db.SubmitChanges();
-
-                bool hasRemainingItems = db.OrderDetails.Any(d => d.OrderId == orderId);
-                var order = db.Orders.FirstOrDefault(o => o.Id == orderId);
-
-                if (!hasRemainingItems && order != null && order.Status == "Chưa thanh toán")
+                using (var db = GetContext())
                 {
-                    int tableId = order.TableId;
-                    db.Orders.DeleteOnSubmit(order);
+                    var detail = db.OrderDetails.FirstOrDefault(d =>
+                        d.OrderId == orderId &&
+                        d.ProductId == productId);
 
-                    var table = db.Tables.FirstOrDefault(t => t.Id == tableId);
-                    if (table != null)
+                    if (detail == null)
+                        return false;
+
+                    db.OrderDetails.DeleteOnSubmit(detail);
+                    db.SubmitChanges();
+
+                    bool hasRemainingItems = db.OrderDetails.Any(d => d.OrderId == orderId);
+                    var order = db.Orders.FirstOrDefault(o => o.Id == orderId);
+
+                    if (!hasRemainingItems && order != null && order.Status == "Chưa thanh toán")
                     {
-                        table.Status = "Trống";
+                        int tableId = order.TableId;
+                        db.Orders.DeleteOnSubmit(order);
+
+                        var table = db.Tables.FirstOrDefault(t => t.Id == tableId);
+                        if (table != null)
+                        {
+                            table.Status = "Trống";
+                        }
+
+                        db.SubmitChanges();
+                    }
+                    else
+                    {
+                        RecalculateOrderTotalInternal(db, orderId);
                     }
 
-                    db.SubmitChanges();
+                    scope.Complete();
+                    return true;
                 }
-                else
-                {
-                    RecalculateOrderTotalInternal(db, orderId);
-                }
-
-                return true;
             }
         }
 
@@ -513,7 +527,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             db.SubmitChanges();
         }
 
-        // 14. Hoàn tất thanh toán hóa đơn và giải phóng bàn về trạng thái "Trống"
+        // 14. Hoàn tất thanh toán hóa đơn và giải phóng bàn về trạng thái "Trống" (bọc TransactionScope)
         public bool CompleteOrderPayment(int orderId, decimal totalAmount, decimal discountAmount, decimal finalAmount, int? promotionId)
         {
             if (!_tableRepo.IsDatabaseOnline())
@@ -536,31 +550,35 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                 return true;
             }
 
-            using (var db = GetContext())
+            using (var scope = new TransactionScope())
             {
-                var order = db.Orders.FirstOrDefault(o => o.Id == orderId);
-                if (order == null)
-                    return false;
-
-                order.TotalAmount = totalAmount;
-                order.DiscountAmount = discountAmount;
-                order.FinalAmount = finalAmount;
-                order.PromotionId = promotionId;
-                order.OrderDate = DateTime.Now;
-                order.Status = "Đã thanh toán";
-
-                var table = db.Tables.FirstOrDefault(t => t.Id == order.TableId);
-                if (table != null)
+                using (var db = GetContext())
                 {
-                    table.Status = "Trống";
-                }
+                    var order = db.Orders.FirstOrDefault(o => o.Id == orderId);
+                    if (order == null)
+                        return false;
 
-                db.SubmitChanges();
-                return true;
+                    order.TotalAmount = totalAmount;
+                    order.DiscountAmount = discountAmount;
+                    order.FinalAmount = finalAmount;
+                    order.PromotionId = promotionId;
+                    order.OrderDate = DateTime.Now;
+                    order.Status = "Đã thanh toán";
+
+                    var table = db.Tables.FirstOrDefault(t => t.Id == order.TableId);
+                    if (table != null)
+                    {
+                        table.Status = "Trống";
+                    }
+
+                    db.SubmitChanges();
+                    scope.Complete();
+                    return true;
+                }
             }
         }
 
-        // 15. Chuyển bàn hoặc Gộp bàn
+        // 15. Chuyển bàn hoặc Gộp bàn (bọc TransactionScope đảm bảo không mất món khi gộp bàn)
         public bool SwitchOrMergeTable(int sourceTableId, int targetTableId)
         {
             if (sourceTableId <= 0 || targetTableId <= 0 || sourceTableId == targetTableId)
@@ -614,63 +632,67 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                 return true;
             }
 
-            using (var db = GetContext())
+            using (var scope = new TransactionScope())
             {
-                var sourceTable = db.Tables.FirstOrDefault(t => t.Id == sourceTableId);
-                var targetTable = db.Tables.FirstOrDefault(t => t.Id == targetTableId);
-
-                if (sourceTable == null || targetTable == null)
-                    return false;
-
-                var sourceOrder = db.Orders
-                    .OrderByDescending(o => o.Id)
-                    .FirstOrDefault(o => o.TableId == sourceTableId && o.Status == "Chưa thanh toán");
-
-                if (sourceOrder == null)
-                    return false;
-
-                var targetOrder = db.Orders
-                    .OrderByDescending(o => o.Id)
-                    .FirstOrDefault(o => o.TableId == targetTableId && o.Status == "Chưa thanh toán");
-
-                if (targetOrder == null)
+                using (var db = GetContext())
                 {
-                    sourceOrder.TableId = targetTableId;
-                    sourceTable.Status = "Trống";
-                    targetTable.Status = "Có khách";
-                    db.SubmitChanges();
-                }
-                else
-                {
-                    var sourceDetails = db.OrderDetails.Where(d => d.OrderId == sourceOrder.Id).ToList();
-                    var targetDetails = db.OrderDetails.Where(d => d.OrderId == targetOrder.Id).ToList();
+                    var sourceTable = db.Tables.FirstOrDefault(t => t.Id == sourceTableId);
+                    var targetTable = db.Tables.FirstOrDefault(t => t.Id == targetTableId);
 
-                    foreach (var srcItem in sourceDetails)
+                    if (sourceTable == null || targetTable == null)
+                        return false;
+
+                    var sourceOrder = db.Orders
+                        .OrderByDescending(o => o.Id)
+                        .FirstOrDefault(o => o.TableId == sourceTableId && o.Status == "Chưa thanh toán");
+
+                    if (sourceOrder == null)
+                        return false;
+
+                    var targetOrder = db.Orders
+                        .OrderByDescending(o => o.Id)
+                        .FirstOrDefault(o => o.TableId == targetTableId && o.Status == "Chưa thanh toán");
+
+                    if (targetOrder == null)
                     {
-                        var existingTargetItem = targetDetails.FirstOrDefault(d => d.ProductId == srcItem.ProductId);
-                        if (existingTargetItem != null)
+                        sourceOrder.TableId = targetTableId;
+                        sourceTable.Status = "Trống";
+                        targetTable.Status = "Có khách";
+                        db.SubmitChanges();
+                    }
+                    else
+                    {
+                        var sourceDetails = db.OrderDetails.Where(d => d.OrderId == sourceOrder.Id).ToList();
+                        var targetDetails = db.OrderDetails.Where(d => d.OrderId == targetOrder.Id).ToList();
+
+                        foreach (var srcItem in sourceDetails)
                         {
-                            existingTargetItem.Quantity += srcItem.Quantity;
-                            existingTargetItem.TotalPrice = existingTargetItem.Quantity * existingTargetItem.UnitPrice;
-                            db.OrderDetails.DeleteOnSubmit(srcItem);
+                            var existingTargetItem = targetDetails.FirstOrDefault(d => d.ProductId == srcItem.ProductId);
+                            if (existingTargetItem != null)
+                            {
+                                existingTargetItem.Quantity += srcItem.Quantity;
+                                existingTargetItem.TotalPrice = existingTargetItem.Quantity * existingTargetItem.UnitPrice;
+                                db.OrderDetails.DeleteOnSubmit(srcItem);
+                            }
+                            else
+                            {
+                                srcItem.OrderId = targetOrder.Id;
+                            }
                         }
-                        else
-                        {
-                            srcItem.OrderId = targetOrder.Id;
-                        }
+
+                        db.SubmitChanges();
+
+                        db.Orders.DeleteOnSubmit(sourceOrder);
+                        sourceTable.Status = "Trống";
+                        targetTable.Status = "Có khách";
+                        db.SubmitChanges();
+
+                        RecalculateOrderTotalInternal(db, targetOrder.Id);
                     }
 
-                    db.SubmitChanges();
-
-                    db.Orders.DeleteOnSubmit(sourceOrder);
-                    sourceTable.Status = "Trống";
-                    targetTable.Status = "Có khách";
-                    db.SubmitChanges();
-
-                    RecalculateOrderTotalInternal(db, targetOrder.Id);
+                    scope.Complete();
+                    return true;
                 }
-
-                return true;
             }
         }
     }

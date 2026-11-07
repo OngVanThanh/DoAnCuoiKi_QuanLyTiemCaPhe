@@ -38,6 +38,8 @@
             this.cboPrinters = new System.Windows.Forms.ComboBox();
             this.btnPrint = new System.Windows.Forms.Button();
             this.tabControlInvoice = new System.Windows.Forms.TabControl();
+            this.tabRdlcReport = new System.Windows.Forms.TabPage();
+            this.reportViewerInvoice = new Microsoft.Reporting.WinForms.ReportViewer();
             this.tabVisualPreview = new System.Windows.Forms.TabPage();
             this.pnlReceiptContainer = new System.Windows.Forms.Panel();
             this.pnlPaper = new System.Windows.Forms.Panel();
@@ -65,19 +67,17 @@
             this.lblShopPhone = new System.Windows.Forms.Label();
             this.lblShopAddress = new System.Windows.Forms.Label();
             this.lblShopName = new System.Windows.Forms.Label();
-            this.tabRdlcReport = new System.Windows.Forms.TabPage();
-            this.reportViewerInvoice = new Microsoft.Reporting.WinForms.ReportViewer();
             this.printDocumentInvoice = new System.Drawing.Printing.PrintDocument();
             ((System.ComponentModel.ISupportInitialize)(this.orderDetailDTOBindingSource)).BeginInit();
             this.pnlHeader.SuspendLayout();
             this.pnlBottom.SuspendLayout();
             this.tabControlInvoice.SuspendLayout();
+            this.tabRdlcReport.SuspendLayout();
             this.tabVisualPreview.SuspendLayout();
             this.pnlReceiptContainer.SuspendLayout();
             this.pnlPaper.SuspendLayout();
             this.pnlTotals.SuspendLayout();
             this.pnlOrderMeta.SuspendLayout();
-            this.tabRdlcReport.SuspendLayout();
             this.SuspendLayout();
             // 
             // orderDetailDTOBindingSource
@@ -157,8 +157,8 @@
             // 
             // tabControlInvoice
             // 
-            this.tabControlInvoice.Controls.Add(this.tabVisualPreview);
             this.tabControlInvoice.Controls.Add(this.tabRdlcReport);
+            this.tabControlInvoice.Controls.Add(this.tabVisualPreview);
             this.tabControlInvoice.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlInvoice.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControlInvoice.Location = new System.Drawing.Point(0, 48);
@@ -166,6 +166,32 @@
             this.tabControlInvoice.SelectedIndex = 0;
             this.tabControlInvoice.Size = new System.Drawing.Size(860, 552);
             this.tabControlInvoice.TabIndex = 0;
+            // 
+            // tabRdlcReport
+            // 
+            this.tabRdlcReport.Controls.Add(this.reportViewerInvoice);
+            this.tabRdlcReport.Location = new System.Drawing.Point(4, 30);
+            this.tabRdlcReport.Name = "tabRdlcReport";
+            this.tabRdlcReport.Padding = new System.Windows.Forms.Padding(3);
+            this.tabRdlcReport.Size = new System.Drawing.Size(852, 518);
+            this.tabRdlcReport.TabIndex = 0;
+            this.tabRdlcReport.Text = "📊 Báo cáo RDLC (ReportViewer)";
+            this.tabRdlcReport.UseVisualStyleBackColor = true;
+            // 
+            // reportViewerInvoice
+            // 
+            this.reportViewerInvoice.Dock = System.Windows.Forms.DockStyle.Fill;
+            reportDataSource1.Name = "DataSetInvoiceDetails";
+            reportDataSource1.Value = this.orderDetailDTOBindingSource;
+            this.reportViewerInvoice.LocalReport.DataSources.Add(reportDataSource1);
+            this.reportViewerInvoice.LocalReport.ReportEmbeddedResource = "DoAnCuoiKi_QuanLyTiemCaPhe.Form.TanPhat.RptInvoiceK80.rdlc";
+            this.reportViewerInvoice.Location = new System.Drawing.Point(3, 3);
+            this.reportViewerInvoice.Name = "reportViewerInvoice";
+            this.reportViewerInvoice.ServerReport.BearerToken = null;
+            this.reportViewerInvoice.Size = new System.Drawing.Size(846, 512);
+            this.reportViewerInvoice.TabIndex = 0;
+            this.reportViewerInvoice.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.Percent;
+            this.reportViewerInvoice.ZoomPercent = 100;
             // 
             // tabVisualPreview
             // 
@@ -175,7 +201,7 @@
             this.tabVisualPreview.Name = "tabVisualPreview";
             this.tabVisualPreview.Padding = new System.Windows.Forms.Padding(3);
             this.tabVisualPreview.Size = new System.Drawing.Size(852, 518);
-            this.tabVisualPreview.TabIndex = 0;
+            this.tabVisualPreview.TabIndex = 1;
             this.tabVisualPreview.Text = "📄 Xem trước Phiếu K80 Trực quan";
             // 
             // pnlReceiptContainer
@@ -482,32 +508,6 @@
             this.lblShopName.Text = "THE COFFEE HOUSE";
             this.lblShopName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // tabRdlcReport
-            // 
-            this.tabRdlcReport.Controls.Add(this.reportViewerInvoice);
-            this.tabRdlcReport.Location = new System.Drawing.Point(4, 30);
-            this.tabRdlcReport.Name = "tabRdlcReport";
-            this.tabRdlcReport.Padding = new System.Windows.Forms.Padding(3);
-            this.tabRdlcReport.Size = new System.Drawing.Size(852, 518);
-            this.tabRdlcReport.TabIndex = 1;
-            this.tabRdlcReport.Text = "📊 Báo cáo RDLC (ReportViewer)";
-            this.tabRdlcReport.UseVisualStyleBackColor = true;
-            // 
-            // reportViewerInvoice
-            // 
-            this.reportViewerInvoice.Dock = System.Windows.Forms.DockStyle.Fill;
-            reportDataSource1.Name = "DataSetInvoiceDetails";
-            reportDataSource1.Value = this.orderDetailDTOBindingSource;
-            this.reportViewerInvoice.LocalReport.DataSources.Add(reportDataSource1);
-            this.reportViewerInvoice.LocalReport.ReportEmbeddedResource = "DoAnCuoiKi_QuanLyTiemCaPhe.Form.TanPhat.RptInvoiceK80.rdlc";
-            this.reportViewerInvoice.Location = new System.Drawing.Point(3, 3);
-            this.reportViewerInvoice.Name = "reportViewerInvoice";
-            this.reportViewerInvoice.ServerReport.BearerToken = null;
-            this.reportViewerInvoice.Size = new System.Drawing.Size(846, 512);
-            this.reportViewerInvoice.TabIndex = 0;
-            this.reportViewerInvoice.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.Percent;
-            this.reportViewerInvoice.ZoomPercent = 100;
-            // 
             // printDocumentInvoice
             // 
             this.printDocumentInvoice.DocumentName = "HoaDonThanhToan_K80";
@@ -525,7 +525,7 @@
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "FrmPrintReview";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Xem trước & In hóa đơn K80 (Canvas + RDLC) - Tấn Phát";
+            this.Text = "Xem trước & In hóa đơn K80 (RDLC + Canvas) - Tấn Phát";
             this.Load += new System.EventHandler(this.FrmPrintReview_Load);
             ((System.ComponentModel.ISupportInitialize)(this.orderDetailDTOBindingSource)).EndInit();
             this.pnlHeader.ResumeLayout(false);
@@ -533,6 +533,7 @@
             this.pnlBottom.ResumeLayout(false);
             this.pnlBottom.PerformLayout();
             this.tabControlInvoice.ResumeLayout(false);
+            this.tabRdlcReport.ResumeLayout(false);
             this.tabVisualPreview.ResumeLayout(false);
             this.pnlReceiptContainer.ResumeLayout(false);
             this.pnlPaper.ResumeLayout(false);
@@ -540,7 +541,6 @@
             this.pnlTotals.PerformLayout();
             this.pnlOrderMeta.ResumeLayout(false);
             this.pnlOrderMeta.PerformLayout();
-            this.tabRdlcReport.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

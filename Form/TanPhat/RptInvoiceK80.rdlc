@@ -126,7 +126,7 @@
             </Style>
           </Paragraph>
         </Paragraphs>
-        <Top>0.78in</Top>
+        <Top>0.76in</Top>
         <Left>0.1in</Left>
         <Height>0.24in</Height>
         <Width>2.95in</Width>
@@ -138,17 +138,18 @@
           <PaddingTop>2pt</PaddingTop>
         </Style>
       </Textbox>
-      <Textbox Name="txtOrderInfoLine1">
+      <Textbox Name="lblOrderIdCaption">
         <CanGrow>true</CanGrow>
         <KeepTogether>true</KeepTogether>
         <Paragraphs>
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>="Số HĐ: " &amp; Parameters!pOrderId.Value &amp; "   |   Ngày: " &amp; Parameters!pOrderDate.Value</Value>
+                <Value>Số HĐ:</Value>
                 <Style>
                   <FontFamily>Segoe UI</FontFamily>
                   <FontSize>8.5pt</FontSize>
+                  <Color>#333333</Color>
                 </Style>
               </TextRun>
             </TextRuns>
@@ -157,10 +158,10 @@
             </Style>
           </Paragraph>
         </Paragraphs>
-        <Top>1.06in</Top>
+        <Top>1.04in</Top>
         <Left>0.1in</Left>
         <Height>0.2in</Height>
-        <Width>2.95in</Width>
+        <Width>0.45in</Width>
         <ZIndex>4</ZIndex>
         <Style>
           <Border>
@@ -169,18 +170,19 @@
           <PaddingLeft>2pt</PaddingLeft>
         </Style>
       </Textbox>
-      <Textbox Name="txtOrderInfoLine2">
+      <Textbox Name="txtOrderIdValue">
         <CanGrow>true</CanGrow>
         <KeepTogether>true</KeepTogether>
         <Paragraphs>
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>="Bàn: " &amp; Parameters!pTableName.Value &amp; "  |  TN: " &amp; Parameters!pCashier.Value</Value>
+                <Value>=Parameters!pOrderId.Value</Value>
                 <Style>
                   <FontFamily>Segoe UI</FontFamily>
                   <FontSize>8.5pt</FontSize>
                   <FontWeight>Bold</FontWeight>
+                  <Color>#4A2C1D</Color>
                 </Style>
               </TextRun>
             </TextRuns>
@@ -189,16 +191,204 @@
             </Style>
           </Paragraph>
         </Paragraphs>
-        <Top>1.28in</Top>
-        <Left>0.1in</Left>
-        <Height>0.22in</Height>
-        <Width>2.95in</Width>
+        <Top>1.04in</Top>
+        <Left>0.55in</Left>
+        <Height>0.2in</Height>
+        <Width>0.85in</Width>
         <ZIndex>5</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
+        </Style>
+      </Textbox>
+      <Textbox Name="lblOrderDateCaption">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Ngày:</Value>
+                <Style>
+                  <FontFamily>Segoe UI</FontFamily>
+                  <FontSize>8.5pt</FontSize>
+                  <Color>#333333</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Right</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <Top>1.04in</Top>
+        <Left>1.42in</Left>
+        <Height>0.2in</Height>
+        <Width>0.43in</Width>
+        <ZIndex>6</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Textbox>
+      <Textbox Name="txtOrderDateValue">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Parameters!pOrderDate.Value</Value>
+                <Style>
+                  <FontFamily>Segoe UI</FontFamily>
+                  <FontSize>8.5pt</FontSize>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Right</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <Top>1.04in</Top>
+        <Left>1.85in</Left>
+        <Height>0.2in</Height>
+        <Width>1.2in</Width>
+        <ZIndex>7</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingRight>2pt</PaddingRight>
+        </Style>
+      </Textbox>
+      <Textbox Name="lblTableCaption">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Bàn:</Value>
+                <Style>
+                  <FontFamily>Segoe UI</FontFamily>
+                  <FontSize>8.5pt</FontSize>
+                  <Color>#333333</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Left</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <Top>1.26in</Top>
+        <Left>0.1in</Left>
+        <Height>0.2in</Height>
+        <Width>0.45in</Width>
+        <ZIndex>8</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
           <PaddingLeft>2pt</PaddingLeft>
+        </Style>
+      </Textbox>
+      <Textbox Name="txtTableValue">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Parameters!pTableName.Value</Value>
+                <Style>
+                  <FontFamily>Segoe UI</FontFamily>
+                  <FontSize>8.5pt</FontSize>
+                  <FontWeight>Bold</FontWeight>
+                  <Color>#4A2C1D</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Left</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <Top>1.26in</Top>
+        <Left>0.55in</Left>
+        <Height>0.2in</Height>
+        <Width>0.85in</Width>
+        <ZIndex>9</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Textbox>
+      <Textbox Name="lblCashierCaption">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>TN:</Value>
+                <Style>
+                  <FontFamily>Segoe UI</FontFamily>
+                  <FontSize>8.5pt</FontSize>
+                  <Color>#333333</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Right</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <Top>1.26in</Top>
+        <Left>1.38in</Left>
+        <Height>0.2in</Height>
+        <Width>0.34in</Width>
+        <ZIndex>10</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Textbox>
+      <Textbox Name="txtCashierValue">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Parameters!pCashier.Value</Value>
+                <Style>
+                  <FontFamily>Segoe UI</FontFamily>
+                  <FontSize>8.5pt</FontSize>
+                  <FontWeight>Bold</FontWeight>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Right</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <Top>1.26in</Top>
+        <Left>1.75in</Left>
+        <Height>0.2in</Height>
+        <Width>1.3in</Width>
+        <ZIndex>11</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingRight>2pt</PaddingRight>
         </Style>
       </Textbox>
       <Tablix Name="TablixInvoiceItems">
@@ -443,10 +633,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!UnitPrice.Value, 0)</Value>
+                              <Value>=Fields!UnitPrice.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontSize>8.5pt</FontSize>
+                                <Format>#,0</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -476,11 +667,12 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!TotalPrice.Value, 0)</Value>
+                              <Value>=Fields!TotalPrice.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontSize>8.5pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>#,0</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -524,17 +716,49 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>DataSetInvoiceDetails</DataSetName>
-        <Top>1.54in</Top>
+        <Top>1.52in</Top>
         <Left>0.1in</Left>
         <Height>0.47in</Height>
         <Width>2.95in</Width>
-        <ZIndex>6</ZIndex>
+        <ZIndex>12</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
         </Style>
       </Tablix>
+      <Textbox Name="lblSubtotalCaption">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Tạm tính (Subtotal):</Value>
+                <Style>
+                  <FontFamily>Segoe UI</FontFamily>
+                  <FontSize>8.5pt</FontSize>
+                  <Color>#333333</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Left</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <Top>2.06in</Top>
+        <Left>0.1in</Left>
+        <Height>0.2in</Height>
+        <Width>1.55in</Width>
+        <ZIndex>13</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>4pt</PaddingLeft>
+        </Style>
+      </Textbox>
       <Textbox Name="txtTotalAmountRow">
         <CanGrow>true</CanGrow>
         <KeepTogether>true</KeepTogether>
@@ -542,7 +766,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>="Tạm tính (Subtotal):   " &amp; Parameters!pTotalAmount.Value</Value>
+                <Value>=Parameters!pTotalAmount.Value</Value>
                 <Style>
                   <FontFamily>Segoe UI</FontFamily>
                   <FontSize>8.5pt</FontSize>
@@ -554,16 +778,48 @@
             </Style>
           </Paragraph>
         </Paragraphs>
-        <Top>2.08in</Top>
-        <Left>0.1in</Left>
+        <Top>2.06in</Top>
+        <Left>1.65in</Left>
         <Height>0.2in</Height>
-        <Width>2.95in</Width>
-        <ZIndex>7</ZIndex>
+        <Width>1.4in</Width>
+        <ZIndex>14</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
           <PaddingRight>4pt</PaddingRight>
+        </Style>
+      </Textbox>
+      <Textbox Name="lblDiscountCaptionRdlc">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Giảm giá / KM:</Value>
+                <Style>
+                  <FontFamily>Segoe UI</FontFamily>
+                  <FontSize>8.5pt</FontSize>
+                  <Color>#27AE60</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Left</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <Top>2.28in</Top>
+        <Left>0.1in</Left>
+        <Height>0.2in</Height>
+        <Width>1.55in</Width>
+        <ZIndex>15</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>4pt</PaddingLeft>
         </Style>
       </Textbox>
       <Textbox Name="txtDiscountRow">
@@ -573,7 +829,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>="Giảm giá / KM:   " &amp; Parameters!pDiscountAmount.Value</Value>
+                <Value>=Parameters!pDiscountAmount.Value</Value>
                 <Style>
                   <FontFamily>Segoe UI</FontFamily>
                   <FontSize>8.5pt</FontSize>
@@ -586,16 +842,48 @@
             </Style>
           </Paragraph>
         </Paragraphs>
-        <Top>2.3in</Top>
-        <Left>0.1in</Left>
+        <Top>2.28in</Top>
+        <Left>1.65in</Left>
         <Height>0.2in</Height>
-        <Width>2.95in</Width>
-        <ZIndex>8</ZIndex>
+        <Width>1.4in</Width>
+        <ZIndex>16</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
           <PaddingRight>4pt</PaddingRight>
+        </Style>
+      </Textbox>
+      <Textbox Name="lblVatCaptionRdlc">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Thuế VAT:</Value>
+                <Style>
+                  <FontFamily>Segoe UI</FontFamily>
+                  <FontSize>8.5pt</FontSize>
+                  <Color>#333333</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Left</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <Top>2.5in</Top>
+        <Left>0.1in</Left>
+        <Height>0.2in</Height>
+        <Width>1.55in</Width>
+        <ZIndex>17</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>4pt</PaddingLeft>
         </Style>
       </Textbox>
       <Textbox Name="txtVatRow">
@@ -605,7 +893,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>="Thuế VAT (8%):   " &amp; Parameters!pVatAmount.Value</Value>
+                <Value>=Parameters!pVatAmount.Value</Value>
                 <Style>
                   <FontFamily>Segoe UI</FontFamily>
                   <FontSize>8.5pt</FontSize>
@@ -617,16 +905,56 @@
             </Style>
           </Paragraph>
         </Paragraphs>
-        <Top>2.52in</Top>
-        <Left>0.1in</Left>
+        <Top>2.5in</Top>
+        <Left>1.65in</Left>
         <Height>0.2in</Height>
-        <Width>2.95in</Width>
-        <ZIndex>9</ZIndex>
+        <Width>1.4in</Width>
+        <ZIndex>18</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
           <PaddingRight>4pt</PaddingRight>
+        </Style>
+      </Textbox>
+      <Textbox Name="lblFinalCaptionRdlc">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>TỔNG THANH TOÁN:</Value>
+                <Style>
+                  <FontFamily>Segoe UI</FontFamily>
+                  <FontSize>10pt</FontSize>
+                  <FontWeight>Bold</FontWeight>
+                  <Color>#4A2C1D</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Left</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <Top>2.74in</Top>
+        <Left>0.1in</Left>
+        <Height>0.28in</Height>
+        <Width>1.55in</Width>
+        <ZIndex>19</ZIndex>
+        <Style>
+          <Border>
+            <Color>#8B5A2B</Color>
+            <Style>Solid</Style>
+          </Border>
+          <RightBorder>
+            <Style>None</Style>
+          </RightBorder>
+          <BackgroundColor>#F5EDE4</BackgroundColor>
+          <PaddingLeft>6pt</PaddingLeft>
+          <PaddingTop>4pt</PaddingTop>
+          <PaddingBottom>4pt</PaddingBottom>
         </Style>
       </Textbox>
       <Textbox Name="txtFinalAmountBox">
@@ -636,7 +964,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>="TỔNG THANH TOÁN: " &amp; Parameters!pFinalAmount.Value</Value>
+                <Value>=Parameters!pFinalAmount.Value</Value>
                 <Style>
                   <FontFamily>Segoe UI</FontFamily>
                   <FontSize>10.5pt</FontSize>
@@ -650,16 +978,19 @@
             </Style>
           </Paragraph>
         </Paragraphs>
-        <Top>2.76in</Top>
-        <Left>0.1in</Left>
+        <Top>2.74in</Top>
+        <Left>1.65in</Left>
         <Height>0.28in</Height>
-        <Width>2.95in</Width>
-        <ZIndex>10</ZIndex>
+        <Width>1.4in</Width>
+        <ZIndex>20</ZIndex>
         <Style>
           <Border>
             <Color>#8B5A2B</Color>
             <Style>Solid</Style>
           </Border>
+          <LeftBorder>
+            <Style>None</Style>
+          </LeftBorder>
           <BackgroundColor>#F5EDE4</BackgroundColor>
           <PaddingRight>6pt</PaddingRight>
           <PaddingTop>4pt</PaddingTop>
@@ -687,11 +1018,11 @@
             </Style>
           </Paragraph>
         </Paragraphs>
-        <Top>3.12in</Top>
+        <Top>3.1in</Top>
         <Left>0.1in</Left>
         <Height>0.2in</Height>
         <Width>2.95in</Width>
-        <ZIndex>11</ZIndex>
+        <ZIndex>21</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -719,11 +1050,11 @@
             </Style>
           </Paragraph>
         </Paragraphs>
-        <Top>3.34in</Top>
+        <Top>3.32in</Top>
         <Left>0.1in</Left>
         <Height>0.22in</Height>
         <Width>2.95in</Width>
-        <ZIndex>12</ZIndex>
+        <ZIndex>22</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
