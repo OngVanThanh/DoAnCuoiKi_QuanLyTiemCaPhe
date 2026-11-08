@@ -25,10 +25,11 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         {
             LoadEmployeeData();
             PopulateComboBoxSources();
-            LoadWeekScheduleTemplate();
+            LoadWeekScheduleTemplateWithExistingData();
         }
         private void LoadEmployeeData()
         {
+            employeeNames.Clear();
             var employees = _empRepo.GetAllEmployees();
             if (employees != null)
             {
@@ -43,23 +44,15 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         }
         private void PopulateComboBoxSources()
         {
-            // Đổ vào cột Ca 1 (Sáng)
+            // Đổ danh sách nhân viên vào cột ComboBox Ca 1, Ca 2, Ca 3
             if (dgvSchedule.Columns["Shift1"] is DataGridViewComboBoxColumn colCa1)
-            {
                 colCa1.DataSource = new List<string>(employeeNames);
-            }
 
-            // Đổ vào cột Ca 2 (Chiều)
             if (dgvSchedule.Columns["Shift2"] is DataGridViewComboBoxColumn colCa2)
-            {
                 colCa2.DataSource = new List<string>(employeeNames);
-            }
 
-            // Đổ vào cột Ca 3 (Tối)
             if (dgvSchedule.Columns["Shift3"] is DataGridViewComboBoxColumn colCa3)
-            {
                 colCa3.DataSource = new List<string>(employeeNames);
-            }
         }
         private void LoadWeekScheduleTemplate()
         {
@@ -71,9 +64,44 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 DateTime targetDate = startDate.AddDays(i);
                 string dateStr = targetDate.ToString("dd/MM/yyyy") + " (" + targetDate.ToString("ddd") + ")";
 
-                // Thêm dòng với cột Ngày, các cột Ca ban đầu để trống
+                // Thêm dòng với cột Ngày (index 0 hoặc tên cột "Date"), các cột Ca ban đầu để trống
                 dgvSchedule.Rows.Add(dateStr, "", "", "");
             }
+        }
+        private void LoadWeekScheduleTemplateWithExistingData()
+        {
+            dgvSchedule.Rows.Clear();
+            DateTime startDate = DateTime.Now.AddDays(1).Date;
+            DateTime endDate = startDate.AddDays(6).Date;
+
+            // Lấy danh sách ca đã đăng ký sẵn trong tuần từ Database
+            var existingShifts = _shiftRepo.GetShiftsByDateRangeRaw(startDate, endDate);
+
+            for (int i = 0; i < 7; i++)
+            {
+                DateTime targetDate = startDate.AddDays(i);
+                string dateStr = targetDate.ToString("dd/MM/yyyy") + " (" + targetDate.ToString("ddd") + ")";
+
+                // Tìm xem ngày này có nhân viên nào đã làm Ca 1, Ca 2, Ca 3 chưa
+                string empShift1 = GetEmployeeNameById(existingShifts, targetDate, 1);
+                string empShift2 = GetEmployeeNameById(existingShifts, targetDate, 2);
+                string empShift3 = GetEmployeeNameById(existingShifts, targetDate, 3);
+
+                // Thêm dòng với ngày và các ca đã có dữ liệu (hoặc trống nếu chưa đăng ký)
+                dgvSchedule.Rows.Add(dateStr, empShift1, empShift2, empShift3);
+            }
+        }
+        // Hàm phụ trợ tìm tên nhân viên theo ngày và mã ca từ danh sách trong DB
+        private string GetEmployeeNameById(List<EmployeeShift> shifts, DateTime date, int shiftId)
+        {
+            // Thêm kiểm tra s.WorkDate.HasValue và s.WorkDate.Value.Date
+            var match = shifts.FirstOrDefault(s => s.WorkDate.HasValue && s.WorkDate.Value.Date == date.Date && s.ShiftId == shiftId);
+            if (match != null)
+            {
+                var emp = _empRepo.GetAllEmployees().FirstOrDefault(e => e.Id == match.EmployeeId);
+                return emp != null ? emp.FullName.Trim() : "";
+            }
+            return "";
         }
         private void btnSave_Click(object sender, EventArgs e)
         {
@@ -83,25 +111,25 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
                 foreach (DataGridViewRow row in dgvSchedule.Rows)
                 {
-                    // Sử dụng "ColDate" cho khớp với tên cột ngày đã cấu hình
-                    if (row.Cells["Date"].Value == null) continue;
+                    if (row.IsNewRow) continue;
+                    if (row.Cells[0].Value == null) continue;
 
-                    string dateCellText = row.Cells["Date"].Value.ToString();
+                    string dateCellText = row.Cells[0].Value.ToString();
                     string datePart = dateCellText.Split(' ')[0];
+
                     if (!DateTime.TryParseExact(datePart, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out DateTime workDate))
                     {
                         continue;
                     }
 
-                    // Lấy tên nhân viên được chọn từ các cột ComboBox (ColShift1, ColShift2, ColShift3)
+                    // Lấy giá trị từ 3 cột ca làm
                     Dictionary<int, List<string>> shiftEmployees = new Dictionary<int, List<string>>
-            {
-                { 1, GetSelectedName(row.Cells["Shift1"].Value) },
-                { 2, GetSelectedName(row.Cells["Shift2"].Value) },
-                { 3, GetSelectedName(row.Cells["Shift3"].Value) }
-            };
+                    {
+                        { 1, GetSelectedName(row.Cells["Shift1"].Value) },
+                        { 2, GetSelectedName(row.Cells["Shift2"].Value) },
+                        { 3, GetSelectedName(row.Cells["Shift3"].Value) }
+                    };
 
-                    // Gom nhóm theo từng nhân viên trong ngày đó
                     var empShiftMapping = new Dictionary<string, List<int>>();
                     foreach (var shift in shiftEmployees)
                     {
@@ -122,7 +150,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                         string empName = pair.Key;
                         List<int> registeredShifts = pair.Value;
 
-                        // Tìm nhân viên qua EmployeeRepository
                         var employee = _empRepo.GetEmployeeByName(empName);
                         if (employee == null)
                         {
@@ -137,7 +164,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                             return;
                         }
 
-                        // Quy tắc 2: Đăng ký 2 ca thì phải cách nhau 1 ca (Cặp Ca 1 và Ca 3)
+                        // Quy tắc 2: Đăng ký 2 ca thì phải cách nhau 1 ca (Ca 1 và Ca 3)
                         if (registeredShifts.Count == 2)
                         {
                             registeredShifts.Sort();
@@ -148,7 +175,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                             }
                         }
 
-                        // Lưu xuống Database qua ShiftRepository
+                        // Lưu xuống Database (Hàm RegisterShift đã có kiểm tra trùng lặp nên nếu đã có rồi sẽ bỏ qua, không gây lỗi)
                         foreach (var shiftId in registeredShifts)
                         {
                             bool ok = _shiftRepo.RegisterShift(employee.Id, shiftId, workDate);
@@ -175,6 +202,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
             return list;
         }
+
         private void btnClose_Click(object sender, EventArgs e)
         {
             this.Close();

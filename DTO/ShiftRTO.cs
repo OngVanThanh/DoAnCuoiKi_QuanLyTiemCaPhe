@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace DoAnCuoiKi_QuanLyTiemCaPhe.DTO
 {
-    internal class ShiftRTO
+    public class ShiftRTO 
     {
-        public string Id { get; set; }              // Mã ca làm (nếu có trong bảng EmployeeShifts)
-        public int EmployeeId { get; set; }      // Mã nhân viên
-        public string FullName { get; set; }     // Họ tên nhân viên (tiện cho việc hiển thị lên UI)
-        public int ShiftId { get; set; }         // Ca làm số mấy (1: Sáng, 2: Chiều, 3: Tối)
-        public DateTime WorkDate { get; set; }   // Ngày làm việc
+        public string Id { get; set; }
+        public int EmployeeId { get; set; }
+        public string FullName { get; set; }
+        public int ShiftId { get; set; }
+        public DateTime WorkDate { get; set; }
     }
 }

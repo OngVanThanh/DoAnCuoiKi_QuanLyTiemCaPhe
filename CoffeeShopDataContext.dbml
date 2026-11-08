@@ -149,10 +149,10 @@
   </Table>
   <Table Name="dbo.EmployeeShifts" Member="EmployeeShifts">
     <Type Name="EmployeeShift">
-      <Column Name="Id" Type="System.String" DbType="VarChar(12) NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Never" />
-      <Column Name="EmployeeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="ShiftId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="WorkDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="Id" Type="System.String" DbType="NVarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="EmployeeId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ShiftId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="WorkDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
       <Column Name="Status" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Association Name="Employee_EmployeeShift" Member="Employee" ThisKey="EmployeeId" OtherKey="Id" Type="Employee" IsForeignKey="true" />
       <Association Name="Shift_EmployeeShift" Member="Shift" ThisKey="ShiftId" OtherKey="Id" Type="Shift" IsForeignKey="true" />

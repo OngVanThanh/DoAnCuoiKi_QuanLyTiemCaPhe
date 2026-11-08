@@ -3,39 +3,46 @@ using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DoAnCuoiKi_QuanLyTiemCaPhe
+namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
 {
-    internal class ShiftRepository
+    public class ShiftRepository
     {
         public CoffeeShopDataContextDataContext GetContext()
         {
             return new CoffeeShopDataContextDataContext(ConfigHelper.GetConnectionString("CoffeeShopDB"));
         }
+
+        // Đăng ký ca làm việc
         public bool RegisterShift(int employeeId, int shiftId, DateTime workDate)
         {
             try
             {
                 using (var db = GetContext())
                 {
+                    // 1. Kiểm tra trùng lặp ca làm
                     var existing = db.EmployeeShifts
                         .FirstOrDefault(s => s.EmployeeId == employeeId && s.ShiftId == shiftId && s.WorkDate == workDate.Date);
 
                     if (existing != null)
                     {
-                        return false; // Đã đăng ký ca này trước đó rồi
+                        return false; // Đã tồn tại ca này rồi
                     }
 
+                    // 2. Tự sinh mã Id thủ công định dạng: yyMMdd + "C" + shiftId (Ví dụ: 260811C1)
+                    string generatedId = workDate.ToString("yyMMdd") + "C" + shiftId;
+
+                    // 3. Tạo thực thể mới với đầy đủ thông tin
                     var newShift = new EmployeeShift
                     {
+                        Id = generatedId,         // Truyền tường minh khóa chính kiểu string vào đây
                         EmployeeId = employeeId,
                         ShiftId = shiftId,
                         WorkDate = workDate.Date,
                         Status = "Đã đăng ký"
                     };
 
+                    // 4. Đẩy thay đổi xuống Database
                     db.EmployeeShifts.InsertOnSubmit(newShift);
                     db.SubmitChanges();
 
@@ -44,28 +51,20 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
             catch (Exception ex)
             {
+                System.Windows.Forms.MessageBox.Show("Lỗi DAL RegisterShift: " + ex.Message, "Chi tiết lỗi", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
                 return false;
             }
         }
 
-        // Bổ sung: Lấy danh sách ca làm theo khoảng thời gian quy đổi sang ShiftRTO
-        public List<ShiftRTO> GetShiftsByDateRange(DateTime startDate, DateTime endDate)
+        // Lấy danh sách ca làm quy đổi sang ShiftRTO
+        public List<EmployeeShift> GetShiftsByDateRangeRaw(DateTime startDate, DateTime endDate)
         {
             using (var db = GetContext())
             {
                 return db.EmployeeShifts
                     .Where(s => s.WorkDate >= startDate.Date && s.WorkDate <= endDate.Date)
-                    .Select(s => new ShiftRTO
-                    {
-                        Id = s.Id,
-                        EmployeeId = s.EmployeeId,
-                        FullName = s.Employee.FullName, // Lấy trực tiếp tên từ quan hệ bảng
-                        ShiftId = s.ShiftId,
-                        WorkDate = s.WorkDate
-                    })
                     .ToList();
             }
         }
-
     }
 }

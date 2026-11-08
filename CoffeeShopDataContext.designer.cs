@@ -3238,11 +3238,11 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 		
 		private string _Id;
 		
-		private int _EmployeeId;
+		private System.Nullable<int> _EmployeeId;
 		
-		private int _ShiftId;
+		private System.Nullable<int> _ShiftId;
 		
-		private System.DateTime _WorkDate;
+		private System.Nullable<System.DateTime> _WorkDate;
 		
 		private string _Status;
 		
@@ -3256,11 +3256,11 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
     partial void OnCreated();
     partial void OnIdChanging(string value);
     partial void OnIdChanged();
-    partial void OnEmployeeIdChanging(int value);
+    partial void OnEmployeeIdChanging(System.Nullable<int> value);
     partial void OnEmployeeIdChanged();
-    partial void OnShiftIdChanging(int value);
+    partial void OnShiftIdChanging(System.Nullable<int> value);
     partial void OnShiftIdChanged();
-    partial void OnWorkDateChanging(System.DateTime value);
+    partial void OnWorkDateChanging(System.Nullable<System.DateTime> value);
     partial void OnWorkDateChanged();
     partial void OnStatusChanging(string value);
     partial void OnStatusChanged();
@@ -3273,7 +3273,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="VarChar(12) NOT NULL", CanBeNull=false, IsPrimaryKey=true, IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="NVarChar(20) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
 		public string Id
 		{
 			get
@@ -3293,8 +3293,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EmployeeId", DbType="Int NOT NULL")]
-		public int EmployeeId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EmployeeId", DbType="Int")]
+		public System.Nullable<int> EmployeeId
 		{
 			get
 			{
@@ -3317,8 +3317,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ShiftId", DbType="Int NOT NULL")]
-		public int ShiftId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ShiftId", DbType="Int")]
+		public System.Nullable<int> ShiftId
 		{
 			get
 			{
@@ -3341,8 +3341,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WorkDate", DbType="Date NOT NULL")]
-		public System.DateTime WorkDate
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WorkDate", DbType="Date")]
+		public System.Nullable<System.DateTime> WorkDate
 		{
 			get
 			{
@@ -3408,7 +3408,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 					}
 					else
 					{
-						this._EmployeeId = default(int);
+						this._EmployeeId = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("Employee");
 				}
@@ -3442,7 +3442,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 					}
 					else
 					{
-						this._ShiftId = default(int);
+						this._ShiftId = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("Shift");
 				}
