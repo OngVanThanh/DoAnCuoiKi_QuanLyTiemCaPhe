@@ -46,7 +46,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             _systemTimer.Start();
             this.BeginInvoke((MethodInvoker)delegate {
                 FrmOrder frmOrder = new FrmOrder();
-                frmOrder.ShowDialog(); // Hoặc dùng frmOrder.Show(); tùy bạn muốn chặn hay không chặn FrmMain
+                OpenChildForm(frmOrder);
             });
         }
         private void OpenChildForm(Form childForm)

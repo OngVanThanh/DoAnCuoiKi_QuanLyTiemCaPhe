@@ -26,11 +26,22 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=localhost;Initial Catalog=CoffeeShopDB;Integrated Security=True;Trust" +
-            "ServerCertificate=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=LAPTOP-6QPAKIHK;Initial Catalog=CoffeeShopDB;Integrated Security=True" +
+            ";TrustServerCertificate=True;")]
         public string CoffeeShopDBConnectionString {
             get {
                 return ((string)(this["CoffeeShopDBConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=localhost;Initial Catalog=CoffeeShopDB;Integrated Security=True;Encry" +
+            "pt=True;TrustServerCertificate=True")]
+        public string CoffeeShopDBConnectionString1 {
+            get {
+                return ((string)(this["CoffeeShopDBConnectionString1"]));
             }
         }
     }

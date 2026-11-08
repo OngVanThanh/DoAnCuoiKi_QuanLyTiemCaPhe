@@ -1,5 +1,6 @@
 ﻿using DoAnCuoiKi_QuanLyTiemCaPhe.DAL;
 using DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
+using System;
 using System.Collections.Generic;
 
 namespace DoAnCuoiKi_QuanLyTiemCaPhe.BLL
@@ -50,9 +51,9 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.BLL
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(dto.Position))
+            if (dto.RoleId <= 0)
             {
-                errorMsg = "Vui lòng chọn hoặc nhập chức vụ (Thu ngân, Pha chế, Phục vụ, Quản lý)!";
+                errorMsg = "Vui lòng chọn hoặc nhập mã chức vụ (1. Quản lý, 2.Thu ngân, 3. Pha chế, 4. Phục vụ)!";
                 return false;
             }
 
@@ -61,31 +62,23 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.BLL
                 errorMsg = "Mức lương cơ bản không được âm!";
                 return false;
             }
+            dto.FullName = dto.FullName.Trim();
+            dto.Phone = phone;
+            dto.Address = dto.Address?.Trim();
+            dto.HireDate = dto.HireDate ?? DateTime.Now;
 
-            var employee = new Employee
+            if (dto.Id <= 0)
             {
-                Id = dto.Id,
-                FullName = dto.FullName.Trim(),
-                Phone = phone,
-                Address = dto.Address?.Trim(),
-                Position = dto.Position.Trim(),
-                Salary = dto.Salary,
-                HireDate = dto.HireDate
-            };
-
-            if (dto.Id == 0)
-            {
-                return _employeeRepo.InsertEmployee(employee);
+                return _employeeRepo.InsertEmployee(dto);
             }
             else
             {
-                return _employeeRepo.UpdateEmployee(employee);
+                return _employeeRepo.UpdateEmployee(dto);
             }
         }
 
-        public bool DeleteEmployee(int employeeId, out string errorMsg)
+        public bool DeleteEmployee(int employeeId)
         {
-            errorMsg = string.Empty;
             return _employeeRepo.DeleteEmployee(employeeId);
         }
     }

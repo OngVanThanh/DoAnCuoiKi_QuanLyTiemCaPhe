@@ -36,6 +36,7 @@
             this.lblUsername = new System.Windows.Forms.Label();
             this.txtUsername = new System.Windows.Forms.TextBox();
             this.lblTitle = new System.Windows.Forms.Label();
+            this.lnkForgotPassword = new System.Windows.Forms.LinkLabel();
             this.pnlCard.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -43,6 +44,7 @@
             // 
             this.pnlCard.BackColor = System.Drawing.Color.White;
             this.pnlCard.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlCard.Controls.Add(this.lnkForgotPassword);
             this.pnlCard.Controls.Add(this.btnExit);
             this.pnlCard.Controls.Add(this.btnLogin);
             this.pnlCard.Controls.Add(this.txtPassword);
@@ -52,7 +54,7 @@
             this.pnlCard.Controls.Add(this.lblTitle);
             this.pnlCard.Location = new System.Drawing.Point(45, 30);
             this.pnlCard.Name = "pnlCard";
-            this.pnlCard.Size = new System.Drawing.Size(395, 295);
+            this.pnlCard.Size = new System.Drawing.Size(395, 332);
             this.pnlCard.TabIndex = 0;
             // 
             // btnExit
@@ -131,12 +133,23 @@
             this.lblTitle.Text = "ĐĂNG NHẬP HỆ THỐNG";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // lnkForgotPassword
+            // 
+            this.lnkForgotPassword.AutoSize = true;
+            this.lnkForgotPassword.Location = new System.Drawing.Point(266, 296);
+            this.lnkForgotPassword.Name = "lnkForgotPassword";
+            this.lnkForgotPassword.Size = new System.Drawing.Size(103, 16);
+            this.lnkForgotPassword.TabIndex = 1;
+            this.lnkForgotPassword.TabStop = true;
+            this.lnkForgotPassword.Text = "Quên mật khẩu?";
+            this.lnkForgotPassword.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkForgotPassword_LinkClicked);
+            // 
             // FrmLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(248)))), ((int)(((byte)(245)))));
-            this.ClientSize = new System.Drawing.Size(482, 353);
+            this.ClientSize = new System.Drawing.Size(467, 374);
             this.Controls.Add(this.pnlCard);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -160,6 +173,7 @@
         private System.Windows.Forms.Label lblPassword;
         private System.Windows.Forms.Button btnLogin;
         private System.Windows.Forms.Button btnExit;
+        private System.Windows.Forms.LinkLabel lnkForgotPassword;
     }
 }
 

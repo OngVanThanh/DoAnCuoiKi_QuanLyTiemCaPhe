@@ -1,6 +1,7 @@
 ﻿
 using DoAnCuoiKi_QuanLyTiemCaPhe.DAL;
 using DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
+using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
 using System;
 using System.Collections.Generic;
 
@@ -22,95 +23,39 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             return _userRepository.GetAllUsersWithRoles();
         }
 
-        // 3. Danh sách các màn hình trong hệ thống
-        public List<string> GetAllSystemPermisisons()
-        {
-            return new List<string>
-            {
-                "FrmOrder - Màn hình Bán hàng & Gọi món",
-                "FrmProduct - Quản lý Danh mục Thực đơn",
-                "FrmTable - Quản lý Sơ đồ Bàn",
-                "FrmEmployee - Quản lý Nhân sự & Luân chuyển",
-                "FrmCustomer - Quản lý Khách hàng & Điểm thưởng",
-                "FrmInventory - Quản lý Kho & Nguyên vật liệu",
-                "FrmReport - Xem Báo cáo & Thống kê Doanh thu",
-                "FrmReportWord - Kết xuất Báo cáo Word",
-                "FrmPermission - Phân quyền & Quản lý Tài khoản",
-                "FrmAppConfig - Cấu hình Hệ thống & CSDL"
-            };
-        }
-
-        // Giữ tên hàm cũ để tương thích với Form hiện tại
-        public List<string> GetAllSystemPermisison()
-        {
-            return GetAllSystemPermisisons();
-        }
-
-        // 4. Lấy quyền theo vai trò
-        public List<string> GetPermissionsByRoleId(int roleId)
-        {
-            var role = _userRepository.GetRoleById(roleId);
-
-            if (role == null)
-                return new List<string>();
-
-            if (string.Equals(
-                role.RoleName, "Admin",
-                StringComparison.OrdinalIgnoreCase))
-            {
-                return GetAllSystemPermisisons();
-            }
-
-            if (!string.IsNullOrEmpty(role.RoleName) &&
-                role.RoleName.Contains("Thu ngân"))
-            {
-                return new List<string>
-                {
-                    "FrmOrder - Màn hình Bán hàng & Gọi món",
-                    "FrmCustomer - Quản lý Khách hàng & Điểm thưởng",
-                    "FrmReport - Xem Báo cáo & Thống kê Doanh thu"
-                };
-            }
-
-            if (!string.IsNullOrEmpty(role.RoleName) &&
-                role.RoleName.Contains("Pha chế"))
-            {
-                return new List<string>
-                {
-                    "FrmOrder - Màn hình Bán hàng & Gọi món",
-                    "FrmInventory - Quản lý Kho & Nguyên vật liệu"
-                };
-            }
-
-            return new List<string>();
-        }
 
         // 5. Tạo tài khoản mới
-        public bool CreateUser(string username, string password, int roleId, int employeeId = 1)
+        public bool CreateUser(UserDTO dto, string password)
         {
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrEmpty(password)) return false;
-
-            username = username.Trim();
-
-            if (!_userRepository.RoleExists(roleId)) return false;
-
-            if (_userRepository.GetByUserName(username) != null) return false;
-
-            string salt = SecurityHelper.GenerateSalt();
-            string passwordHash =
-                SecurityHelper.HashPassword(password, salt);
-
-            var newUser = new User
+            // 1. Kiểm tra tính hợp lệ của dữ liệu đầu vào
+            if (dto == null || string.IsNullOrWhiteSpace(dto.Username) || string.IsNullOrEmpty(password))
             {
-                Username = username,
-                PasswordHash = passwordHash,
-                Salt = salt,
-                RoleId = roleId,
-                EmployeeId = employeeId,
-                IsActive = true
-            };
+                return false;
+            }
 
-            return _userRepository.InsertUser(newUser);
+            string username = dto.Username.Trim();
+
+            // 2. Kiểm tra xem RoleId có tồn tại không
+            if (!_userRepository.RoleExists(dto.RoleId))
+            {
+                return false;
+            }
+
+            // 3. Kiểm tra trùng tên tài khoản
+            if (_userRepository.GetByUserName(username) != null)
+            {
+                return false;
+            }
+
+            // 4. Tạo Salt và băm mật khẩu
+            string salt = SecurityHelper.GenerateSalt();
+            string passwordHash = SecurityHelper.HashPassword(password, salt);
+            
+            dto.PasswordHash = passwordHash;
+            dto.Salt = salt;
+
+            // 6. Gọi Repository thực hiện thêm mới
+            return _userRepository.InsertUser(dto);
         }
 
         // 6. Xác minh mật khẩu đăng nhập
@@ -181,12 +126,12 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         }
 
         // 9. Xóa tài khoản
-        public bool DeleteUser(int userId)
+        public bool DeleteUser(string username)
         {
-            if (userId <= 0)
+            if (string.IsNullOrWhiteSpace(username))
                 return false;
 
-            return _userRepository.DeleteUser(userId);
+            return _userRepository.DeleteUser(username.Trim());
         }
 
         // 10. Vô hiệu hóa tài khoản
@@ -196,6 +141,60 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 return false;
 
             return _userRepository.DeactivateUser(userId);
+        }
+        public bool ChangePassword(string username, string oldPassword, string newPassword)
+        {
+            // 1. Lấy thông tin user hiện tại
+            var user = _userRepository.GetByUserName(username);
+            if (user == null) return false;
+
+            // 2. Kiểm tra mật khẩu cũ có chính xác không
+            string oldHash = SecurityHelper.HashPassword(oldPassword, user.Salt);
+            if (oldHash != user.PasswordHash)
+            {
+                return false; // Mật khẩu cũ không khớp
+            }
+
+            // 3. Nếu đúng, tạo Salt và Hash cho mật khẩu mới
+            string newSalt = SecurityHelper.GenerateSalt();
+            string newHash = SecurityHelper.HashPassword(newPassword, newSalt);
+
+            // 4. Gọi DAL để cập nhật
+            return _userRepository.UpdatePassword(username, newHash, newSalt);
+        }
+        // 1. Hàm xác thực thông tin nhân viên và đổi mật khẩu mới (có mã hóa Salt/Hash)
+        public bool ResetPasswordWithVerification(int employeeId, string phone, string newPassword)
+        {
+            if (employeeId <= 0 || string.IsNullOrWhiteSpace(phone) || string.IsNullOrEmpty(newPassword))
+            {
+                return false;
+            }
+
+            // Tạo Salt và Hash mới cho mật khẩu
+            string newSalt = SecurityHelper.GenerateSalt();
+            string newHash = SecurityHelper.HashPassword(newPassword, newSalt);
+
+            // Gọi xuống DAL thực hiện cập nhật
+            return _userRepository.ResetPasswordByManagerAndEmployee(employeeId, phone, newHash, newSalt);
+        }
+
+        // 2. Hàm kiểm tra tài khoản và mật khẩu của quản lý (Admin)
+        public bool ValidateManagerCredentials(string managerUsername, string managerPassword)
+        {
+            if (string.IsNullOrWhiteSpace(managerUsername) || string.IsNullOrEmpty(managerPassword))
+            {
+                return false;
+            }
+
+            var user = _userRepository.GetByUserName(managerUsername.Trim());
+            if (user == null) return false;
+
+            // Kiểm tra mật khẩu của Quản lý dựa trên Salt của họ
+            string hash = SecurityHelper.HashPassword(managerPassword, user.Salt);
+            if (hash != user.PasswordHash) return false;
+
+            // Kiểm tra quyền quản lý (Ví dụ: RoleId = 1 là Quản lý/Admin, hoặc tùy thuộc vào cấu trúc CSDL của bạn)
+            return user.RoleId == 1;
         }
     }
 }

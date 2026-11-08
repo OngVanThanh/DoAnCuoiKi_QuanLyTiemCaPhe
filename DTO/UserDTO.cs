@@ -12,8 +12,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DTO
         public string Username { get; set; }
         public string PasswordHash { get; set; }
         public int RoleId { get; set; }
+        public string Salt { get; set; }
         public string RoleName { get; set; }
-        public int EmployeeID { get; set; }
+        public string FullName { get; set; }
+        public int EmployeeId { get; set; }
         public bool? IsActive { get; set; }
     }
 }

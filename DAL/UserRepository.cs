@@ -30,16 +30,9 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             }
         }
 
-        // 3. Lấy toàn bộ tài khoản
-        public List<User> GetAllUsers()
-        {
-            using (var db = GetContext())
-            {
-                return db.Users.ToList();
-            }
-        }
 
-        // 4. Lấy tài khoản kèm tên vai trò để hiển thị
+
+        // 4. Lấy tài khoản kèm tên vai trò và tên nhân viên để hiển thị
         public List<UserDTO> GetAllUsersWithRoles()
         {
             using (var db = GetContext())
@@ -48,12 +41,18 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                     from user in db.Users
                     join role in db.Roles
                         on user.RoleId equals role.Id
+                    join emp in db.Employees
+                        on user.EmployeeId equals emp.Id into empGroup
+                    from employee in empGroup.DefaultIfEmpty()
                     select new UserDTO
                     {
                         Id = user.Id,
                         Username = user.Username,
+                        RoleId = user.RoleId,
                         RoleName = role.RoleName,
-                        IsActive = user.IsActive
+                        EmployeeId = user.EmployeeId,
+                        FullName = employee.FullName,
+                        IsActive = user.IsActive ?? true
                     };
 
                 return query.ToList();
@@ -87,17 +86,29 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
         }
 
         // 8. Thêm tài khoản
-        public bool InsertUser(User user)
+        public bool InsertUser(UserDTO dto)
         {
-            if (user == null)
+            try
             {
-                throw new ArgumentNullException(nameof(user));
+                using (var db = GetContext())
+                {
+                    var newUser = new User
+                    {
+                        Username = dto.Username.Trim(),
+                        EmployeeId = dto.EmployeeId,             // Thêm EmployeeId liên kết nhân viên
+                        PasswordHash = dto.PasswordHash,      // Lưu ý tên cột trên CSDL của bạn (PasssWordHash hay PasswordHash)
+                        Salt = dto.Salt,                       // Lưu mã Salt bảo mật
+                        RoleId = dto.RoleId,
+                        IsActive = dto.IsActive
+                    };
+                    db.Users.InsertOnSubmit(newUser);
+                    db.SubmitChanges();
+                    return true;
+                }
             }
-            using (var db = GetContext())
+            catch
             {
-                db.Users.InsertOnSubmit(user);
-                db.SubmitChanges();
-                return true;
+                return false;
             }
         }
 
@@ -151,11 +162,11 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
         }
 
         // 11. Xóa tài khoản theo Id
-        public bool DeleteUser(int userId)
+        public bool DeleteUser(string username)
         {
             using (var db = GetContext())
             {
-                var user = db.Users.FirstOrDefault(u => u.Id == userId);
+                var user = db.Users.FirstOrDefault(u => u.Username == username);
                 if (user != null)
                 {
                     db.Users.DeleteOnSubmit(user);
@@ -181,6 +192,56 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
 
                 db.SubmitChanges();
                 return true;
+            }
+        }
+        public bool UpdatePassword(string username, string newPasswordHash, string newSalt)
+        {
+            try
+            {
+                using (var db = GetContext())
+                {
+                    var user = db.Users.FirstOrDefault(u => u.Username == username);
+                    if (user == null) return false;
+
+                    user.PasswordHash = newPasswordHash; // Đảm bảo tên cột khớp DB của bạn (PasswordHash)
+                    user.Salt = newSalt;
+
+                    db.SubmitChanges();
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public bool ResetPasswordByManagerAndEmployee(int employeeId, string phone, string newPasswordHash, string newSalt)
+        {
+            try
+            {
+                using (var db = GetContext())
+                {
+                    // Kiểm tra nhân viên có tồn tại khớp ID và Phone không
+                    var employee = db.Employees.FirstOrDefault(e => e.Id == employeeId && e.Phone == phone);
+                    if (employee == null)
+                        return false;
+
+                    // Tìm user liên kết với nhân viên này
+                    var user = db.Users.FirstOrDefault(u => u.EmployeeId == employeeId);
+                    if (user == null)
+                        return false;
+
+                    // Cập nhật mật khẩu mới và Salt mới
+                    user.PasswordHash = newPasswordHash; // Lưu ý tên cột PasswordHash / PasssWordHash trong DB của bạn
+                    user.Salt = newSalt;
+
+                    db.SubmitChanges();
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
             }
         }
     }
