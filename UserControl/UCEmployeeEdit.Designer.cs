@@ -52,9 +52,10 @@
             // 
             // ptbAvatar
             // 
-            this.ptbAvatar.Location = new System.Drawing.Point(49, 68);
+            this.ptbAvatar.Location = new System.Drawing.Point(49, 67);
             this.ptbAvatar.Name = "ptbAvatar";
-            this.ptbAvatar.Size = new System.Drawing.Size(218, 132);
+            this.ptbAvatar.Size = new System.Drawing.Size(218, 133);
+            this.ptbAvatar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.ptbAvatar.TabIndex = 26;
             this.ptbAvatar.TabStop = false;
             // 
@@ -183,6 +184,7 @@
             this.btnEditAvatar.TabIndex = 29;
             this.btnEditAvatar.Text = "Đổi ảnh";
             this.btnEditAvatar.UseVisualStyleBackColor = true;
+            this.btnEditAvatar.Click += new System.EventHandler(this.btnAddAvatar_Click);
             // 
             // btnSave
             // 

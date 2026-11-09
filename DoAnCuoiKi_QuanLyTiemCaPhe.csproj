@@ -129,7 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BLL\AppConfigService.cs" />
-        <Compile Include="BLL\CustomerService.cs" />
+    <Compile Include="BLL\CustomerService.cs" />
     <Compile Include="BLL\AuthService.cs" />
     <Compile Include="BLL\EmployeeService.cs" />
     <Compile Include="BLL\InventoryService.cs" />
@@ -155,7 +155,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CoffeeShopDBDataSet11.xsd</DependentUpon>
     </Compile>
-        <Compile Include="CoffeeShopReportDataSet2.Designer.cs">
+    <Compile Include="CoffeeShopReportDataSet2.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CoffeeShopReportDataSet2.xsd</DependentUpon>
@@ -163,7 +163,7 @@
     <Compile Include="CoffeeShopReportDataSet2.cs">
       <DependentUpon>CoffeeShopReportDataSet2.xsd</DependentUpon>
     </Compile>
-        <Compile Include="DTO\RoleDTO.cs" />
+    <Compile Include="DTO\RoleDTO.cs" />
     <Compile Include="DTO\ShiftRTO.cs" />
     <Compile Include="DTO\TableDTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />
@@ -174,10 +174,10 @@
     <Compile Include="DAL\PromotionRepository.cs" />
     <Compile Include="DAL\TableRepository.cs" />
     <Compile Include="DAL\UserRepository.cs" />
-        <Compile Include="DAL\CustomerRepository.cs" />
+    <Compile Include="DAL\CustomerRepository.cs" />
     <Compile Include="DAL\ReportRepository.cs" />
     <Compile Include="DTO\AreaDTO.cs" />
-        <Compile Include="DTO\CustomerDTO.cs" />
+    <Compile Include="DTO\CustomerDTO.cs" />
     <Compile Include="DTO\RevenueStatisticDTO.cs" />
     <Compile Include="DTO\TopProductDTO.cs" />
     <Compile Include="DTO\Category.cs" />
@@ -318,6 +318,12 @@
     <Compile Include="DAL\ShiftRepository.cs" />
     <Compile Include="BLL\ShiftService.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
+    <Compile Include="UserControl\UCEmployeeAdd.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControl\UCEmployeeAdd.Designer.cs">
+      <DependentUpon>UCEmployeeAdd.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControl\UCPermissionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -425,6 +431,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UserControl\UCEmployeeAdd.resx">
+      <DependentUpon>UCEmployeeAdd.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControl\UCPermissionControl.resx">
       <DependentUpon>UCPermissionControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -468,7 +477,7 @@
       <DependentUpon>CoffeeShopDBDataSet11.xsd</DependentUpon>
     </None>
     <None Include="packages.config" />
-        <None Include="CoffeeShopReportDataSet2.xsc">
+    <None Include="CoffeeShopReportDataSet2.xsc">
       <DependentUpon>CoffeeShopReportDataSet2.xsd</DependentUpon>
     </None>
     <None Include="CoffeeShopReportDataSet2.xsd">

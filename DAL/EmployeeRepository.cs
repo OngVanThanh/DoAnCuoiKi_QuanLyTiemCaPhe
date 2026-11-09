@@ -124,7 +124,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             }
         }
 
-        // 4. Sửa thông tin nhân viên
         // 4. Sửa thông tin nhân viên (Cập nhật đầy đủ từ EmployeeDTO)
         public bool UpdateEmployee(EmployeeDTO dto)
         {

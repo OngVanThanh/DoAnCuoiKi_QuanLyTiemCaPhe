@@ -20,6 +20,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         private EmployeeService _employeeService = new EmployeeService();
         private PermissionService _permissionService = new PermissionService();
+        private EmployeeRepository _employeeRepository = new EmployeeRepository();
         private int _employeeId = -1;
         private string _currentImagePath = string.Empty;
         public UCEmployeeEdit()
@@ -55,7 +56,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 if (!string.IsNullOrEmpty(emp.Image) && System.IO.File.Exists(emp.Image))
                 {
                     // Giả sử bạn có ptbAvatar trên giao diện sửa
-                    // ptbAvatar.Image = Image.FromFile(emp.Image);
+                    ptbAvatar.Image = Image.FromFile(emp.Image);
                 }
             }
         }
@@ -102,8 +103,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
                 // 3. Gọi Service/Repository để thực hiện cập nhật xuống cơ sở dữ liệu
                 // (Bạn có thể gọi qua _employeeService nếu có hàm Update, hoặc dùng trực tiếp EmployeeRepository)
-                EmployeeRepository empRepo = new EmployeeRepository();
-                bool isSuccess = empRepo.UpdateEmployee(updatedDto);
+                bool isSuccess = _employeeService.UpdateEmployee(updatedDto, out string errorMsg);
 
                 if (isSuccess)
                 {
@@ -136,21 +136,37 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             {
                 try
                 {
-                    EmployeeRepository empRepo = new EmployeeRepository();
+                    // Lấy thông tin lương (Amount và TimeUnit) từ bảng Roles qua Service
+                    var salaryInfo = _employeeRepository.GetSalaryInfoByRoleId(selectedRoleId);
 
-                    // Lấy thông tin lương (Amount và TimeUnit) theo RoleId vừa chọn
-                    var salaryInfo = empRepo.GetSalaryInfoByRoleId(selectedRoleId);
-
-                    // Hiển thị số tiền lên ô txtSalary (định dạng số có dấu phẩy cho dễ đọc, ví dụ: 8,000,000)
-                    txtSalary.Text = salaryInfo.Amount.ToString("N0");
-
-                    // (Tùy chọn) Nếu trên giao diện của bạn có một Label hiện đơn vị như lblTimeUnit, bạn có thể cập nhật luôn:
-                    // lblTimeUnit.Text = $"VNĐ / {salaryInfo.TimeUnit}";
+                    // Gán chuỗi định dạng đầy đủ vào txtSalary
+                    if (txtSalary != null)
+                    {
+                        txtSalary.Text = $"{salaryInfo.Amount:N0} VNĐ / {salaryInfo.TimeUnit}";
+                    }
                 }
                 catch (Exception ex)
                 {
                     // Xử lý ngoại lệ nếu cần thiết
                     Console.WriteLine("Lỗi load lương theo Role: " + ex.Message);
+                }
+            }
+        }
+        private void btnAddAvatar_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp";
+                ofd.Title = "Chọn ảnh đại diện nhân viên";
+
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    // Lưu lại đường dẫn tệp ảnh vào biến toàn cục (ví dụ: _currentImagePath hoặc _imagePath)
+                    _currentImagePath = ofd.FileName;
+
+                    // Hiển thị ảnh lên PictureBox và căn chỉnh vừa khít
+                    ptbAvatar.Image = Image.FromFile(_currentImagePath);
+                    ptbAvatar.SizeMode = PictureBoxSizeMode.Zoom;
                 }
             }
         }
