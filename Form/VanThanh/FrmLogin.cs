@@ -15,6 +15,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
     public partial class FrmLogin : Form
     {
         private AuthService _authService = new AuthService();
+        private string _sessionRoleTarget;
         public FrmLogin()
         {
             InitializeComponent();
