@@ -82,7 +82,7 @@
             // 
             // orderDetailDTOBindingSource
             // 
-            this.orderDetailDTOBindingSource.DataSource = typeof(DoAnCuoiKi_QuanLyTiemCaPhe.DTO.OrderDetailDTO);
+            // DataSource bound at runtime to avoid Visual Studio designer type-resolution crash
             // 
             // pnlHeader
             // 

@@ -28,7 +28,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.BLL
         // 3. Lấy toàn bộ danh sách bàn kèm tên khu vực
         public List<TableDTO> GetAllTables()
         {
-            return _tableRepository.GetAllTablesWithArea();
+            return _tableRepository.GetAllTableDTOs();
         }
 
         // 4. Lọc danh sách bàn theo khu vực (areaId <= 0 trả về tất cả bàn)
@@ -55,6 +55,81 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.BLL
                 "Có khách",
                 "Đặt trước"
             };
+        }
+
+                // 7a. Thêm bàn mới (không cần Area)
+        public bool AddTable(string tableName, string status, out string message)
+        {
+            if (string.IsNullOrWhiteSpace(tableName))
+            {
+                message = "Tên bàn không được để trống!";
+                return false;
+            }
+
+            tableName = tableName.Trim();
+
+            if (_tableRepository.IsTableNameDuplicate(tableName))
+            {
+                message = $"Tên bàn '{tableName}' đã tồn tại trong hệ thống!";
+                return false;
+            }
+
+            string normalizedStatus = string.IsNullOrWhiteSpace(status) ? "Trống" : status.Trim();
+
+            var newTable = new Table
+            {
+                TableName = tableName,
+                AreaId = 1,
+                Status = normalizedStatus
+            };
+
+            bool result = _tableRepository.InsertTable(newTable);
+            message = result ? "Thêm bàn mới thành công!" : "Không thể thêm bàn mới.";
+            return result;
+        }
+
+        // 8a. Cập nhật thông tin bàn (không cần Area)
+        public bool UpdateTable(int tableId, string tableName, string status, out string message)
+        {
+            if (tableId <= 0)
+            {
+                message = "Vui lòng chọn bàn cần cập nhật!";
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(tableName))
+            {
+                message = "Tên bàn không được để trống!";
+                return false;
+            }
+
+            tableName = tableName.Trim();
+
+            if (_tableRepository.IsTableNameDuplicate(tableName, tableId))
+            {
+                message = $"Tên bàn '{tableName}' đã trùng với một bàn khác!";
+                return false;
+            }
+
+            string normalizedStatus = string.IsNullOrWhiteSpace(status) ? "Trống" : status.Trim();
+
+            if (normalizedStatus == "Trống" && _tableRepository.HasUnpaidOrders(tableId))
+            {
+                message = "Bàn hiện đang có hóa đơn chưa thanh toán, không thể chuyển trạng thái về 'Trống'!";
+                return false;
+            }
+
+            var tableToUpdate = new Table
+            {
+                Id = tableId,
+                TableName = tableName,
+                AreaId = 1,
+                Status = normalizedStatus
+            };
+
+            bool result = _tableRepository.UpdateTable(tableToUpdate);
+            message = result ? "Cập nhật thông tin bàn thành công!" : "Không tìm thấy bàn cần cập nhật.";
+            return result;
         }
 
         // 7. Thêm bàn mới (có kiểm tra ràng buộc dữ liệu đầu vào)

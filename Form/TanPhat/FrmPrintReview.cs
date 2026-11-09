@@ -35,6 +35,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         public FrmPrintReview(OrderDTO order, List<OrderDetailDTO> orderDetails)
         {
             InitializeComponent();
+            if (this.orderDetailDTOBindingSource != null && this.orderDetailDTOBindingSource.DataSource == null)
+            {
+                this.orderDetailDTOBindingSource.DataSource = typeof(DoAnCuoiKi_QuanLyTiemCaPhe.DTO.OrderDetailDTO);
+            }
 
             if (order != null)
             {

@@ -9,14 +9,14 @@ using System.Windows.Forms;
 namespace DoAnCuoiKi_QuanLyTiemCaPhe
 {
     /// <summary>
-    /// Màn hình Quản lý Sơ đồ bàn & Khu vực (FrmTable).
-    /// Đồng bộ phong cách Warm Coffee với UIHelper của nhóm, hỗ trợ lọc bàn theo khu vực và CRUD.
+    /// Màn hình Quản lý Sơ đồ bàn (FrmTable) - Thiết kế kéo thả WinForms Designer 100%.
+    /// Quản lý danh sách bàn ăn (Mã bàn, Tên bàn, Trạng thái) độc lập không phụ thuộc Area.
     /// </summary>
     public partial class FrmTable : Form
     {
         private readonly TableService _tableService = new TableService();
         private int _selectedTableId = -1;
-        private bool _isLoading = false;
+        // _isLoading removed
 
         public FrmTable()
         {
@@ -28,10 +28,9 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         {
             try
             {
-                _isLoading = true;
+                //
                 UIHelper.StyleDataGridView(dgvTable);
 
-                LoadAreasToComboBox();
                 LoadStatusesToComboBox();
                 LoadTablesToGrid();
                 ResetInputFields();
@@ -46,24 +45,11 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
             finally
             {
-                _isLoading = false;
+                //
             }
         }
 
-        // 2. Tải danh sách Khu vực lên ComboBox cboArea
-        private void LoadAreasToComboBox()
-        {
-            cboArea.DataSource = null;
-            cboArea.DisplayMember = "AreaName";
-            cboArea.ValueMember = "Id";
-            cboArea.DataSource = _tableService.GetAllAreas();
-            if (cboArea.Items.Count > 0)
-            {
-                cboArea.SelectedIndex = 0;
-            }
-        }
-
-        // 3. Tải danh sách Trạng thái bàn lên ComboBox cboTableStatus
+        // 2. Tải danh sách Trạng thái bàn lên ComboBox cboTableStatus
         private void LoadStatusesToComboBox()
         {
             cboTableStatus.Items.Clear();
@@ -77,16 +63,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
         }
 
-        // 4. Tải danh sách bàn lên DataGridView dgvTable và cập nhật thống kê trạng thái
+        // 3. Tải danh sách bàn lên DataGridView dgvTable và cập nhật thống kê trạng thái
         private void LoadTablesToGrid()
         {
-            int filterAreaId = -1;
-            if (chkFilterByArea.Checked && TryGetSelectedAreaId(out int selectedAreaId))
-            {
-                filterAreaId = selectedAreaId;
-            }
-
-            List<TableDTO> tables = _tableService.GetTablesByArea(filterAreaId);
+            List<TableDTO> tables = _tableService.GetAllTables();
 
             dgvTable.DataSource = null;
             dgvTable.DataSource = tables;
@@ -99,17 +79,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             lblSummaryStats.Text = $"Tổng: {total} bàn | Trống: {emptyCount} | Có khách: {occupiedCount}";
         }
 
-        // 5. Lấy AreaId đang được chọn trên ComboBox cboArea
-        private bool TryGetSelectedAreaId(out int areaId)
-        {
-            areaId = -1;
-            if (cboArea.SelectedValue == null)
-                return false;
-
-            return int.TryParse(cboArea.SelectedValue.ToString(), out areaId);
-        }
-
-        // 6. Đặt lại các ô nhập liệu về trạng thái mặc định
+        // 4. Đặt lại các ô nhập liệu về trạng thái mặc định
         private void ResetInputFields()
         {
             _selectedTableId = -1;
@@ -125,28 +95,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             txtTableName.Focus();
         }
 
-        // 7. Sự kiện khi thay đổi lựa chọn Khu vực trên cboArea
-        private void cboArea_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (_isLoading)
-                return;
-
-            if (chkFilterByArea.Checked)
-            {
-                LoadTablesToGrid();
-            }
-        }
-
-        // 8. Sự kiện khi bật/tắt chế độ lọc bàn theo khu vực
-        private void chkFilterByArea_CheckedChanged(object sender, EventArgs e)
-        {
-            if (_isLoading)
-                return;
-
-            LoadTablesToGrid();
-        }
-
-        // 9. Sự kiện khi click chọn một dòng trên bảng dgvTable
+        // 5. Sự kiện khi click chọn một dòng trên bảng dgvTable
         private void dgvTable_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0)
@@ -163,22 +112,16 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             txtTableId.Text = tableId.ToString();
             txtTableName.Text = row.Cells["colTableName"].Value?.ToString() ?? string.Empty;
 
-            _isLoading = true;
-
-            if (row.Cells["colAreaId"].Value != null &&
-                int.TryParse(row.Cells["colAreaId"].Value.ToString(), out int areaId))
-            {
-                cboArea.SelectedValue = areaId;
-            }
+            //
 
             string status = row.Cells["colStatus"].Value?.ToString() ?? "Trống";
             int statusIndex = cboTableStatus.FindStringExact(status);
             cboTableStatus.SelectedIndex = statusIndex >= 0 ? statusIndex : 0;
 
-            _isLoading = false;
+            //
         }
 
-        // 10. Sự kiện nút Thêm bàn (btnAdd)
+        // 6. Sự kiện nút Thêm bàn (btnAdd)
         private void btnAdd_Click(object sender, EventArgs e)
         {
             if (_selectedTableId > 0 && string.IsNullOrWhiteSpace(txtTableName.Text))
@@ -199,21 +142,11 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 return;
             }
 
-            if (!TryGetSelectedAreaId(out int areaId))
-            {
-                MessageBox.Show(
-                    "Vui lòng chọn khu vực cho bàn!",
-                    "Cảnh báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                return;
-            }
-
             string status = cboTableStatus.SelectedItem?.ToString() ?? "Trống";
 
             try
             {
-                bool success = _tableService.AddTable(tableName, areaId, status, out string message);
+                bool success = _tableService.AddTable(tableName, status, out string message);
                 MessageBox.Show(
                     message,
                     success ? "Thông báo" : "Cảnh báo",
@@ -222,15 +155,15 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
                 if (success)
                 {
-                    _isLoading = true;
+                    //
                     LoadTablesToGrid();
                     ResetInputFields();
-                    _isLoading = false;
+                    //
                 }
             }
             catch (Exception ex)
             {
-                _isLoading = false;
+                //
                 MessageBox.Show(
                     "Lỗi khi thêm bàn:\n" + ex.Message,
                     "Lỗi",
@@ -239,7 +172,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
         }
 
-        // 11. Sự kiện nút Sửa bàn (btnEdit)
+        // 7. Sự kiện nút Sửa bàn (btnEdit)
         private void btnEdit_Click(object sender, EventArgs e)
         {
             if (_selectedTableId <= 0)
@@ -252,22 +185,12 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 return;
             }
 
-            if (!TryGetSelectedAreaId(out int areaId))
-            {
-                MessageBox.Show(
-                    "Vui lòng chọn khu vực hợp lệ!",
-                    "Cảnh báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                return;
-            }
-
             string tableName = txtTableName.Text.Trim();
             string status = cboTableStatus.SelectedItem?.ToString() ?? "Trống";
 
             try
             {
-                bool success = _tableService.UpdateTable(_selectedTableId, tableName, areaId, status, out string message);
+                bool success = _tableService.UpdateTable(_selectedTableId, tableName, status, out string message);
                 MessageBox.Show(
                     message,
                     success ? "Thông báo" : "Cảnh báo",
@@ -276,15 +199,15 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
                 if (success)
                 {
-                    _isLoading = true;
+                    //
                     LoadTablesToGrid();
                     ResetInputFields();
-                    _isLoading = false;
+                    //
                 }
             }
             catch (Exception ex)
             {
-                _isLoading = false;
+                //
                 MessageBox.Show(
                     "Lỗi khi cập nhật bàn:\n" + ex.Message,
                     "Lỗi",
@@ -293,7 +216,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
         }
 
-        // 12. Sự kiện nút Xóa bàn (btnDelete)
+        // 8. Sự kiện nút Xóa bàn (btnDelete)
         private void btnDelete_Click(object sender, EventArgs e)
         {
             if (_selectedTableId <= 0)
@@ -326,15 +249,15 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
                 if (success)
                 {
-                    _isLoading = true;
+                    //
                     LoadTablesToGrid();
                     ResetInputFields();
-                    _isLoading = false;
+                    //
                 }
             }
             catch (Exception ex)
             {
-                _isLoading = false;
+                //
                 MessageBox.Show(
                     "Lỗi khi xóa bàn:\n" + ex.Message,
                     "Lỗi",
@@ -343,20 +266,13 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
         }
 
-        // 13. Sự kiện nút Lưu / Làm mới (btnSave)
+        // 9. Sự kiện nút Làm mới (btnSave)
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (_selectedTableId <= 0 && !string.IsNullOrWhiteSpace(txtTableName.Text))
-            {
-                btnAdd_Click(sender, e);
-                return;
-            }
-
-            _isLoading = true;
-            chkFilterByArea.Checked = false;
+            //
             LoadTablesToGrid();
             ResetInputFields();
-            _isLoading = false;
+            //
         }
     }
 }

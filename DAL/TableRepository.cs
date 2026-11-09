@@ -128,6 +128,38 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             }
         }
 
+                // 6b. Lấy toàn bộ danh sách Bàn dạng DTO độc lập không cần Area
+        public List<TableDTO> GetAllTableDTOs()
+        {
+            if (!IsDatabaseOnline())
+            {
+                return FallbackTables
+                    .OrderBy(t => t.Id)
+                    .Select(t => new TableDTO
+                    {
+                        Id = t.Id,
+                        TableName = t.TableName,
+                        Status = t.Status,
+                        AreaId = t.AreaId,
+                        AreaName = string.Empty
+                    }).ToList();
+            }
+
+            using (var db = GetContext())
+            {
+                return db.Tables
+                    .OrderBy(t => t.Id)
+                    .Select(t => new TableDTO
+                    {
+                        Id = t.Id,
+                        TableName = t.TableName,
+                        Status = t.Status,
+                        AreaId = t.AreaId,
+                        AreaName = string.Empty
+                    }).ToList();
+            }
+        }
+
         // 7. Lấy danh sách Bàn kèm tên Khu vực để hiển thị lên giao diện
         public List<TableDTO> GetAllTablesWithArea()
         {

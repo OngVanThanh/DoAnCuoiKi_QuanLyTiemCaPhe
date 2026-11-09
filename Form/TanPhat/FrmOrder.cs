@@ -219,7 +219,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                     Tag = table,
                     Cursor = Cursors.Hand,
                     Font = new Font("Segoe UI", 9F, FontStyle.Bold),
-                    Text = $"{table.TableName}\n{table.AreaName}\n[{table.Status}]",
+                    Text = $"{table.TableName}\n[{table.Status}]",
                     FlatStyle = FlatStyle.Flat
                 };
 
