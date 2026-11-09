@@ -66,5 +66,71 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                     .ToList();
             }
         }
+        public bool UpdateShiftAssignment(int? employeeId, int shiftId, DateTime workDate)
+        {
+            try
+            {
+                using (var db = GetContext())
+                {
+                    // Tìm bản ghi đã tồn tại chắc chắn trong DB
+                    var existing = db.EmployeeShifts
+                        .FirstOrDefault(s => s.ShiftId == shiftId && s.WorkDate == workDate.Date);
+
+                    if (existing != null)
+                    {
+                        if (employeeId.HasValue)
+                        {
+                            // Cập nhật nhân viên mới cho ca này
+                            existing.EmployeeId = employeeId.Value;
+                            existing.Status = "Đã đăng ký";
+                        }
+                        else
+                        {
+                            // Nếu người dùng bỏ trống ô trên giao diện -> Đặt lại EmployeeId về null
+                            existing.EmployeeId = null;
+                            existing.Status = "Chưa đăng ký";
+                        }
+                        db.SubmitChanges();
+                    }
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show("Lỗi DAL UpdateShiftAssignment: " + ex.Message, "Lỗi", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                return false;
+            }
+        }
+        public void InitializeWeekShiftsIfNeeded(DateTime startDate, DateTime endDate)
+        {
+            using (var db = GetContext())
+            {
+                for (int i = 0; i < 7; i++)
+                {
+                    DateTime targetDate = startDate.AddDays(i).Date;
+                    for (int shiftId = 1; shiftId <= 3; shiftId++)
+                    {
+                        // Kiểm tra xem ca này trong ngày đó đã có trong DB chưa
+                        bool exists = db.EmployeeShifts.Any(s => s.ShiftId == shiftId && s.WorkDate == targetDate);
+
+                        if (!exists)
+                        {
+                            // Nếu chưa có -> Tạo mới bản ghi trống (EmployeeId = null)
+                            string generatedId = targetDate.ToString("yyMMdd") + "C" + shiftId;
+                            var newShift = new EmployeeShift
+                            {
+                                Id = generatedId,
+                                EmployeeId = null, // Chưa có ai nhận ca
+                                ShiftId = shiftId,
+                                WorkDate = targetDate,
+                                Status = "Chưa đăng ký"
+                            };
+                            db.EmployeeShifts.InsertOnSubmit(newShift);
+                        }
+                    }
+                }
+                db.SubmitChanges();
+            }
+        }
     }
 }

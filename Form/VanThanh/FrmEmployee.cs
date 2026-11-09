@@ -23,6 +23,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         private int _selectedRowIndex = -1; //
         private EmployeeService _employeeService = new EmployeeService();
         private ShiftService _shiftService = new ShiftService();
+        private ShiftRepository _shiftRepo = new ShiftRepository();
         public FrmEmployee()
         {
             InitializeComponent();
@@ -103,35 +104,62 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
             if (selectedEmployee != null)
             {
-                // 1. Kiểm tra xem panel chứa đã được tạo trên form chưa
                 if (pnlEmployeeDetail == null)
                 {
-                    MessageBox.Show("Vui lòng kéo một Panel tên 'panelDetailContainer' lên Form thiết kế trước!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Vui lòng kiểm tra lại panel pnlEmployeeDetail trên Form!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // 2. Xóa các control cũ bên trong panel (nếu trước đó đã xem nhân viên khác)
                 pnlEmployeeDetail.Controls.Clear();
 
                 // 3. Khởi tạo User Control chi tiết
                 _ucEmployeeInform = new UCEmployeeInform();
-                _ucEmployeeInform.Dock = DockStyle.Fill; // Trải đầy panel
-
-                // 4. Đổ dữ liệu ứng với dòng được chọn vào User Control
+                _ucEmployeeInform.Dock = DockStyle.Fill;
                 _ucEmployeeInform.BindData(selectedEmployee);
 
-                // 5. Add User Control vào Panel và đưa lên lớp trên cùng hiển thị
-                pnlEmployeeDetail.Controls.Add(_ucEmployeeInform);
-                _ucEmployeeInform.BringToFront(); // Đưa User Control lên vị trí hiển thị trên cùng (Top)
+                // ==========================================
+                // THÊM ĐOẠN LẮNG NGHE SỰ KIỆN SỬA THÔNG TIN NÀY:
+                // ==========================================
+                _ucEmployeeInform.EditClicked += (sender, empToEdit) => {
+                    pnlEmployeeDetail.Controls.Clear();
 
-                // (Tùy chọn) Đảm bảo Panel cũng được hiện lên nếu trước đó bạn để ẩn
-                pnlEmployeeDetail.BringToFront();
-                pnlEmployeeDetail.Visible = true;
+                    // Khởi tạo UC Sửa thông tin
+                    _ucEmployeeEdit = new UCEmployeeEdit();
+                    _ucEmployeeEdit.Dock = DockStyle.Fill;
+
+                    // Đẩy dữ liệu nhân viên hiện tại sang UC Sửa
+                    _ucEmployeeEdit.SetEmployeeData(empToEdit);
+
+                    // Khi sửa và lưu thành công
+                    _ucEmployeeEdit.SaveCompleted += (s, ev) => {
+                        pnlEmployeeDetail.Controls.Clear();
+                        pnlEmployeeDetail.Visible = false;
+                        LoadEmployeeData(); // Load lại DataGridView chính
+                        MessageBox.Show("Cập nhật thông tin nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    };
+
+                    // Khi bấm nút Hủy ở form Sửa
+                    _ucEmployeeEdit.CancelClicked += (s, ev) => {
+                        pnlEmployeeDetail.Controls.Clear();
+                        pnlEmployeeDetail.Visible = false;
+                    };
+
+                    pnlEmployeeDetail.Controls.Add(_ucEmployeeEdit);
+                    _ucEmployeeEdit.BringToFront();
+                };
+                // ==========================================
+
+                // Xử lý sự kiện đóng màn hình chi tiết
                 _ucEmployeeInform.CloseClicked += (s, e) =>
                 {
-                    pnlEmployeeDetail.Controls.Clear(); // Xóa UC khỏi Panel
-                    pnlEmployeeDetail.Visible = false;  // Ẩn panel đi (hoặc giữ nguyên tùy ý bạn)
+                    pnlEmployeeDetail.Controls.Clear();
+                    pnlEmployeeDetail.Visible = false;
                 };
+
+                pnlEmployeeDetail.Controls.Add(_ucEmployeeInform);
+                _ucEmployeeInform.BringToFront();
+                pnlEmployeeDetail.BringToFront();
+                pnlEmployeeDetail.Visible = true;
             }
         }
         private void ExecuteDeleteAction(int rowIndex)
@@ -214,11 +242,23 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         private void btnRegisterShift_Click(object sender, EventArgs e)
         {
-            // Khởi tạo form đăng ký ca làm
-            FrmShiftSchedule frm = new FrmShiftSchedule();
+            try
+            {
+                // Xác định khoảng thời gian tuần tới (ví dụ: từ ngày mai đến 7 ngày sau)
+                DateTime startDate = DateTime.Now.AddDays(1).Date;
+                DateTime endDate = startDate.AddDays(6).Date;
 
-            // Mở form dưới dạng hộp thoại (người dùng phải đóng form này mới thao tác tiếp được form chính)
-            frm.ShowDialog();
+                // 1. Tự động khởi tạo 21 ca vào Database nếu chưa có sẵn
+                _shiftRepo.InitializeWeekShiftsIfNeeded(startDate, endDate);
+
+                // 2. Mở form quản lý lịch làm việc
+                FrmShiftSchedule frm = new FrmShiftSchedule();
+                frm.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi khởi tạo lịch: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

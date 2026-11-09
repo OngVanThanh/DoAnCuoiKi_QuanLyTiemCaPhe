@@ -133,8 +133,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         private void menuItemOrder_Click(object sender, EventArgs e)
         {
-            FrmOrder frm = new FrmOrder();
-            frm.ShowDialog();
+            OpenChildForm(new FrmOrder());
+
         }
 
         private void menuItemInventory_Click(object sender, EventArgs e)

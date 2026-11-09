@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.dgvEmployee = new System.Windows.Forms.DataGridView();
             this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FullName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -39,17 +38,9 @@
             this.btnBulkAttendance = new System.Windows.Forms.Button();
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.btnSearch = new System.Windows.Forms.Button();
-            this.coffeeShopDBDataSet = new DoAnCuoiKi_QuanLyTiemCaPhe.CoffeeShopDBDataSet();
-            this.coffeeShopDBDataSetBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.coffeeShopDBDataSet1 = new DoAnCuoiKi_QuanLyTiemCaPhe.CoffeeShopDBDataSet1();
-            this.coffeeShopDBDataSet1BindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.pnlEmployeeDetail = new System.Windows.Forms.Panel();
             this.btnRegisterShift = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvEmployee)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.coffeeShopDBDataSet)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.coffeeShopDBDataSetBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.coffeeShopDBDataSet1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.coffeeShopDBDataSet1BindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // dgvEmployee
@@ -150,26 +141,6 @@
             this.btnSearch.Text = "Tìm kiếm";
             this.btnSearch.UseVisualStyleBackColor = true;
             // 
-            // coffeeShopDBDataSet
-            // 
-            this.coffeeShopDBDataSet.DataSetName = "CoffeeShopDBDataSet";
-            this.coffeeShopDBDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // coffeeShopDBDataSetBindingSource
-            // 
-            this.coffeeShopDBDataSetBindingSource.DataSource = this.coffeeShopDBDataSet;
-            this.coffeeShopDBDataSetBindingSource.Position = 0;
-            // 
-            // coffeeShopDBDataSet1
-            // 
-            this.coffeeShopDBDataSet1.DataSetName = "CoffeeShopDBDataSet1";
-            this.coffeeShopDBDataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // coffeeShopDBDataSet1BindingSource
-            // 
-            this.coffeeShopDBDataSet1BindingSource.DataSource = this.coffeeShopDBDataSet1;
-            this.coffeeShopDBDataSet1BindingSource.Position = 0;
-            // 
             // pnlEmployeeDetail
             // 
             this.pnlEmployeeDetail.Location = new System.Drawing.Point(893, 80);
@@ -205,10 +176,6 @@
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.FrmEmployee_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvEmployee)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.coffeeShopDBDataSet)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.coffeeShopDBDataSetBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.coffeeShopDBDataSet1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.coffeeShopDBDataSet1BindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -221,10 +188,6 @@
         private System.Windows.Forms.Button btnBulkAttendance;
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.Button btnSearch;
-        private System.Windows.Forms.BindingSource coffeeShopDBDataSet1BindingSource;
-        private CoffeeShopDBDataSet1 coffeeShopDBDataSet1;
-        private CoffeeShopDBDataSet coffeeShopDBDataSet;
-        private System.Windows.Forms.BindingSource coffeeShopDBDataSetBindingSource;
         private System.Windows.Forms.DataGridViewTextBoxColumn Id;
         private System.Windows.Forms.DataGridViewTextBoxColumn FullName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Position;

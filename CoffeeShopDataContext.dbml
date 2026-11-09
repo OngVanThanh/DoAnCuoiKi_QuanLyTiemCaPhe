@@ -62,23 +62,6 @@
       <Column Name="Status" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
     </Type>
   </Table>
-  <Table Name="dbo.Employees" Member="Employees">
-    <Type Name="Employee">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="FullName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
-      <Column Name="Phone" Type="System.String" DbType="VarChar(15)" CanBeNull="true" />
-      <Column Name="Address" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
-      <Column Name="Salary" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
-      <Column Name="HireDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
-      <Column Name="BirthDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
-      <Column Name="Image" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
-      <Column Name="RoleId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="Employee_InventoryTransaction" Member="InventoryTransactions" ThisKey="Id" OtherKey="EmployeeId" Type="InventoryTransaction" />
-      <Association Name="Employee_User" Member="Users" ThisKey="Id" OtherKey="EmployeeId" Type="User" />
-      <Association Name="Employee_EmployeeShift" Member="EmployeeShifts" ThisKey="Id" OtherKey="EmployeeId" Type="EmployeeShift" />
-      <Association Name="Role_Employee" Member="Role" ThisKey="RoleId" OtherKey="Id" Type="Role" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.OrderDetails" Member="OrderDetails">
     <Type Name="OrderDetail">
       <Column Name="OrderId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -116,14 +99,6 @@
       <Association Name="User_Order" Member="User" ThisKey="OrderId" OtherKey="Id" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.Roles" Member="Roles">
-    <Type Name="Role">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="RoleName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Association Name="Role_Employee" Member="Employees" ThisKey="Id" OtherKey="RoleId" Type="Employee" />
-      <Association Name="Role_User" Member="Users" ThisKey="Id" OtherKey="RoleId" Type="User" />
-    </Type>
-  </Table>
   <Table Name="dbo.Users" Member="Users">
     <Type Name="User">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -154,8 +129,42 @@
       <Column Name="ShiftId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="WorkDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
       <Column Name="Status" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Association Name="Employee_EmployeeShift" Member="Employee" ThisKey="EmployeeId" OtherKey="Id" Type="Employee" IsForeignKey="true" />
       <Association Name="Shift_EmployeeShift" Member="Shift" ThisKey="ShiftId" OtherKey="Id" Type="Shift" IsForeignKey="true" />
+      <Association Name="Employee_EmployeeShift" Member="Employee" ThisKey="EmployeeId" OtherKey="Id" Type="Employee" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Employees" Member="Employees">
+    <Type Name="Employee">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="FullName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Phone" Type="System.String" DbType="VarChar(15) NOT NULL" CanBeNull="false" />
+      <Column Name="Address" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="HireDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="BirthDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="Image" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="RoleId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Employee_InventoryTransaction" Member="InventoryTransactions" ThisKey="Id" OtherKey="EmployeeId" Type="InventoryTransaction" />
+      <Association Name="Employee_User" Member="Users" ThisKey="Id" OtherKey="EmployeeId" Type="User" />
+      <Association Name="Employee_EmployeeShift" Member="EmployeeShifts" ThisKey="Id" OtherKey="EmployeeId" Type="EmployeeShift" />
+      <Association Name="Role_Employee" Member="Role" ThisKey="RoleId" OtherKey="Id" Type="Role" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Roles" Member="Roles">
+    <Type Name="Role">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="RoleName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Role_User" Member="Users" ThisKey="Id" OtherKey="RoleId" Type="User" />
+      <Association Name="Role_Employee" Member="Employees" ThisKey="Id" OtherKey="RoleId" Type="Employee" />
+      <Association Name="Role_Salary" Member="Salaries" ThisKey="Id" OtherKey="RoleId" Type="Salary" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Salaries" Member="Salaries">
+    <Type Name="Salary">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="RoleId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Amount" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TimeUnit" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Association Name="Role_Salary" Member="Role" ThisKey="RoleId" OtherKey="Id" Type="Role" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

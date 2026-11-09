@@ -13,7 +13,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             return new CoffeeShopDataContextDataContext(ConfigHelper.GetConnectionString("CoffeeShopDB"));
         }
 
-        // 1. Lấy toàn bộ nhân viên chuyển sang EmployeeDTO
+        // 1. Lấy toàn bộ nhân viên chuyển sang EmployeeDTO (có kèm thông tin Lương từ bảng Salaries)
         public List<EmployeeDTO> GetAllEmployees()
         {
             using (var db = GetContext())
@@ -21,6 +21,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                 var query =
                     from e in db.Employees
                     join r in db.Roles on e.RoleId equals r.Id
+                    join s in db.Salaries on e.RoleId equals s.RoleId into salaries
+                    from s in salaries.DefaultIfEmpty()
                     select new EmployeeDTO
                     {
                         Id = e.Id,
@@ -29,12 +31,39 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                         Phone = e.Phone,
                         Address = e.Address,
                         Position = r.RoleName,
-                        RoleId = e.RoleId ?? 0,
-                        Salary = e.Salary,
+                        RoleId = e.RoleId,
                         HireDate = e.HireDate,
-                        Image = e.Image // Hoặc tên cột chứa đường dẫn trong bảng Employees của bạn
+                        Salary = s != null ? (decimal?)s.Amount : null,
+                        Image = e.Image
                     };
                 return query.ToList();
+            }
+        }
+        // Lấy thông tin nhân viên theo Id chuyển sang EmployeeDTO (có kèm thông tin Lương từ bảng Salaries)
+        public EmployeeDTO GetEmployeeDTOById(int employeeId)
+        {
+            using (var db = GetContext())
+            {
+                var query =
+                    from e in db.Employees
+                    where e.Id == employeeId
+                    join r in db.Roles on e.RoleId equals r.Id
+                    join s in db.Salaries on e.RoleId equals s.RoleId into salaries
+                    from s in salaries.DefaultIfEmpty()
+                    select new EmployeeDTO
+                    {
+                        Id = e.Id,
+                        FullName = e.FullName,
+                        BirthDate = e.BirthDate,
+                        Phone = e.Phone,
+                        Address = e.Address,
+                        Position = r.RoleName,
+                        RoleId = e.RoleId,
+                        HireDate = e.HireDate,
+                        Salary = s != null ? (decimal?)s.Amount : null,
+                        Image = e.Image
+                    };
+                return query.FirstOrDefault();
             }
         }
 
@@ -43,24 +72,26 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
         {
             using (var db = GetContext())
             {
-                return db.Employees
-                    .Join(db.Roles,
-                        e => e.RoleId,
-                        r => r.Id,
-                        (e, r) => new { e, r })
-                    .Where(x => x.e.FullName.Contains(keyword) || x.e.Phone.Contains(keyword))
-                    .Select(x => new EmployeeDTO
+                var query =
+                    from e in db.Employees
+                    join r in db.Roles on e.RoleId equals r.Id
+                    join s in db.Salaries on e.RoleId equals s.RoleId into salaries
+                    from s in salaries.DefaultIfEmpty()
+                    where e.FullName.Contains(keyword) || e.Phone.Contains(keyword)
+                    select new EmployeeDTO
                     {
-                        Id = x.e.Id,
-                        FullName = x.e.FullName,
-                        Phone = x.e.Phone,
-                        Address = x.e.Address,
-                        RoleId = x.e.RoleId ?? 0,
-                        Position = x.r.RoleName,
-                        Salary = x.e.Salary,
-                        HireDate = x.e.HireDate
-                    })
-                    .ToList();
+                        Id = e.Id,
+                        FullName = e.FullName,
+                        BirthDate = e.BirthDate,
+                        Phone = e.Phone,
+                        Address = e.Address,
+                        Position = r.RoleName,
+                        RoleId = e.RoleId,
+                        HireDate = e.HireDate,
+                        Salary = s != null ? (decimal?)s.Amount : null,
+                        Image = e.Image
+                    };
+                return query.ToList();
             }
         }
 
@@ -74,11 +105,12 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                     var newEmp = new Employee
                     {
                         FullName = dto.FullName.Trim(),
+                        BirthDate = dto.BirthDate,
                         Phone = string.IsNullOrEmpty(dto.Phone) ? null : dto.Phone.Trim(),
                         Address = string.IsNullOrEmpty(dto.Address) ? null : dto.Address.Trim(),
-                        Salary = dto.Salary,
                         HireDate = dto.HireDate ?? DateTime.Now,
-                        RoleId = dto.RoleId // Gắn khóa ngoại RoleId
+                        RoleId = dto.RoleId,
+                        Image = dto.Image
                     };
 
                     db.Employees.InsertOnSubmit(newEmp);
@@ -88,33 +120,41 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             }
             catch (Exception ex)
             {
-                // Log lỗi nếu cần
-
-
                 return false;
             }
         }
 
         // 4. Sửa thông tin nhân viên
+        // 4. Sửa thông tin nhân viên (Cập nhật đầy đủ từ EmployeeDTO)
         public bool UpdateEmployee(EmployeeDTO dto)
         {
             if (dto == null) return false;
 
-            using (var db = GetContext())
+            try
             {
-                // Tìm nhân viên cần sửa theo Id
-                var existing = db.Employees.FirstOrDefault(e => e.Id == dto.Id);
-                if (existing == null) return false;
+                using (var db = GetContext())
+                {
+                    var existing = db.Employees.FirstOrDefault(e => e.Id == dto.Id);
+                    if (existing == null) return false;
 
-                // Cập nhật thông tin cơ bản từ EmployeeDTO
-                existing.FullName = dto.FullName;
-                existing.Phone = dto.Phone;
-                existing.Address = dto.Address;
-                existing.Salary = dto.Salary;
-                existing.HireDate = dto.HireDate;
-                existing.RoleId = dto.RoleId;
-                db.SubmitChanges();
-                return true;
+                    existing.FullName = dto.FullName?.Trim();
+                    existing.BirthDate = dto.BirthDate;
+                    existing.Phone = dto.Phone?.Trim();
+                    existing.Address = dto.Address?.Trim();
+                    existing.RoleId = dto.RoleId;
+
+                    if (!string.IsNullOrEmpty(dto.Image))
+                    {
+                        existing.Image = dto.Image;
+                    }
+
+                    db.SubmitChanges();
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
         }
 
@@ -160,6 +200,19 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             using (var db = GetContext())
             {
                 return db.Employees.FirstOrDefault(e => e.FullName.Trim().ToLower() == fullName.Trim().ToLower());
+            }
+        }
+        // Phương thức lấy thông tin lương theo RoleId
+        public (decimal Amount, string TimeUnit) GetSalaryInfoByRoleId(int roleId)
+        {
+            using (var db = GetContext())
+            {
+                var salaryConfig = db.Salaries.FirstOrDefault(s => s.RoleId == roleId);
+                if (salaryConfig != null)
+                {
+                    return (salaryConfig.Amount, salaryConfig.TimeUnit);
+                }
+                return (0, "Tháng"); // Giá trị mặc định nếu chưa cấu hình
             }
         }
     }
