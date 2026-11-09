@@ -18,18 +18,23 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
         {
             using (var db = GetContext())
             {
-                return db.Employees
-                    .Select(e => new EmployeeDTO
+                var query =
+                    from e in db.Employees
+                    join r in db.Roles on e.RoleId equals r.Id
+                    select new EmployeeDTO
                     {
                         Id = e.Id,
                         FullName = e.FullName,
+                        BirthDate = e.BirthDate,
                         Phone = e.Phone,
                         Address = e.Address,
-                        Position = e.Position,
+                        Position = r.RoleName,
+                        RoleId = e.RoleId ?? 0,
                         Salary = e.Salary,
-                        HireDate = e.HireDate
-                    })
-                    .ToList();
+                        HireDate = e.HireDate,
+                        Image = e.Image // Hoặc tên cột chứa đường dẫn trong bảng Employees của bạn
+                    };
+                return query.ToList();
             }
         }
 
@@ -39,49 +44,75 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             using (var db = GetContext())
             {
                 return db.Employees
-                    .Where(e => e.FullName.Contains(keyword) || e.Phone.Contains(keyword))
-                    .Select(e => new EmployeeDTO
+                    .Join(db.Roles,
+                        e => e.RoleId,
+                        r => r.Id,
+                        (e, r) => new { e, r })
+                    .Where(x => x.e.FullName.Contains(keyword) || x.e.Phone.Contains(keyword))
+                    .Select(x => new EmployeeDTO
                     {
-                        Id = e.Id,
-                        FullName = e.FullName,
-                        Phone = e.Phone,
-                        Address = e.Address,
-                        Position = e.Position,
-                        Salary = e.Salary,
-                        HireDate = e.HireDate
+                        Id = x.e.Id,
+                        FullName = x.e.FullName,
+                        Phone = x.e.Phone,
+                        Address = x.e.Address,
+                        RoleId = x.e.RoleId ?? 0,
+                        Position = x.r.RoleName,
+                        Salary = x.e.Salary,
+                        HireDate = x.e.HireDate
                     })
                     .ToList();
             }
         }
 
-        // 3. Thêm nhân viên mới
-        public bool InsertEmployee(Employee employee)
+        // 3. Thêm nhân viên mới (Nhận vào EmployeeDTO)
+        public bool InsertEmployee(EmployeeDTO dto)
         {
-            if (employee == null) return false;
-            using (var db = GetContext())
+            try
             {
-                db.Employees.InsertOnSubmit(employee);
-                db.SubmitChanges();
-                return true;
+                using (var db = GetContext())
+                {
+                    var newEmp = new Employee
+                    {
+                        FullName = dto.FullName.Trim(),
+                        Phone = string.IsNullOrEmpty(dto.Phone) ? null : dto.Phone.Trim(),
+                        Address = string.IsNullOrEmpty(dto.Address) ? null : dto.Address.Trim(),
+                        Salary = dto.Salary,
+                        HireDate = dto.HireDate ?? DateTime.Now,
+                        RoleId = dto.RoleId // Gắn khóa ngoại RoleId
+                    };
+
+                    db.Employees.InsertOnSubmit(newEmp);
+                    db.SubmitChanges();
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log lỗi nếu cần
+
+
+                return false;
             }
         }
 
         // 4. Sửa thông tin nhân viên
-        public bool UpdateEmployee(Employee employee)
+        public bool UpdateEmployee(EmployeeDTO dto)
         {
-            if (employee == null) return false;
+            if (dto == null) return false;
+
             using (var db = GetContext())
             {
-                var existing = db.Employees.FirstOrDefault(e => e.Id == employee.Id);
+                // Tìm nhân viên cần sửa theo Id
+                var existing = db.Employees.FirstOrDefault(e => e.Id == dto.Id);
                 if (existing == null) return false;
 
-                existing.FullName = employee.FullName;
-                existing.Phone = employee.Phone;
-                existing.Address = employee.Address;
-                existing.Position = employee.Position;
-                existing.Salary = employee.Salary;
-                existing.HireDate = employee.HireDate;
-
+                // Cập nhật thông tin cơ bản từ EmployeeDTO
+                existing.FullName = dto.FullName;
+                existing.Phone = dto.Phone;
+                existing.Address = dto.Address;
+                existing.Salary = dto.Salary;
+                existing.HireDate = dto.HireDate;
+                existing.RoleId = dto.RoleId;
                 db.SubmitChanges();
                 return true;
             }
@@ -100,6 +131,35 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                     return true;
                 }
                 return false;
+            }
+        }
+        //6. Lấy danh sách nhân viên chưa có tài khoản
+        public List<EmployeeDTO> GetEmployeesWithoutAccount()
+        {
+            using (var db = GetContext())
+            {
+                // Truy vấn lấy những nhân viên có ID không nằm trong bảng Users
+                var query = from e in db.Employees
+                            where !(from u in db.Users select u.EmployeeId).Contains(e.Id)
+                            join r in db.Roles on e.RoleId equals r.Id into roles
+                            from r in roles.DefaultIfEmpty()
+                            select new EmployeeDTO
+                            {
+                                Id = e.Id,
+                                FullName = e.FullName,
+                                Phone = e.Phone,
+                                Position = r != null ? r.RoleName : "Chưa có"
+                            };
+
+                return query.ToList();
+            }
+        }
+        // Phương thức tìm nhân viên theo tên (BLL sẽ gọi hàm này)
+        public Employee GetEmployeeByName(string fullName)
+        {
+            using (var db = GetContext())
+            {
+                return db.Employees.FirstOrDefault(e => e.FullName.Trim().ToLower() == fullName.Trim().ToLower());
             }
         }
     }

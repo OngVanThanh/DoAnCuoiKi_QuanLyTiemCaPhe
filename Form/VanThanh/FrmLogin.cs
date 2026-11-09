@@ -15,7 +15,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
     public partial class FrmLogin : Form
     {
         private AuthService _authService = new AuthService();
-        private string _sessionRoleTarget;
         public FrmLogin()
         {
             InitializeComponent();
@@ -52,6 +51,13 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         private void btnExit_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void lnkForgotPassword_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            // Mở form quên mật khẩu
+            FrmForgotPassword frm = new FrmForgotPassword();
+            frm.ShowDialog();
         }
     }
 }
