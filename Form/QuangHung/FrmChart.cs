@@ -22,10 +22,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         }
 
-        private void rdoDay_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
+        
 
         private void rdoMonth_CheckedChanged(object sender, EventArgs e)
         {
@@ -33,6 +30,11 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         }
 
         private void rdoYear_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rdoWeek_CheckedChanged(object sender, EventArgs e)
         {
 
         }
