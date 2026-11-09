@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -96,6 +96,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Data.SqlClient, Version=4.6.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.Data.SqlClient.4.9.1\lib\net462\System.Data.SqlClient.dll</HintPath>
     </Reference>
@@ -131,8 +132,10 @@
     <Compile Include="BLL\AuthService.cs" />
     <Compile Include="BLL\EmployeeService.cs" />
     <Compile Include="BLL\InventoryService.cs" />
+    <Compile Include="BLL\OrderService.cs" />
     <Compile Include="BLL\ProductService.cs" />
     <Compile Include="BLL\PromotionService.cs" />
+    <Compile Include="BLL\TableService.cs" />
     <Compile Include="CoffeeShopDataContext.cs">
       <DependentUpon>CoffeeShopDataContext.dbml</DependentUpon>
     </Compile>
@@ -151,15 +154,24 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CoffeeShopDBDataSet11.xsd</DependentUpon>
     </Compile>
+        <Compile Include="DTO\RoleDTO.cs" />
+    <Compile Include="DTO\ShiftRTO.cs" />
+    <Compile Include="DTO\TableDTO.cs" />
+    <Compile Include="DTO\UserDTO.cs" />
     <Compile Include="DAL\EmployeeRepository.cs" />
     <Compile Include="DAL\InventoryRepository.cs" />
+    <Compile Include="DAL\OrderRepository.cs" />
     <Compile Include="DAL\ProductRepository.cs" />
     <Compile Include="DAL\PromotionRepository.cs" />
+    <Compile Include="DAL\TableRepository.cs" />
     <Compile Include="DAL\UserRepository.cs" />
+    <Compile Include="DTO\AreaDTO.cs" />
     <Compile Include="DTO\Category.cs" />
     <Compile Include="DTO\EmployeeDTO.cs" />
     <Compile Include="DTO\InventoryDTO.cs" />
     <Compile Include="DTO\InventoryTransactionDTO.cs" />
+    <Compile Include="DTO\OrderDetailDTO.cs" />
+    <Compile Include="DTO\OrderDTO.cs" />
     <Compile Include="DTO\PermissionDTO.cs" />
     <Compile Include="DTO\ProductDTO.cs" />
     <Compile Include="DTO\PromotionDTO.cs" />
@@ -189,6 +201,12 @@
     </Compile>
     <Compile Include="Form\VanThanh\FrmAppConfig.Designer.cs">
       <DependentUpon>FrmAppConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\TanPhat\UcProductCard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Form\TanPhat\UcProductCard.Designer.cs">
+      <DependentUpon>UcProductCard.cs</DependentUpon>
     </Compile>
     <Compile Include="Form\TanPhat\FrmOrder.cs">
       <SubType>Form</SubType>
@@ -311,6 +329,7 @@
       <DependentUpon>UCEmployeeEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Utilities\ConfigHelper.cs" />
+    <Compile Include="Utilities\PrintHelper.cs" />
     <Compile Include="Utilities\SecurityHelper.cs" />
     <Compile Include="Utilities\UIHelper.cs" />
     <Compile Include="Utilities\UserSession.cs" />
@@ -328,6 +347,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form\TanPhat\FrmPrintReview.resx">
       <DependentUpon>FrmPrintReview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\TanPhat\RptInvoiceK80.rdlc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\TanPhat\FrmTable.resx">
       <DependentUpon>FrmTable.cs</DependentUpon>
@@ -423,6 +445,7 @@
       <DependentUpon>CoffeeShopDBDataSet11.xsd</DependentUpon>
     </None>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\DoAnCuoiKi_QuanLyTiemCaPhe.DTO.OrderDetailDTO.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
