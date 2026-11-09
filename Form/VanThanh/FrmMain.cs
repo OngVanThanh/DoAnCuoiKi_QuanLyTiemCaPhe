@@ -15,6 +15,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
     {
         private User _currentUser;
         private Role _currentRole;
+
         private Timer _systemTimer;
         public FrmMain(User user)
         {
@@ -160,6 +161,12 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         private void menuItemPermission_Click(object sender, EventArgs e)
         {
             FrmPermission frm = new FrmPermission();
+            frm.ShowDialog();
+        }
+
+        private void menuItemChangePassWord_Click(object sender, EventArgs e)
+        {
+            FrmChangePassword frm = new FrmChangePassword(_currentUser.Username);
             frm.ShowDialog();
         }
     }

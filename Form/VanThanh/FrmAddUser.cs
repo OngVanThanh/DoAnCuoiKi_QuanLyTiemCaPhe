@@ -17,6 +17,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
     {
         private PermissionService _permissionService = new PermissionService();
         private EmployeeRepository _employ = new EmployeeRepository();
+
+        // Biến lưu trữ RoleId của nhân viên đang được chọn để cấp tài khoản
+        private int _selectedRoleId = 0;
+
         public FrmAddUser()
         {
             InitializeComponent();
@@ -24,18 +28,12 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         private void FrmAddUser_Load(object sender, EventArgs e)
         {
-            LoadRolesToComboBox();
             LoadUnlinkedEmployeesToComboBox();
             ClearInputs();
+            btnTogglePassword.Text = "👁";
+            btnTogglePasswordChange.Text = "👁";
         }
-        private void LoadRolesToComboBox()
-        {
-            cboRoles.DataSource = null;
-            cboRoles.DisplayMember = "RoleName";
-            cboRoles.ValueMember = "Id";
-            cboRoles.DataSource = _permissionService.GetAllRoles();
-            cboRoles.SelectedIndex = -1;
-        }
+
         private void LoadUnlinkedEmployeesToComboBox()
         {
             if (cboFullNames == null) return;
@@ -47,14 +45,17 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             cboFullNames.ValueMember = "Id";
             cboFullNames.SelectedIndex = -1;
         }
+
         private void ClearInputs()
         {
             txtUsername.Clear();
             txtPassword.Clear();
             txtCheckPassWord.Clear();
             if (cboFullNames.Items.Count > 0) cboFullNames.SelectedIndex = -1;
-            if (cboRoles.Items.Count > 0) cboRoles.SelectedIndex = -1;
+            txtRole.Clear();
+            _selectedRoleId = 0;
         }
+
         private void btnSave_Click(object sender, EventArgs e)
         {
             try
@@ -67,10 +68,9 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                     return;
                 }
 
-                if (cboRoles.SelectedValue == null)
+                if (_selectedRoleId <= 0)
                 {
-                    MessageBox.Show("Vui lòng chọn vai trò (Role) cho tài khoản!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    cboRoles.Focus();
+                    MessageBox.Show("Không tìm thấy chức vụ hợp lệ của nhân viên này!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -106,7 +106,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 {
                     Username = username,
                     EmployeeId = (int)cboFullNames.SelectedValue,
-                    RoleId = (int)cboRoles.SelectedValue,
+                    RoleId = _selectedRoleId, // Dùng biến RoleId đã lưu tự động khi chọn nhân viên
                     IsActive = true
                 };
 
@@ -137,6 +137,92 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         {
             this.DialogResult = DialogResult.Cancel;
             this.Close();
+        }
+
+        private void cboFullNames_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cboFullNames.SelectedItem != null)
+            {
+                try
+                {
+                    // Lấy đối tượng nhân viên đang được chọn trong ComboBox
+                    var selectedEmp = cboFullNames.SelectedItem as EmployeeDTO;
+
+                    if (selectedEmp != null)
+                    {
+                        // Lưu lại RoleId của nhân viên
+                        _selectedRoleId = selectedEmp.RoleId;
+
+                        // Hiển thị tên chức vụ tương ứng lên ô txtRole (nếu EmployeeDTO có chứa thuộc tính Position hoặc RoleName)
+                        // Nếu DTO của bạn dùng tên thuộc tính khác (ví dụ: Position), hãy đổi lại cho khớp:
+                        txtRole.Text = selectedEmp.Position ?? string.Empty;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Lỗi đồng bộ vai trò theo nhân viên: " + ex.Message);
+                }
+            }
+            else
+            {
+                txtRole.Clear();
+                _selectedRoleId = 0;
+            }
+        }
+
+        private bool _isPasswordHidden = true;
+
+        private void btnTogglePassword_Click(object sender, EventArgs e)
+        {
+            _isPasswordHidden = !_isPasswordHidden; // Đảo trạng thái
+
+            if (_isPasswordHidden)
+            {
+                // Chuyển về dạng ẩn mật khẩu (hiển thị ký tự *)
+                txtPassword.PasswordChar = '*';
+
+                // Đổi text hoặc icon trên nút (ví dụ dùng ký tự con mắt)
+                btnTogglePassword.Text = "👁";
+            }
+            else
+            {
+                // Chuyển về dạng hiện mật khẩu (ký tự '\0' nghĩa là hiển thị bình thường không che)
+                txtPassword.PasswordChar = '\0';
+
+                // Đổi text hoặc icon trên nút
+                btnTogglePassword.Text = "👁‍🗨";
+            }
+
+            // Đưa con trỏ chuột về lại cuối đoạn text trong ô mật khẩu để trải nghiệm nhập liệu mượt mà
+            txtPassword.SelectionStart = txtPassword.Text.Length;
+        }
+
+        // Biến cờ đánh dấu trạng thái mật khẩu đang ẩn hay hiện (mặc định ban đầu là đang ẩn)
+        private bool _isPasswordChangeHidden = true;
+
+        private void btnTogglePasswordChange_Click(object sender, EventArgs e)
+        {
+            _isPasswordChangeHidden = !_isPasswordChangeHidden; // Đảo trạng thái
+
+            if (_isPasswordChangeHidden)
+            {
+                // Chuyển về dạng ẩn mật khẩu (hiển thị ký tự *)
+                txtCheckPassWord.PasswordChar = '*';
+
+                // Đổi text hoặc icon trên nút (ví dụ dùng ký tự con mắt)
+                btnTogglePasswordChange.Text = "👁";
+            }
+            else
+            {
+                // Chuyển về dạng hiện mật khẩu (ký tự '\0' nghĩa là hiển thị bình thường không che)
+                txtCheckPassWord.PasswordChar = '\0';
+
+                // Đổi text hoặc icon trên nút
+                btnTogglePasswordChange.Text = "👁‍🗨";
+            }
+
+            // Đưa con trỏ chuột về lại cuối đoạn text trong ô mật khẩu để trải nghiệm nhập liệu mượt mà
+            txtCheckPassWord.SelectionStart = txtCheckPassWord.Text.Length;
         }
     }
 }

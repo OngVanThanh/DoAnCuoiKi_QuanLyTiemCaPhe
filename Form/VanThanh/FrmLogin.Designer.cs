@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.pnlCard = new System.Windows.Forms.Panel();
+            this.lnkForgotPassword = new System.Windows.Forms.LinkLabel();
             this.btnExit = new System.Windows.Forms.Button();
             this.btnLogin = new System.Windows.Forms.Button();
             this.txtPassword = new System.Windows.Forms.TextBox();
@@ -36,7 +37,7 @@
             this.lblUsername = new System.Windows.Forms.Label();
             this.txtUsername = new System.Windows.Forms.TextBox();
             this.lblTitle = new System.Windows.Forms.Label();
-            this.lnkForgotPassword = new System.Windows.Forms.LinkLabel();
+            this.btnTogglePassword = new System.Windows.Forms.Button();
             this.pnlCard.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -44,6 +45,7 @@
             // 
             this.pnlCard.BackColor = System.Drawing.Color.White;
             this.pnlCard.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlCard.Controls.Add(this.btnTogglePassword);
             this.pnlCard.Controls.Add(this.lnkForgotPassword);
             this.pnlCard.Controls.Add(this.btnExit);
             this.pnlCard.Controls.Add(this.btnLogin);
@@ -56,6 +58,17 @@
             this.pnlCard.Name = "pnlCard";
             this.pnlCard.Size = new System.Drawing.Size(395, 332);
             this.pnlCard.TabIndex = 0;
+            // 
+            // lnkForgotPassword
+            // 
+            this.lnkForgotPassword.AutoSize = true;
+            this.lnkForgotPassword.Location = new System.Drawing.Point(266, 296);
+            this.lnkForgotPassword.Name = "lnkForgotPassword";
+            this.lnkForgotPassword.Size = new System.Drawing.Size(103, 16);
+            this.lnkForgotPassword.TabIndex = 1;
+            this.lnkForgotPassword.TabStop = true;
+            this.lnkForgotPassword.Text = "Quên mật khẩu?";
+            this.lnkForgotPassword.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkForgotPassword_LinkClicked);
             // 
             // btnExit
             // 
@@ -133,16 +146,14 @@
             this.lblTitle.Text = "ĐĂNG NHẬP HỆ THỐNG";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lnkForgotPassword
+            // btnTogglePassword
             // 
-            this.lnkForgotPassword.AutoSize = true;
-            this.lnkForgotPassword.Location = new System.Drawing.Point(266, 296);
-            this.lnkForgotPassword.Name = "lnkForgotPassword";
-            this.lnkForgotPassword.Size = new System.Drawing.Size(103, 16);
-            this.lnkForgotPassword.TabIndex = 1;
-            this.lnkForgotPassword.TabStop = true;
-            this.lnkForgotPassword.Text = "Quên mật khẩu?";
-            this.lnkForgotPassword.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkForgotPassword_LinkClicked);
+            this.btnTogglePassword.Location = new System.Drawing.Point(322, 180);
+            this.btnTogglePassword.Name = "btnTogglePassword";
+            this.btnTogglePassword.Size = new System.Drawing.Size(33, 23);
+            this.btnTogglePassword.TabIndex = 31;
+            this.btnTogglePassword.UseVisualStyleBackColor = true;
+            this.btnTogglePassword.Click += new System.EventHandler(this.btnTogglePassword_Click);
             // 
             // FrmLogin
             // 
@@ -174,6 +185,7 @@
         private System.Windows.Forms.Button btnLogin;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.LinkLabel lnkForgotPassword;
+        private System.Windows.Forms.Button btnTogglePassword;
     }
 }
 

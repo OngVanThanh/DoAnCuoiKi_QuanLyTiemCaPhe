@@ -32,8 +32,6 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.cboFullNames = new System.Windows.Forms.ComboBox();
             this.lblFullName = new System.Windows.Forms.Label();
-            this.cboRoles = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.lblPassword = new System.Windows.Forms.Label();
             this.lblUserName = new System.Windows.Forms.Label();
@@ -41,6 +39,12 @@
             this.txtCheckPassWord = new System.Windows.Forms.TextBox();
             this.lblCheckPassword = new System.Windows.Forms.Label();
             this.lblTitle = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtRole = new System.Windows.Forms.TextBox();
+            this.coffeeShopDBDataSet1 = new DoAnCuoiKi_QuanLyTiemCaPhe.CoffeeShopDBDataSet();
+            this.btnTogglePassword = new System.Windows.Forms.Button();
+            this.btnTogglePasswordChange = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.coffeeShopDBDataSet1)).BeginInit();
             this.SuspendLayout();
             // 
             // btnExit
@@ -70,53 +74,33 @@
             "Admin",
             "Thu ngân",
             "Pha chế"});
-            this.cboFullNames.Location = new System.Drawing.Point(211, 215);
+            this.cboFullNames.Location = new System.Drawing.Point(212, 135);
             this.cboFullNames.Name = "cboFullNames";
             this.cboFullNames.Size = new System.Drawing.Size(335, 24);
-            this.cboFullNames.TabIndex = 24;
+            this.cboFullNames.TabIndex = 1;
+            this.cboFullNames.SelectedIndexChanged += new System.EventHandler(this.cboFullNames_SelectedIndexChanged);
             // 
             // lblFullName
             // 
             this.lblFullName.AutoSize = true;
-            this.lblFullName.Location = new System.Drawing.Point(50, 218);
+            this.lblFullName.Location = new System.Drawing.Point(51, 138);
             this.lblFullName.Name = "lblFullName";
             this.lblFullName.Size = new System.Drawing.Size(67, 16);
             this.lblFullName.TabIndex = 23;
             this.lblFullName.Text = "Họ và tên:";
             // 
-            // cboRoles
-            // 
-            this.cboRoles.FormattingEnabled = true;
-            this.cboRoles.Items.AddRange(new object[] {
-            "Admin",
-            "Thu ngân",
-            "Pha chế"});
-            this.cboRoles.Location = new System.Drawing.Point(212, 261);
-            this.cboRoles.Name = "cboRoles";
-            this.cboRoles.Size = new System.Drawing.Size(335, 24);
-            this.cboRoles.TabIndex = 22;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(51, 264);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(99, 16);
-            this.label1.TabIndex = 21;
-            this.label1.Text = "Vai trò/Chức vụ:";
-            // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(211, 130);
+            this.txtPassword.Location = new System.Drawing.Point(211, 180);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(335, 22);
-            this.txtPassword.TabIndex = 20;
+            this.txtPassword.TabIndex = 2;
             // 
             // lblPassword
             // 
             this.lblPassword.AutoSize = true;
-            this.lblPassword.Location = new System.Drawing.Point(50, 133);
+            this.lblPassword.Location = new System.Drawing.Point(50, 183);
             this.lblPassword.Name = "lblPassword";
             this.lblPassword.Size = new System.Drawing.Size(64, 16);
             this.lblPassword.TabIndex = 19;
@@ -136,24 +120,24 @@
             this.txtUsername.Location = new System.Drawing.Point(211, 90);
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(335, 22);
-            this.txtUsername.TabIndex = 17;
+            this.txtUsername.TabIndex = 0;
             // 
             // txtCheckPassWord
             // 
-            this.txtCheckPassWord.Location = new System.Drawing.Point(211, 175);
+            this.txtCheckPassWord.Location = new System.Drawing.Point(211, 225);
             this.txtCheckPassWord.Name = "txtCheckPassWord";
             this.txtCheckPassWord.PasswordChar = '*';
             this.txtCheckPassWord.Size = new System.Drawing.Size(335, 22);
-            this.txtCheckPassWord.TabIndex = 28;
+            this.txtCheckPassWord.TabIndex = 3;
             // 
             // lblCheckPassword
             // 
             this.lblCheckPassword.AutoSize = true;
-            this.lblCheckPassword.Location = new System.Drawing.Point(50, 178);
+            this.lblCheckPassword.Location = new System.Drawing.Point(50, 228);
             this.lblCheckPassword.Name = "lblCheckPassword";
-            this.lblCheckPassword.Size = new System.Drawing.Size(64, 16);
+            this.lblCheckPassword.Size = new System.Drawing.Size(117, 16);
             this.lblCheckPassword.TabIndex = 27;
-            this.lblCheckPassword.Text = "Mật khẩu:";
+            this.lblCheckPassword.Text = "Nhập lại mật khẩu:";
             // 
             // lblTitle
             // 
@@ -164,11 +148,53 @@
             this.lblTitle.TabIndex = 29;
             this.lblTitle.Text = "THÊM TÀI KHOẢN MỚI";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(51, 264);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(99, 16);
+            this.label1.TabIndex = 21;
+            this.label1.Text = "Vai trò/Chức vụ:";
+            // 
+            // txtRole
+            // 
+            this.txtRole.Location = new System.Drawing.Point(211, 258);
+            this.txtRole.Name = "txtRole";
+            this.txtRole.Size = new System.Drawing.Size(335, 22);
+            this.txtRole.TabIndex = 4;
+            // 
+            // coffeeShopDBDataSet1
+            // 
+            this.coffeeShopDBDataSet1.DataSetName = "CoffeeShopDBDataSet";
+            this.coffeeShopDBDataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // btnTogglePassword
+            // 
+            this.btnTogglePassword.Location = new System.Drawing.Point(513, 180);
+            this.btnTogglePassword.Name = "btnTogglePassword";
+            this.btnTogglePassword.Size = new System.Drawing.Size(33, 23);
+            this.btnTogglePassword.TabIndex = 30;
+            this.btnTogglePassword.UseVisualStyleBackColor = true;
+            this.btnTogglePassword.Click += new System.EventHandler(this.btnTogglePassword_Click);
+            // 
+            // btnTogglePasswordChange
+            // 
+            this.btnTogglePasswordChange.Location = new System.Drawing.Point(513, 225);
+            this.btnTogglePasswordChange.Name = "btnTogglePasswordChange";
+            this.btnTogglePasswordChange.Size = new System.Drawing.Size(33, 23);
+            this.btnTogglePasswordChange.TabIndex = 31;
+            this.btnTogglePasswordChange.UseVisualStyleBackColor = true;
+            this.btnTogglePasswordChange.Click += new System.EventHandler(this.btnTogglePasswordChange_Click);
+            // 
             // FrmAddUser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(606, 361);
+            this.Controls.Add(this.btnTogglePasswordChange);
+            this.Controls.Add(this.btnTogglePassword);
+            this.Controls.Add(this.txtRole);
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.txtCheckPassWord);
             this.Controls.Add(this.lblCheckPassword);
@@ -176,15 +202,17 @@
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.cboFullNames);
             this.Controls.Add(this.lblFullName);
-            this.Controls.Add(this.cboRoles);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtPassword);
             this.Controls.Add(this.lblPassword);
             this.Controls.Add(this.lblUserName);
             this.Controls.Add(this.txtUsername);
+            this.MaximizeBox = false;
             this.Name = "FrmAddUser";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FrmAddUser";
             this.Load += new System.EventHandler(this.FrmAddUser_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.coffeeShopDBDataSet1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -196,8 +224,6 @@
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.ComboBox cboFullNames;
         private System.Windows.Forms.Label lblFullName;
-        private System.Windows.Forms.ComboBox cboRoles;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.Label lblPassword;
         private System.Windows.Forms.Label lblUserName;
@@ -205,5 +231,10 @@
         private System.Windows.Forms.TextBox txtCheckPassWord;
         private System.Windows.Forms.Label lblCheckPassword;
         private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox txtRole;
+        private CoffeeShopDBDataSet coffeeShopDBDataSet1;
+        private System.Windows.Forms.Button btnTogglePassword;
+        private System.Windows.Forms.Button btnTogglePasswordChange;
     }
 }

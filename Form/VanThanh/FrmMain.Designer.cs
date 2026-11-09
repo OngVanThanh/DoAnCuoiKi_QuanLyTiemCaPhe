@@ -56,6 +56,7 @@
             this.lblSystemTime = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlContent = new System.Windows.Forms.Panel();
+            this.menuItemChangePassWord = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripMain.SuspendLayout();
             this.statusStripMain.SuspendLayout();
             this.SuspendLayout();
@@ -71,7 +72,7 @@
             this.menuPermission});
             this.menuStripMain.Location = new System.Drawing.Point(0, 0);
             this.menuStripMain.Name = "menuStripMain";
-            this.menuStripMain.Size = new System.Drawing.Size(800, 30);
+            this.menuStripMain.Size = new System.Drawing.Size(800, 28);
             this.menuStripMain.TabIndex = 1;
             this.menuStripMain.Text = "&Hệ thống";
             // 
@@ -79,11 +80,12 @@
             // 
             this.menuSystem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuItemAppConfig,
+            this.menuItemChangePassWord,
             this.menuItemLogout,
             this.toolStripMenuItem1,
             this.menuItemExit});
             this.menuSystem.Name = "menuSystem";
-            this.menuSystem.Size = new System.Drawing.Size(85, 26);
+            this.menuSystem.Size = new System.Drawing.Size(85, 24);
             this.menuSystem.Text = "&Hệ thống";
             // 
             // menuItemAppConfig
@@ -122,7 +124,7 @@
             this.menuItemEmployee,
             this.menuItemCustomer});
             this.menuCategory.Name = "menuCategory";
-            this.menuCategory.Size = new System.Drawing.Size(90, 26);
+            this.menuCategory.Size = new System.Drawing.Size(90, 24);
             this.menuCategory.Text = "&Danh mục";
             // 
             // menuItemProduct
@@ -172,7 +174,7 @@
             this.menuItemInventory,
             this.menuItemPromotion});
             this.menuBusiness.Name = "menuBusiness";
-            this.menuBusiness.Size = new System.Drawing.Size(91, 26);
+            this.menuBusiness.Size = new System.Drawing.Size(91, 24);
             this.menuBusiness.Text = "&Nghiệp vụ";
             // 
             // menuItemOrder
@@ -202,7 +204,7 @@
             this.menuItemReportWord,
             this.menuItemChart});
             this.menuReport.Name = "menuReport";
-            this.menuReport.Size = new System.Drawing.Size(77, 26);
+            this.menuReport.Size = new System.Drawing.Size(77, 24);
             this.menuReport.Text = "&Báo cáo";
             // 
             // menuItemReportWord
@@ -224,7 +226,7 @@
             this.menuPermission.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuItemPermission});
             this.menuPermission.Name = "menuPermission";
-            this.menuPermission.Size = new System.Drawing.Size(99, 26);
+            this.menuPermission.Size = new System.Drawing.Size(99, 24);
             this.menuPermission.Text = "&Phân quyền";
             // 
             // menuItemPermission
@@ -289,10 +291,17 @@
             // pnlContent
             // 
             this.pnlContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlContent.Location = new System.Drawing.Point(0, 30);
+            this.pnlContent.Location = new System.Drawing.Point(0, 28);
             this.pnlContent.Name = "pnlContent";
-            this.pnlContent.Size = new System.Drawing.Size(800, 394);
+            this.pnlContent.Size = new System.Drawing.Size(800, 396);
             this.pnlContent.TabIndex = 4;
+            // 
+            // menuItemChangePassWord
+            // 
+            this.menuItemChangePassWord.Name = "menuItemChangePassWord";
+            this.menuItemChangePassWord.Size = new System.Drawing.Size(255, 26);
+            this.menuItemChangePassWord.Text = "Đổi mật khẩu";
+            this.menuItemChangePassWord.Click += new System.EventHandler(this.menuItemChangePassWord_Click);
             // 
             // FrmMain
             // 
@@ -348,5 +357,6 @@
         private System.Windows.Forms.ToolStripStatusLabel lblCurrentUser;
         private System.Windows.Forms.ToolStripStatusLabel lblCurrentRole;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripMenuItem menuItemChangePassWord;
     }
 }

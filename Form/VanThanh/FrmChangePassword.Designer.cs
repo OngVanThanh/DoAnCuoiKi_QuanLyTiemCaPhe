@@ -37,6 +37,8 @@
             this.lblOldPassword = new System.Windows.Forms.Label();
             this.txtCheckPassword = new System.Windows.Forms.TextBox();
             this.lblCheckPassword = new System.Windows.Forms.Label();
+            this.btnTogglePasswordChange = new System.Windows.Forms.Button();
+            this.btnTogglePassword = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblPasswordChangeTitle
@@ -74,7 +76,7 @@
             this.txtNewPassword.Name = "txtNewPassword";
             this.txtNewPassword.PasswordChar = '*';
             this.txtNewPassword.Size = new System.Drawing.Size(335, 22);
-            this.txtNewPassword.TabIndex = 19;
+            this.txtNewPassword.TabIndex = 1;
             // 
             // lblNewPassword
             // 
@@ -91,7 +93,7 @@
             this.txtOldPassword.Name = "txtOldPassword";
             this.txtOldPassword.PasswordChar = '*';
             this.txtOldPassword.Size = new System.Drawing.Size(335, 22);
-            this.txtOldPassword.TabIndex = 24;
+            this.txtOldPassword.TabIndex = 0;
             // 
             // lblOldPassword
             // 
@@ -108,7 +110,7 @@
             this.txtCheckPassword.Name = "txtCheckPassword";
             this.txtCheckPassword.PasswordChar = '*';
             this.txtCheckPassword.Size = new System.Drawing.Size(335, 22);
-            this.txtCheckPassword.TabIndex = 26;
+            this.txtCheckPassword.TabIndex = 2;
             // 
             // lblCheckPassword
             // 
@@ -119,11 +121,30 @@
             this.lblCheckPassword.TabIndex = 25;
             this.lblCheckPassword.Text = "Mật khẩu mới";
             // 
+            // btnTogglePasswordChange
+            // 
+            this.btnTogglePasswordChange.Location = new System.Drawing.Point(476, 127);
+            this.btnTogglePasswordChange.Name = "btnTogglePasswordChange";
+            this.btnTogglePasswordChange.Size = new System.Drawing.Size(33, 23);
+            this.btnTogglePasswordChange.TabIndex = 33;
+            this.btnTogglePasswordChange.UseVisualStyleBackColor = true;
+            // 
+            // btnTogglePassword
+            // 
+            this.btnTogglePassword.Location = new System.Drawing.Point(476, 88);
+            this.btnTogglePassword.Name = "btnTogglePassword";
+            this.btnTogglePassword.Size = new System.Drawing.Size(33, 23);
+            this.btnTogglePassword.TabIndex = 32;
+            this.btnTogglePassword.UseVisualStyleBackColor = true;
+            this.btnTogglePassword.Click += new System.EventHandler(this.btnTogglePassword_Click);
+            // 
             // FrmChangePassword
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(565, 235);
+            this.Controls.Add(this.btnTogglePasswordChange);
+            this.Controls.Add(this.btnTogglePassword);
             this.Controls.Add(this.txtCheckPassword);
             this.Controls.Add(this.lblCheckPassword);
             this.Controls.Add(this.txtOldPassword);
@@ -151,5 +172,7 @@
         private System.Windows.Forms.Label lblOldPassword;
         private System.Windows.Forms.TextBox txtCheckPassword;
         private System.Windows.Forms.Label lblCheckPassword;
+        private System.Windows.Forms.Button btnTogglePasswordChange;
+        private System.Windows.Forms.Button btnTogglePassword;
     }
 }

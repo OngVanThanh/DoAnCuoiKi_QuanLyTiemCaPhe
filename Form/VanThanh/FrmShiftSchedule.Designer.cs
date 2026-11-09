@@ -129,7 +129,10 @@
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.dgvSchedule);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "FrmShiftSchedule";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FrmShiftSchedule";
             this.Load += new System.EventHandler(this.FrmShiftSchedule_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvSchedule)).EndInit();

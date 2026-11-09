@@ -164,7 +164,7 @@
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.ReadOnly = true;
             this.txtDescription.Size = new System.Drawing.Size(207, 70);
-            this.txtDescription.TabIndex = 5;
+            this.txtDescription.TabIndex = 2;
             this.txtDescription.TextChanged += new System.EventHandler(this.txtDescription_TextChanged);
             // 
             // lblDescription
@@ -183,7 +183,7 @@
             this.txtCategoryName.Name = "txtCategoryName";
             this.txtCategoryName.ReadOnly = true;
             this.txtCategoryName.Size = new System.Drawing.Size(207, 27);
-            this.txtCategoryName.TabIndex = 3;
+            this.txtCategoryName.TabIndex = 1;
             // 
             // lblCategoryName
             // 
@@ -202,7 +202,7 @@
             this.txtCategoryId.Name = "txtCategoryId";
             this.txtCategoryId.ReadOnly = true;
             this.txtCategoryId.Size = new System.Drawing.Size(207, 27);
-            this.txtCategoryId.TabIndex = 1;
+            this.txtCategoryId.TabIndex = 0;
             // 
             // lblCategoryId
             // 

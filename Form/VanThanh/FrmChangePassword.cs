@@ -17,6 +17,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         public FrmChangePassword(string username)
         {
             InitializeComponent();
+            btnTogglePassword.Text = "👁";
+            btnTogglePasswordChange.Text = "👁";
             _targetUsername = username;
         }
         private void btnExitNewPassword_Click(object sender, EventArgs e)
@@ -75,6 +77,61 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 txtOldPassword.Focus();
                 txtOldPassword.SelectAll();
             }
+        }
+
+        private bool _isPasswordHidden = true;
+
+        private void btnTogglePassword_Click(object sender, EventArgs e)
+        {
+            _isPasswordHidden = !_isPasswordHidden; // Đảo trạng thái
+
+            if (_isPasswordHidden)
+            {
+                // Chuyển về dạng ẩn mật khẩu (hiển thị ký tự *)
+                txtNewPassword.PasswordChar = '*';
+
+                // Đổi text hoặc icon trên nút (ví dụ dùng ký tự con mắt)
+                btnTogglePassword.Text = "👁";
+            }
+            else
+            {
+                // Chuyển về dạng hiện mật khẩu (ký tự '\0' nghĩa là hiển thị bình thường không che)
+                txtNewPassword.PasswordChar = '\0';
+
+                // Đổi text hoặc icon trên nút
+                btnTogglePassword.Text = "👁‍🗨";
+            }
+
+            // Đưa con trỏ chuột về lại cuối đoạn text trong ô mật khẩu để trải nghiệm nhập liệu mượt mà
+            txtNewPassword.SelectionStart = txtNewPassword.Text.Length;
+        }
+
+        // Biến cờ đánh dấu trạng thái mật khẩu đang ẩn hay hiện (mặc định ban đầu là đang ẩn)
+        private bool _isPasswordChangeHidden = true;
+
+        private void btnTogglePasswordChange_Click(object sender, EventArgs e)
+        {
+            _isPasswordChangeHidden = !_isPasswordChangeHidden; // Đảo trạng thái
+
+            if (_isPasswordChangeHidden)
+            {
+                // Chuyển về dạng ẩn mật khẩu (hiển thị ký tự *)
+                txtCheckPassword.PasswordChar = '*';
+
+                // Đổi text hoặc icon trên nút (ví dụ dùng ký tự con mắt)
+                btnTogglePasswordChange.Text = "👁";
+            }
+            else
+            {
+                // Chuyển về dạng hiện mật khẩu (ký tự '\0' nghĩa là hiển thị bình thường không che)
+                txtCheckPassword.PasswordChar = '\0';
+
+                // Đổi text hoặc icon trên nút
+                btnTogglePasswordChange.Text = "👁‍🗨";
+            }
+
+            // Đưa con trỏ chuột về lại cuối đoạn text trong ô mật khẩu để trải nghiệm nhập liệu mượt mà
+            txtCheckPassword.SelectionStart = txtCheckPassword.Text.Length;
         }
     }
 }
