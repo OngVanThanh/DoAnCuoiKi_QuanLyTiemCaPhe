@@ -46,12 +46,13 @@
             this.btnExit = new System.Windows.Forms.Button();
             this.btnEditAvatar = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
+            this.lblTitle = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).BeginInit();
             this.SuspendLayout();
             // 
             // ptbAvatar
             // 
-            this.ptbAvatar.Location = new System.Drawing.Point(54, 27);
+            this.ptbAvatar.Location = new System.Drawing.Point(49, 68);
             this.ptbAvatar.Name = "ptbAvatar";
             this.ptbAvatar.Size = new System.Drawing.Size(218, 132);
             this.ptbAvatar.TabIndex = 26;
@@ -59,21 +60,21 @@
             // 
             // dtpBirthDate
             // 
-            this.dtpBirthDate.Location = new System.Drawing.Point(129, 259);
+            this.dtpBirthDate.Location = new System.Drawing.Point(124, 300);
             this.dtpBirthDate.Name = "dtpBirthDate";
             this.dtpBirthDate.Size = new System.Drawing.Size(200, 22);
             this.dtpBirthDate.TabIndex = 25;
             // 
             // dtpHireDate
             // 
-            this.dtpHireDate.Location = new System.Drawing.Point(146, 345);
+            this.dtpHireDate.Location = new System.Drawing.Point(141, 386);
             this.dtpHireDate.Name = "dtpHireDate";
             this.dtpHireDate.Size = new System.Drawing.Size(200, 22);
             this.dtpHireDate.TabIndex = 24;
             // 
             // txtAddress
             // 
-            this.txtAddress.Location = new System.Drawing.Point(146, 231);
+            this.txtAddress.Location = new System.Drawing.Point(141, 272);
             this.txtAddress.Name = "txtAddress";
             this.txtAddress.Size = new System.Drawing.Size(100, 22);
             this.txtAddress.TabIndex = 23;
@@ -81,35 +82,36 @@
             // cbPosition
             // 
             this.cbPosition.FormattingEnabled = true;
-            this.cbPosition.Location = new System.Drawing.Point(146, 287);
+            this.cbPosition.Location = new System.Drawing.Point(141, 328);
             this.cbPosition.Name = "cbPosition";
             this.cbPosition.Size = new System.Drawing.Size(121, 24);
             this.cbPosition.TabIndex = 22;
+            this.cbPosition.SelectedIndexChanged += new System.EventHandler(this.cbPosition_SelectedIndexChanged);
             // 
             // txtSalary
             // 
-            this.txtSalary.Location = new System.Drawing.Point(162, 317);
+            this.txtSalary.Location = new System.Drawing.Point(157, 358);
             this.txtSalary.Name = "txtSalary";
             this.txtSalary.Size = new System.Drawing.Size(100, 22);
             this.txtSalary.TabIndex = 21;
             // 
             // txtPhone
             // 
-            this.txtPhone.Location = new System.Drawing.Point(145, 203);
+            this.txtPhone.Location = new System.Drawing.Point(140, 244);
             this.txtPhone.Name = "txtPhone";
             this.txtPhone.Size = new System.Drawing.Size(100, 22);
             this.txtPhone.TabIndex = 20;
             // 
             // txtFullName
             // 
-            this.txtFullName.Location = new System.Drawing.Point(145, 175);
+            this.txtFullName.Location = new System.Drawing.Point(141, 219);
             this.txtFullName.Name = "txtFullName";
             this.txtFullName.Size = new System.Drawing.Size(100, 22);
             this.txtFullName.TabIndex = 19;
             // 
             // lblHireDate
             // 
-            this.lblHireDate.Location = new System.Drawing.Point(43, 350);
+            this.lblHireDate.Location = new System.Drawing.Point(38, 391);
             this.lblHireDate.Name = "lblHireDate";
             this.lblHireDate.Size = new System.Drawing.Size(97, 16);
             this.lblHireDate.TabIndex = 16;
@@ -117,7 +119,7 @@
             // 
             // lblSalary
             // 
-            this.lblSalary.Location = new System.Drawing.Point(41, 320);
+            this.lblSalary.Location = new System.Drawing.Point(36, 361);
             this.lblSalary.Name = "lblSalary";
             this.lblSalary.Size = new System.Drawing.Size(127, 16);
             this.lblSalary.TabIndex = 15;
@@ -125,7 +127,7 @@
             // 
             // lblBirthDate
             // 
-            this.lblBirthDate.Location = new System.Drawing.Point(44, 264);
+            this.lblBirthDate.Location = new System.Drawing.Point(39, 305);
             this.lblBirthDate.Name = "lblBirthDate";
             this.lblBirthDate.Size = new System.Drawing.Size(80, 16);
             this.lblBirthDate.TabIndex = 14;
@@ -133,7 +135,7 @@
             // 
             // cboPosition
             // 
-            this.cboPosition.Location = new System.Drawing.Point(51, 290);
+            this.cboPosition.Location = new System.Drawing.Point(46, 331);
             this.cboPosition.Name = "cboPosition";
             this.cboPosition.Size = new System.Drawing.Size(81, 16);
             this.cboPosition.TabIndex = 13;
@@ -141,7 +143,7 @@
             // 
             // lblAddress
             // 
-            this.lblAddress.Location = new System.Drawing.Point(51, 234);
+            this.lblAddress.Location = new System.Drawing.Point(46, 275);
             this.lblAddress.Name = "lblAddress";
             this.lblAddress.Size = new System.Drawing.Size(81, 16);
             this.lblAddress.TabIndex = 12;
@@ -149,7 +151,7 @@
             // 
             // lblPhone
             // 
-            this.lblPhone.Location = new System.Drawing.Point(41, 207);
+            this.lblPhone.Location = new System.Drawing.Point(36, 248);
             this.lblPhone.Name = "lblPhone";
             this.lblPhone.Size = new System.Drawing.Size(98, 16);
             this.lblPhone.TabIndex = 17;
@@ -157,7 +159,7 @@
             // 
             // lblFullName
             // 
-            this.lblFullName.Location = new System.Drawing.Point(44, 178);
+            this.lblFullName.Location = new System.Drawing.Point(39, 219);
             this.lblFullName.Name = "lblFullName";
             this.lblFullName.Size = new System.Drawing.Size(70, 16);
             this.lblFullName.TabIndex = 11;
@@ -165,7 +167,7 @@
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(297, 402);
+            this.btnExit.Location = new System.Drawing.Point(292, 443);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 23);
             this.btnExit.TabIndex = 28;
@@ -175,7 +177,7 @@
             // 
             // btnEditAvatar
             // 
-            this.btnEditAvatar.Location = new System.Drawing.Point(278, 136);
+            this.btnEditAvatar.Location = new System.Drawing.Point(273, 177);
             this.btnEditAvatar.Name = "btnEditAvatar";
             this.btnEditAvatar.Size = new System.Drawing.Size(75, 23);
             this.btnEditAvatar.TabIndex = 29;
@@ -184,7 +186,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(216, 402);
+            this.btnSave.Location = new System.Drawing.Point(211, 443);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 27;
@@ -192,10 +194,20 @@
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
+            // lblTitle
+            // 
+            this.lblTitle.AutoSize = true;
+            this.lblTitle.Location = new System.Drawing.Point(82, 25);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(215, 16);
+            this.lblTitle.TabIndex = 71;
+            this.lblTitle.Text = "CẬP NHẬT THÔNG TIN CÁ NHÂN";
+            // 
             // UCEmployeeEdit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnEditAvatar);
             this.Controls.Add(this.btnSave);
@@ -215,7 +227,7 @@
             this.Controls.Add(this.lblPhone);
             this.Controls.Add(this.lblFullName);
             this.Name = "UCEmployeeEdit";
-            this.Size = new System.Drawing.Size(385, 447);
+            this.Size = new System.Drawing.Size(385, 483);
             ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -241,5 +253,6 @@
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Button btnEditAvatar;
         private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Label lblTitle;
     }
 }

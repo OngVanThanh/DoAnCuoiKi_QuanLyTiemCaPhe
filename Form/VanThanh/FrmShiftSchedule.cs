@@ -54,20 +54,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             if (dgvSchedule.Columns["Shift3"] is DataGridViewComboBoxColumn colCa3)
                 colCa3.DataSource = new List<string>(employeeNames);
         }
-        private void LoadWeekScheduleTemplate()
-        {
-            dgvSchedule.Rows.Clear();
-            DateTime startDate = DateTime.Now.AddDays(1);
-
-            for (int i = 0; i < 7; i++)
-            {
-                DateTime targetDate = startDate.AddDays(i);
-                string dateStr = targetDate.ToString("dd/MM/yyyy") + " (" + targetDate.ToString("ddd") + ")";
-
-                // Thêm dòng với cột Ngày (index 0 hoặc tên cột "Date"), các cột Ca ban đầu để trống
-                dgvSchedule.Rows.Add(dateStr, "", "", "");
-            }
-        }
+        // Tạo 7 ngày (21 ca) và load dữ liệu đã lưu từ Database lên DataGridView
         private void LoadWeekScheduleTemplateWithExistingData()
         {
             dgvSchedule.Rows.Clear();
@@ -91,14 +78,14 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 dgvSchedule.Rows.Add(dateStr, empShift1, empShift2, empShift3);
             }
         }
-        // Hàm phụ trợ tìm tên nhân viên theo ngày và mã ca từ danh sách trong DB
+
+        // Hàm phụ trợ tìm tên nhân viên theo ngày và mã ca từ danh sách trong DB (Đã xử lý an toàn DateTime?)
         private string GetEmployeeNameById(List<EmployeeShift> shifts, DateTime date, int shiftId)
         {
-            // Thêm kiểm tra s.WorkDate.HasValue và s.WorkDate.Value.Date
             var match = shifts.FirstOrDefault(s => s.WorkDate.HasValue && s.WorkDate.Value.Date == date.Date && s.ShiftId == shiftId);
-            if (match != null)
+            if (match != null && match.EmployeeId.HasValue)
             {
-                var emp = _empRepo.GetAllEmployees().FirstOrDefault(e => e.Id == match.EmployeeId);
+                var emp = _empRepo.GetAllEmployees().FirstOrDefault(e => e.Id == match.EmployeeId.Value);
                 return emp != null ? emp.FullName.Trim() : "";
             }
             return "";
@@ -107,8 +94,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         {
             try
             {
-                int successCount = 0;
-
                 foreach (DataGridViewRow row in dgvSchedule.Rows)
                 {
                     if (row.IsNewRow) continue;
@@ -122,69 +107,52 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                         continue;
                     }
 
-                    // Lấy giá trị từ 3 cột ca làm
-                    Dictionary<int, List<string>> shiftEmployees = new Dictionary<int, List<string>>
-                    {
-                        { 1, GetSelectedName(row.Cells["Shift1"].Value) },
-                        { 2, GetSelectedName(row.Cells["Shift2"].Value) },
-                        { 3, GetSelectedName(row.Cells["Shift3"].Value) }
-                    };
+                    string name1 = row.Cells["Shift1"].Value?.ToString().Trim();
+                    string name2 = row.Cells["Shift2"].Value?.ToString().Trim();
+                    string name3 = row.Cells["Shift3"].Value?.ToString().Trim();
 
-                    var empShiftMapping = new Dictionary<string, List<int>>();
-                    foreach (var shift in shiftEmployees)
+                    // Kiểm tra ràng buộc tối đa 2 ca/ngày, cách nhau 1 ca (Ca 1 và Ca 3)
+                    Dictionary<string, List<int>> empShiftsMap = new Dictionary<string, List<int>>();
+                    void AddMapping(string name, int shiftId)
                     {
-                        int shiftId = shift.Key;
-                        foreach (var empName in shift.Value)
+                        if (!string.IsNullOrEmpty(name))
                         {
-                            if (!empShiftMapping.ContainsKey(empName))
-                            {
-                                empShiftMapping[empName] = new List<int>();
-                            }
-                            empShiftMapping[empName].Add(shiftId);
+                            if (!empShiftsMap.ContainsKey(name)) empShiftsMap[name] = new List<int>();
+                            empShiftsMap[name].Add(shiftId);
                         }
                     }
+                    AddMapping(name1, 1);
+                    AddMapping(name2, 2);
+                    AddMapping(name3, 3);
 
-                    // Kiểm tra ràng buộc nghiệp vụ
-                    foreach (var pair in empShiftMapping)
+                    foreach (var pair in empShiftsMap)
                     {
                         string empName = pair.Key;
-                        List<int> registeredShifts = pair.Value;
+                        List<int> shifts = pair.Value;
 
-                        var employee = _empRepo.GetEmployeeByName(empName);
-                        if (employee == null)
+                        if (shifts.Count > 2)
                         {
-                            MessageBox.Show($"Không tìm thấy nhân viên '{empName}' trong hệ thống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show($"Nhân viên '{empName}' ngày {datePart} đăng ký quá 2 ca!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return;
                         }
-
-                        // Quy tắc 1: Tối đa 2 ca/ngày
-                        if (registeredShifts.Count > 2)
+                        if (shifts.Count == 2)
                         {
-                            MessageBox.Show($"Nhân viên '{empName}' ngày {datePart} đăng ký quá 2 ca (tối đa 2 ca/ngày)!", "Vi phạm ràng buộc", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            return;
-                        }
-
-                        // Quy tắc 2: Đăng ký 2 ca thì phải cách nhau 1 ca (Ca 1 và Ca 3)
-                        if (registeredShifts.Count == 2)
-                        {
-                            registeredShifts.Sort();
-                            if (registeredShifts[1] - registeredShifts[0] != 2)
+                            shifts.Sort();
+                            if (shifts[1] - shifts[0] != 2)
                             {
-                                MessageBox.Show($"Nhân viên '{empName}' ngày {datePart} đăng ký 2 ca liền kề không hợp lệ (Phải cách nhau 1 ca, chỉ được chọn Ca 1 và Ca 3)!", "Vi phạm ràng buộc", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                MessageBox.Show($"Nhân viên '{empName}' ngày {datePart} đăng ký 2 ca liền kề không hợp lệ (Phải cách nhau 1 ca)!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                                 return;
                             }
                         }
-
-                        // Lưu xuống Database (Hàm RegisterShift đã có kiểm tra trùng lặp nên nếu đã có rồi sẽ bỏ qua, không gây lỗi)
-                        foreach (var shiftId in registeredShifts)
-                        {
-                            bool ok = _shiftRepo.RegisterShift(employee.Id, shiftId, workDate);
-                            if (ok) successCount++;
-                        }
                     }
+
+                    // Thực hiện cập nhật dữ liệu cho từng ca trong ngày
+                    UpdateCellDatabase(workDate, 1, name1);
+                    UpdateCellDatabase(workDate, 2, name2);
+                    UpdateCellDatabase(workDate, 3, name3);
                 }
 
-                MessageBox.Show($"Đã cập nhật thành công {successCount} lượt đăng ký ca làm vào Database!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Cập nhật lịch làm việc thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
             catch (Exception ex)
@@ -193,14 +161,19 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
         }
 
-        private List<string> GetSelectedName(object cellValue)
+        private void UpdateCellDatabase(DateTime workDate, int shiftId, string employeeName)
         {
-            List<string> list = new List<string>();
-            if (cellValue != null && !string.IsNullOrWhiteSpace(cellValue.ToString()))
+            int? employeeId = null;
+            if (!string.IsNullOrEmpty(employeeName))
             {
-                list.Add(cellValue.ToString().Trim());
+                var emp = _empRepo.GetEmployeeByName(employeeName);
+                if (emp != null)
+                {
+                    employeeId = emp.Id;
+                }
             }
-            return list;
+
+            _shiftRepo.UpdateShiftAssignment(employeeId, shiftId, workDate);
         }
 
         private void btnClose_Click(object sender, EventArgs e)

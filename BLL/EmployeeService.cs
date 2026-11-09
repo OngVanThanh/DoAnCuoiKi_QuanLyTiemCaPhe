@@ -56,12 +56,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.BLL
                 errorMsg = "Vui lòng chọn hoặc nhập mã chức vụ (1. Quản lý, 2.Thu ngân, 3. Pha chế, 4. Phục vụ)!";
                 return false;
             }
-
-            if (dto.Salary.HasValue && dto.Salary.Value < 0)
-            {
-                errorMsg = "Mức lương cơ bản không được âm!";
-                return false;
-            }
             dto.FullName = dto.FullName.Trim();
             dto.Phone = phone;
             dto.Address = dto.Address?.Trim();
