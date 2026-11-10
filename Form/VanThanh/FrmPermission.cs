@@ -31,7 +31,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             {
                 _isLoading = true;
                 LoadRolesToFilter();
-                SetupEvents();
                 FilterUsers();
                 InitActionPopup();
             }
@@ -77,22 +76,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             cboFilter.ValueMember = "Id";
             cboFilter.DataSource = filterList;
             cboFilter.SelectedIndex = 0;
-        }
-
-        // Đăng ký sự kiện tìm kiếm và lọc
-        private void SetupEvents()
-        {
-            txtSearch.TextChanged += (s, e) => FilterUsers();
-            txtSearch.KeyDown += (s, e) =>
-            {
-                if (e.KeyCode == Keys.Enter)
-                {
-                    FilterUsers();
-                    e.SuppressKeyPress = true;
-                }
-            };
-            cboFilter.SelectedIndexChanged += (s, e) => FilterUsers();
-            btnSearch.Click += (s, e) => FilterUsers();
         }
 
         // Lọc người dùng theo Username / Họ và tên và Vai trò
@@ -291,6 +274,29 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 // Tiến hành load lại danh sách tài khoản trên DataGridView
                 LoadUsersToGrid();
             }
+        }
+        private void TxtSearch_TextChanged(object sender, EventArgs e)
+        {
+            FilterUsers();
+        }
+
+        private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                FilterUsers();
+                e.SuppressKeyPress = true; // Chặn tiếng kêu "beep" khi nhấn Enter
+            }
+        }
+
+        private void CboFilter_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FilterUsers();
+        }
+
+        private void BtnSearch_Click(object sender, EventArgs e)
+        {
+            FilterUsers();
         }
     }
 }

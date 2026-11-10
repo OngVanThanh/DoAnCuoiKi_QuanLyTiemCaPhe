@@ -39,7 +39,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 _isLoading = true;
                 LoadRoleFilter();
                 LoadMissionFilter();
-                SetupEvents();
                 LoadEmployeeData();
                 LoadDailyShifts();
                 InitActionPopup();
@@ -57,32 +56,30 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         // 1. Nạp danh sách vai trò vào ComboBox cboFilter (Phục vụ tìm kiếm 1.a)
         private void LoadRoleFilter()
         {
+            // Nếu bạn vẫn cần dòng "Tất cả vai trò" ở đầu để lọc danh sách:
             var filterList = new List<RoleDTO>
             {
-                new RoleDTO(0, "Tất cả vai trò")
+                 new RoleDTO(0, "Tất cả vai trò")
             };
 
-            try
+            // Nếu bạn KHÔNG CẦN dòng "Tất cả vai trò" mà chỉ muốn load đúng 100% từ DB, hãy dùng:
+            // var filterList = new List<RoleDTO>();
+
+            var roles = _employeeService.GetAllRoles();
+            if (roles != null && roles.Count > 0)
             {
-                var roles = _employeeService.GetAllRoles();
-                if (roles != null && roles.Count > 0)
-                {
-                    filterList.AddRange(roles);
-                }
-            }
-            catch
-            {
-                filterList.Add(new RoleDTO(1, "Quản lý"));
-                filterList.Add(new RoleDTO(2, "Thu ngân"));
-                filterList.Add(new RoleDTO(3, "Pha chế"));
-                filterList.Add(new RoleDTO(4, "Phục vụ"));
+                filterList.AddRange(roles);
             }
 
             cboFilter.DropDownStyle = ComboBoxStyle.DropDownList;
             cboFilter.DisplayMember = "RoleName";
             cboFilter.ValueMember = "Id";
             cboFilter.DataSource = filterList;
-            cboFilter.SelectedIndex = 0;
+
+            if (cboFilter.Items.Count > 0)
+            {
+                cboFilter.SelectedIndex = 0;
+            }
         }
 
         // 2. Nạp danh sách nhiệm vụ vào ComboBox cboShiftMission (Phục vụ lọc ca làm 1.b)
@@ -119,35 +116,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         }
 
         // 3. Đăng ký các sự kiện tìm kiếm và lọc cho cả 2 vùng
-        private void SetupEvents()
-        {
-            // 3.a. Tìm kiếm nhân viên bằng tên/số điện thoại/Id và lọc theo vai trò
-            txtSearch.TextChanged += (s, e) => FilterEmployees();
-            txtSearch.KeyDown += (s, e) =>
-            {
-                if (e.KeyCode == Keys.Enter)
-                {
-                    FilterEmployees();
-                    e.SuppressKeyPress = true;
-                }
-            };
-            cboFilter.SelectedIndexChanged += (s, e) => FilterEmployees();
-            btnSearch.Click += (s, e) => FilterEmployees();
-
-            // 3.b. Tìm kiếm ca làm trong ngày lọc theo nhiệm vụ
-            dtpShiftDate.ValueChanged += (s, e) => LoadDailyShifts();
-            cboShiftMission.SelectedIndexChanged += (s, e) => LoadDailyShifts();
-            txtSearchShift.TextChanged += (s, e) => LoadDailyShifts();
-            txtSearchShift.KeyDown += (s, e) =>
-            {
-                if (e.KeyCode == Keys.Enter)
-                {
-                    LoadDailyShifts();
-                    e.SuppressKeyPress = true;
-                }
-            };
-            btnSearchShift.Click += (s, e) => LoadDailyShifts();
-        }
 
         // 4. Hàm thực thi tìm kiếm nhân viên theo Tên / SĐT / ID kết hợp lọc theo vai trò
         private void FilterEmployees()
@@ -465,6 +433,42 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             {
                 MessageBox.Show("Lỗi khi khởi tạo lịch: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        // Sự kiện tìm kiếm nhân viên
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            FilterEmployees(); // Gọi trực tiếp hàm xử lý
+        }
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            FilterEmployees();
+        }
+
+        private void cboFilter_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FilterEmployees();
+        }
+
+        // Sự kiện tìm kiếm ca làm việc
+        private void btnSearchShift_Click(object sender, EventArgs e)
+        {
+            LoadDailyShifts();
+        }
+
+        private void cboShiftMission_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadDailyShifts();
+        }
+
+        private void dtpShiftDate_ValueChanged(object sender, EventArgs e)
+        {
+            LoadDailyShifts();
+        }
+        private void txtSearchShift_TextChanged(object sender, EventArgs e)
+        {
+            LoadDailyShifts(); // Gọi trực tiếp hàm tải ca làm
         }
     }
 }

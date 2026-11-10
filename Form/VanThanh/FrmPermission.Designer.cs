@@ -116,6 +116,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.btnSearch.TabIndex = 21;
             this.btnSearch.Text = "Tìm kiếm";
             this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.BtnSearch_Click);
             // 
             // txtSearch
             // 
@@ -123,6 +124,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(240, 22);
             this.txtSearch.TabIndex = 20;
+            this.txtSearch.TextChanged += new System.EventHandler(this.TxtSearch_TextChanged);
+            this.txtSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtSearch_KeyDown);
             // 
             // cboFilter
             // 
@@ -132,6 +135,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.cboFilter.Name = "cboFilter";
             this.cboFilter.Size = new System.Drawing.Size(145, 24);
             this.cboFilter.TabIndex = 22;
+            this.cboFilter.SelectedIndexChanged += new System.EventHandler(this.CboFilter_SelectedIndexChanged);
             // 
             // FrmPermission
             // 

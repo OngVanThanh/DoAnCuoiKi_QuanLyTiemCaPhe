@@ -120,7 +120,7 @@
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(460, 525);
+            this.btnAdd.Location = new System.Drawing.Point(648, 516);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(135, 30);
             this.btnAdd.TabIndex = 1;
@@ -134,6 +134,7 @@
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(260, 22);
             this.txtSearch.TabIndex = 3;
+            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
             // 
             // btnSearch
             // 
@@ -143,6 +144,7 @@
             this.btnSearch.TabIndex = 4;
             this.btnSearch.Text = "Tìm kiếm";
             this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
             // pnlEmployeeDetail
             // 
@@ -153,7 +155,7 @@
             // 
             // btnRegisterShift
             // 
-            this.btnRegisterShift.Location = new System.Drawing.Point(610, 525);
+            this.btnRegisterShift.Location = new System.Drawing.Point(57, 602);
             this.btnRegisterShift.Name = "btnRegisterShift";
             this.btnRegisterShift.Size = new System.Drawing.Size(173, 30);
             this.btnRegisterShift.TabIndex = 6;
@@ -169,6 +171,7 @@
             this.cboFilter.Name = "cboFilter";
             this.cboFilter.Size = new System.Drawing.Size(155, 24);
             this.cboFilter.TabIndex = 23;
+            this.cboFilter.SelectedIndexChanged += new System.EventHandler(this.cboFilter_SelectedIndexChanged);
             // 
             // dataGridView1
             // 
@@ -181,14 +184,14 @@
             this.ColMission,
             this.ColEmployee,
             this.ColStatus});
-            this.dataGridView1.Location = new System.Drawing.Point(318, 644);
+            this.dataGridView1.Location = new System.Drawing.Point(54, 644);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 24;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(465, 235);
+            this.dataGridView1.Size = new System.Drawing.Size(729, 235);
             this.dataGridView1.TabIndex = 24;
             // 
             // ColShiftTime
@@ -255,6 +258,7 @@
             this.dtpShiftDate.Name = "dtpShiftDate";
             this.dtpShiftDate.Size = new System.Drawing.Size(130, 22);
             this.dtpShiftDate.TabIndex = 27;
+            this.dtpShiftDate.ValueChanged += new System.EventHandler(this.dtpShiftDate_ValueChanged);
             // 
             // cboShiftMission
             // 
@@ -264,6 +268,7 @@
             this.cboShiftMission.Name = "cboShiftMission";
             this.cboShiftMission.Size = new System.Drawing.Size(180, 24);
             this.cboShiftMission.TabIndex = 28;
+            this.cboShiftMission.SelectedIndexChanged += new System.EventHandler(this.cboShiftMission_SelectedIndexChanged);
             // 
             // txtSearchShift
             // 
@@ -271,6 +276,7 @@
             this.txtSearchShift.Name = "txtSearchShift";
             this.txtSearchShift.Size = new System.Drawing.Size(370, 22);
             this.txtSearchShift.TabIndex = 29;
+            this.txtSearchShift.TextChanged += new System.EventHandler(this.txtSearchShift_TextChanged);
             // 
             // btnSearchShift
             // 
@@ -280,6 +286,7 @@
             this.btnSearchShift.TabIndex = 30;
             this.btnSearchShift.Text = "Tìm kiếm";
             this.btnSearchShift.UseVisualStyleBackColor = true;
+            this.btnSearchShift.Click += new System.EventHandler(this.btnSearchShift_Click);
             // 
             // FrmEmployee
             // 
