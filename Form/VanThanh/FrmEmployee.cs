@@ -245,12 +245,17 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         {
             try
             {
-                // Xác định khoảng thời gian tuần tới (ví dụ: từ ngày mai đến 7 ngày sau)
-                DateTime startDate = DateTime.Now.AddDays(1).Date;
-                DateTime endDate = startDate.AddDays(6).Date;
+                DateTime today = DateTime.Today;
 
-                // 1. Tự động khởi tạo 21 ca vào Database nếu chưa có sẵn
-                _shiftRepo.InitializeWeekShiftsIfNeeded(startDate, endDate);
+                // Tính số ngày để nhảy tới Thứ Hai tuần sau
+                int daysUntilNextMonday = ((int)DayOfWeek.Monday - (int)today.DayOfWeek + 7) % 7;
+                if (daysUntilNextMonday == 0) daysUntilNextMonday = 7; // Nếu hôm nay là Thứ Hai, lấy Thứ Hai tuần sau
+
+                DateTime nextMonday = today.AddDays(daysUntilNextMonday).Date;
+                DateTime nextSunday = nextMonday.AddDays(6).Date; // Chủ Nhật của tuần sau
+
+                // 1. Tự động khởi tạo lịch tuần tới (63 bản ghi phân tách theo nhiệm vụ) vào Database nếu chưa có sẵn
+                _shiftRepo.InitializeWeekShiftsIfNeeded(nextMonday, nextSunday);
 
                 // 2. Mở form quản lý lịch làm việc
                 FrmShiftSchedule frm = new FrmShiftSchedule();
