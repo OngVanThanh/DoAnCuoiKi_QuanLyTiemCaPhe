@@ -10,7 +10,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
         // 1. Thống kê doanh thu theo khoảng thời gian
         public List<RevenueStatisticDTO> GetRevenueReport(DateTime fromDate, DateTime toDate)
         {
-            using (var db = new CoffeeShopDataContextDataContext()) // Đổi đúng tên DataContext của bạn
+            using (var db = new CoffeeShopDataContextDataContext())
             {
                 var query = from o in db.Orders
                             where o.OrderDate >= fromDate.Date
@@ -21,8 +21,9 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                             {
                                 Date = g.Key,
                                 TotalOrders = g.Count(),
-                                TotalDiscount = g.Sum(x => x.DiscountAmount ?? 0m),
-                                TotalRevenue = g.Sum(x => x.FinalAmount)
+                                TotalAmount = g.Sum(x => x.TotalAmount),            // Tiền gốc trước giảm
+                                TotalDiscount = g.Sum(x => x.DiscountAmount ?? 0m), // Chiết khấu
+                                TotalRevenue = g.Sum(x => x.FinalAmount)      // Thực thu
                             };
 
                 return query.OrderBy(x => x.Date).ToList();
@@ -59,7 +60,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                             orderby c.RewardPoints descending
                             select new CustomerDTO
                             {
-                                Id = c.Id.ToString(),
+                                
                                 CustomerName = c.CustomerName,
                                 Phone = c.Phone,
                                 RewardPoints = c.RewardPoints ?? 0,

@@ -7,137 +7,166 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
 {
     public class CustomerRepository
     {
-        // 1. Lấy toàn bộ danh sách khách hàng
+        // 1. Hàm lấy toàn bộ danh sách khách hàng
         public List<CustomerDTO> GetAllCustomers()
         {
             using (var db = new CoffeeShopDataContextDataContext())
             {
-                var query = from c in db.Customers
-                            orderby c.RegistrationDate ascending
-                            select new CustomerDTO
-                            {
-                                Id = c.Id.ToString(),
-                                CustomerName = c.CustomerName,
-                                Phone = c.Phone,
-                                RewardPoints = c.RewardPoints ?? 0,
-                                MembershipTier = c.MembershipTier,
-                                RegistrationDate = (c.RegistrationDate ?? DateTime.Now).Date
-                            };
-                return query.ToList();
+                return db.Customers
+                         .OrderByDescending(c => c.RewardPoints ?? 0)
+                         .Select(c => new CustomerDTO
+                         {
+                             CustomerName = c.CustomerName,
+                             Phone = c.Phone,
+                             RewardPoints = c.RewardPoints ?? 0,
+                             MembershipTier = c.MembershipTier ?? "Thường",
+                             RegistrationDate = (c.RegistrationDate ?? DateTime.Now).Date
+                         })
+                         .ToList();
             }
         }
 
-        // 2. Kiểm tra trùng số điện thoại
-        public bool IsPhoneExists(string phone, string excludeId = null)
+        // 2. Hàm lấy khách hàng theo số điện thoại
+        public CustomerDTO GetByPhone(string phone)
         {
-            using (var db = new CoffeeShopDataContextDataContext())
-            {
-                if (string.IsNullOrEmpty(excludeId))
-                {
-                    return db.Customers.Any(c => c.Phone == phone);
-                }
-                // Khi Sửa: Cho phép giữ nguyên SĐT của chính khách hàng đó
-                return db.Customers.Any(c => c.Phone == phone && c.Id.ToString() != excludeId);
-            }
-        }
+            if (string.IsNullOrWhiteSpace(phone)) return null;
 
-        // 3. Thêm mới khách hàng
-        public bool InsertCustomer(CustomerDTO dto)
-        {
             using (var db = new CoffeeShopDataContextDataContext())
             {
-                var entity = new Customer
+                var customer = db.Customers.FirstOrDefault(c => c.Phone == phone.Trim());
+                if (customer == null) return null;
+
+                return new CustomerDTO
                 {
-                    Id = int.Parse(dto.Id), // Gán ID từ DTO mà người dùng đã nhập
-                    CustomerName = dto.CustomerName,
-                    Phone = dto.Phone,
-                    RewardPoints = dto.RewardPoints,
-                    MembershipTier = string.IsNullOrWhiteSpace(dto.MembershipTier) ? "Thường" : dto.MembershipTier,
-                    RegistrationDate = dto.RegistrationDate.Date
+                    CustomerName = customer.CustomerName,
+                    Phone = customer.Phone,
+                    RewardPoints = customer.RewardPoints ?? 0,
+                    MembershipTier = customer.MembershipTier ?? "Thường",
+                    RegistrationDate = (customer.RegistrationDate ?? DateTime.Now).Date
                 };
-
-                db.Customers.InsertOnSubmit(entity);
-                db.SubmitChanges();
-                return true;
             }
         }
 
-        // 4. Sửa khách hàng
-        public bool UpdateCustomer(CustomerDTO dto)
+        // 3. Hàm kiểm tra trùng số điện thoại
+        public bool PhoneExists(string phone)
         {
+            if (string.IsNullOrWhiteSpace(phone)) return false;
+
             using (var db = new CoffeeShopDataContextDataContext())
             {
-                var customer = db.Customers.SingleOrDefault(c => c.Id.ToString() == dto.Id);
-                if (customer != null)
-                {
-                    customer.CustomerName = dto.CustomerName;
-                    customer.Phone = dto.Phone;
-                    customer.RewardPoints = dto.RewardPoints;
-                    customer.MembershipTier = dto.MembershipTier;
-                    // Không cần cập nhật RegistrationDate để giữ nguyên ngày đăng ký ban đầu
+                return db.Customers.Any(c => c.Phone == phone.Trim());
+            }
+        }
 
+        // 4. Thêm khách hàng mới
+        public bool AddCustomer(CustomerDTO dto, out string error)
+        {
+            error = string.Empty;
+            try
+            {
+                using (var db = new CoffeeShopDataContextDataContext())
+                {
+                    if (PhoneExists(dto.Phone))
+                    {
+                        error = "Số điện thoại này đã tồn tại!";
+                        return false;
+                    }
+
+                    var newCustomer = new Customer
+                    {
+                        CustomerName = dto.CustomerName.Trim(),
+                        Phone = dto.Phone.Trim(),
+                        RewardPoints = dto.RewardPoints,
+                        MembershipTier = dto.MembershipTier,
+                        RegistrationDate = dto.RegistrationDate
+                    };
+
+                    db.Customers.InsertOnSubmit(newCustomer);
                     db.SubmitChanges();
                     return true;
                 }
+            }
+            catch (Exception ex)
+            {
+                error = "Lỗi thêm: " + ex.Message;
                 return false;
             }
         }
 
-        // 5. Xóa khách hàng
-        public bool DeleteCustomer(string id)
+        // 5. Cập nhật khách hàng theo Phone
+        public bool UpdateCustomer(CustomerDTO dto, out string error)
         {
-            using (var db = new CoffeeShopDataContextDataContext())
+            error = string.Empty;
+            try
             {
-                var customer = db.Customers.SingleOrDefault(c => c.Id.ToString() == id);
-                if (customer != null)
+                using (var db = new CoffeeShopDataContextDataContext())
                 {
+                    var customer = db.Customers.FirstOrDefault(c => c.Phone == dto.Phone.Trim());
+                    if (customer == null)
+                    {
+                        error = "Không tìm thấy khách hàng!";
+                        return false;
+                    }
+
+                    customer.CustomerName = dto.CustomerName.Trim();
+                    customer.RewardPoints = dto.RewardPoints;
+                    customer.MembershipTier = dto.MembershipTier;
+
+                    db.SubmitChanges();
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                error = "Lỗi cập nhật: " + ex.Message;
+                return false;
+            }
+        }
+
+        // 6. Xóa khách hàng theo Phone
+        public bool DeleteCustomer(string phone, out string error)
+        {
+            error = string.Empty;
+            try
+            {
+                using (var db = new CoffeeShopDataContextDataContext())
+                {
+                    var customer = db.Customers.FirstOrDefault(c => c.Phone == phone.Trim());
+                    if (customer == null)
+                    {
+                        error = "Không tìm thấy khách hàng để xóa!";
+                        return false;
+                    }
+
                     db.Customers.DeleteOnSubmit(customer);
                     db.SubmitChanges();
                     return true;
                 }
+            }
+            catch (Exception ex)
+            {
+                error = "Lỗi xóa: " + ex.Message;
                 return false;
             }
         }
 
-        // 6. Tìm kiếm theo SĐT hoặc Tên
-        public List<CustomerDTO> SearchCustomers(string keyword)
+        // 7. Lấy Top khách hàng cho báo cáo RDLC
+        public List<CustomerDTO> GetTopCustomersByPoints(int topCount = 10)
         {
             using (var db = new CoffeeShopDataContextDataContext())
             {
-                var query = from c in db.Customers
-                            where c.Phone.Contains(keyword) || c.CustomerName.Contains(keyword)
-                            orderby c.Id descending
-                            select new CustomerDTO
-                            {
-                                Id = c.Id.ToString(),
-                                CustomerName = c.CustomerName,
-                                Phone = c.Phone,
-                                RewardPoints = c.RewardPoints ?? 0,
-                                MembershipTier = c.MembershipTier,
-                                RegistrationDate = c.RegistrationDate ?? DateTime.Now
-                            };
-                return query.ToList();
-            }
-        }
-        // Tìm kiếm chính xác khách hàng theo Id
-        public CustomerDTO GetCustomerById(int id)
-        {
-            using (var db = new CoffeeShopDataContextDataContext()) // Đổi theo tên DataContext của bạn
-            {
-                var customer = db.Customers.SingleOrDefault(c => c.Id == id);
-                if (customer != null)
-                {
-                    return new CustomerDTO
-                    {
-                        Id = customer.Id.ToString(),
-                        CustomerName = customer.CustomerName,
-                        Phone = customer.Phone,
-                        RewardPoints = customer.RewardPoints ?? 0,
-                        MembershipTier = customer.MembershipTier,
-                        RegistrationDate = customer.RegistrationDate ?? DateTime.Now
-                    };
-                }
-                return null;
+                return db.Customers
+                         .OrderByDescending(c => c.RewardPoints ?? 0)
+                         .Take(topCount)
+                         .Select(c => new CustomerDTO
+                         {
+                             CustomerName = c.CustomerName,
+                             Phone = c.Phone,
+                             RewardPoints = c.RewardPoints ?? 0,
+                             MembershipTier = c.MembershipTier ?? "Thường",
+                             RegistrationDate = (c.RegistrationDate ?? DateTime.Now).Date
+                         })
+                         .ToList();
             }
         }
     }

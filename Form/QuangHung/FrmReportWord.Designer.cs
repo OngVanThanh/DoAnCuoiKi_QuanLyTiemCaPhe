@@ -48,7 +48,7 @@
             // 
             // dtpToDate
             // 
-            this.dtpToDate.CustomFormat = "dd/mm/yyyy";
+            this.dtpToDate.CustomFormat = "dd/MM/yyyy";
             this.dtpToDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpToDate.Location = new System.Drawing.Point(244, 23);
             this.dtpToDate.Name = "dtpToDate";
@@ -78,17 +78,17 @@
             // reportViewer1
             // 
             this.reportViewer1.LocalReport.ReportEmbeddedResource = "DoAnCuoiKi_QuanLyTiemCaPhe.Form.QuangHung.Report1.rdlc";
-            this.reportViewer1.Location = new System.Drawing.Point(29, 63);
+            this.reportViewer1.Location = new System.Drawing.Point(12, 63);
             this.reportViewer1.Name = "reportViewer1";
             this.reportViewer1.ServerReport.BearerToken = null;
-            this.reportViewer1.Size = new System.Drawing.Size(877, 383);
+            this.reportViewer1.Size = new System.Drawing.Size(1092, 474);
             this.reportViewer1.TabIndex = 4;
             // 
             // FrmReportWord
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1044, 450);
+            this.ClientSize = new System.Drawing.Size(1116, 549);
             this.Controls.Add(this.reportViewer1);
             this.Controls.Add(this.btnExportWord);
             this.Controls.Add(this.cboReportType);

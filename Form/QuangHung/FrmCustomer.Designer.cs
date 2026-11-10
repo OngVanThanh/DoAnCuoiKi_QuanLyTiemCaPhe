@@ -33,26 +33,23 @@
             this.coffeeShopDBDataSetBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.coffeeShopDBDataSet = new DoAnCuoiKi_QuanLyTiemCaPhe.CoffeeShopDBDataSet();
             this.coffeeShopDBDataSetBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.txtCustomerId = new System.Windows.Forms.TextBox();
             this.txtRewardPoints = new System.Windows.Forms.TextBox();
             this.txtCustomerName = new System.Windows.Forms.TextBox();
             this.txtPhone = new System.Windows.Forms.TextBox();
             this.lblMembershipTier = new System.Windows.Forms.Label();
             this.pnlAddData = new System.Windows.Forms.Panel();
+            this.btnRefresh = new System.Windows.Forms.Button();
             this.txtMembershipTier = new System.Windows.Forms.TextBox();
-            this.btnSearch = new System.Windows.Forms.Button();
             this.lblCreatedDate = new System.Windows.Forms.Label();
             this.txtRegistrationDate = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
+            this.btnSearch = new System.Windows.Forms.Button();
             this.txtSearch = new System.Windows.Forms.TextBox();
-            this.btnRefresh = new System.Windows.Forms.Button();
-            this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CustomerName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Phone = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.RewardPoints = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -72,7 +69,6 @@
             this.dgvCustomer.AutoGenerateColumns = false;
             this.dgvCustomer.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvCustomer.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Id,
             this.CustomerName,
             this.Phone,
             this.RewardPoints,
@@ -102,17 +98,9 @@
             this.coffeeShopDBDataSetBindingSource.DataSource = this.coffeeShopDBDataSet;
             this.coffeeShopDBDataSetBindingSource.Position = 0;
             // 
-            // txtCustomerId
-            // 
-            this.txtCustomerId.Location = new System.Drawing.Point(95, 3);
-            this.txtCustomerId.Name = "txtCustomerId";
-            this.txtCustomerId.Size = new System.Drawing.Size(100, 20);
-            this.txtCustomerId.TabIndex = 1;
-            this.txtCustomerId.TextChanged += new System.EventHandler(this.txtCustomerId_TextChanged);
-            // 
             // txtRewardPoints
             // 
-            this.txtRewardPoints.Location = new System.Drawing.Point(95, 81);
+            this.txtRewardPoints.Location = new System.Drawing.Point(95, 63);
             this.txtRewardPoints.Name = "txtRewardPoints";
             this.txtRewardPoints.Size = new System.Drawing.Size(100, 20);
             this.txtRewardPoints.TabIndex = 2;
@@ -120,7 +108,7 @@
             // 
             // txtCustomerName
             // 
-            this.txtCustomerName.Location = new System.Drawing.Point(95, 29);
+            this.txtCustomerName.Location = new System.Drawing.Point(95, 11);
             this.txtCustomerName.Name = "txtCustomerName";
             this.txtCustomerName.Size = new System.Drawing.Size(100, 20);
             this.txtCustomerName.TabIndex = 3;
@@ -128,7 +116,7 @@
             // 
             // txtPhone
             // 
-            this.txtPhone.Location = new System.Drawing.Point(95, 55);
+            this.txtPhone.Location = new System.Drawing.Point(95, 37);
             this.txtPhone.Name = "txtPhone";
             this.txtPhone.Size = new System.Drawing.Size(100, 20);
             this.txtPhone.TabIndex = 4;
@@ -137,7 +125,7 @@
             // lblMembershipTier
             // 
             this.lblMembershipTier.AutoSize = true;
-            this.lblMembershipTier.Location = new System.Drawing.Point(3, 107);
+            this.lblMembershipTier.Location = new System.Drawing.Point(3, 89);
             this.lblMembershipTier.Name = "lblMembershipTier";
             this.lblMembershipTier.Size = new System.Drawing.Size(56, 13);
             this.lblMembershipTier.TabIndex = 5;
@@ -153,27 +141,109 @@
             this.pnlAddData.Controls.Add(this.label4);
             this.pnlAddData.Controls.Add(this.label3);
             this.pnlAddData.Controls.Add(this.label2);
-            this.pnlAddData.Controls.Add(this.label1);
             this.pnlAddData.Controls.Add(this.btnDelete);
             this.pnlAddData.Controls.Add(this.btnEdit);
             this.pnlAddData.Controls.Add(this.btnAdd);
-            this.pnlAddData.Controls.Add(this.txtCustomerId);
             this.pnlAddData.Controls.Add(this.lblMembershipTier);
             this.pnlAddData.Controls.Add(this.txtRewardPoints);
             this.pnlAddData.Controls.Add(this.txtPhone);
             this.pnlAddData.Controls.Add(this.txtCustomerName);
             this.pnlAddData.Location = new System.Drawing.Point(0, 1);
             this.pnlAddData.Name = "pnlAddData";
-            this.pnlAddData.Size = new System.Drawing.Size(359, 199);
+            this.pnlAddData.Size = new System.Drawing.Size(359, 172);
             this.pnlAddData.TabIndex = 6;
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Location = new System.Drawing.Point(248, 141);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(75, 23);
+            this.btnRefresh.TabIndex = 16;
+            this.btnRefresh.Text = "Làm mới";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // txtMembershipTier
             // 
-            this.txtMembershipTier.Location = new System.Drawing.Point(95, 107);
+            this.txtMembershipTier.Location = new System.Drawing.Point(95, 89);
             this.txtMembershipTier.Name = "txtMembershipTier";
             this.txtMembershipTier.Size = new System.Drawing.Size(100, 20);
             this.txtMembershipTier.TabIndex = 15;
             this.txtMembershipTier.TextChanged += new System.EventHandler(this.txtMembershipTier_TextChanged);
+            // 
+            // lblCreatedDate
+            // 
+            this.lblCreatedDate.AutoSize = true;
+            this.lblCreatedDate.Location = new System.Drawing.Point(3, 115);
+            this.lblCreatedDate.Name = "lblCreatedDate";
+            this.lblCreatedDate.Size = new System.Drawing.Size(77, 13);
+            this.lblCreatedDate.TabIndex = 14;
+            this.lblCreatedDate.Text = "Ngày đăng ký:";
+            // 
+            // txtRegistrationDate
+            // 
+            this.txtRegistrationDate.Location = new System.Drawing.Point(95, 115);
+            this.txtRegistrationDate.Name = "txtRegistrationDate";
+            this.txtRegistrationDate.Size = new System.Drawing.Size(100, 20);
+            this.txtRegistrationDate.TabIndex = 13;
+            this.txtRegistrationDate.TextChanged += new System.EventHandler(this.txtRegistrationDate_TextChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(3, 37);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(73, 13);
+            this.label4.TabIndex = 12;
+            this.label4.Text = "Số điện thoại:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(3, 63);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(72, 13);
+            this.label3.TabIndex = 11;
+            this.label3.Text = "Điểm tích lũy:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(3, 11);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(42, 13);
+            this.label2.TabIndex = 10;
+            this.label2.Text = "Họ tên:";
+            // 
+            // btnDelete
+            // 
+            this.btnDelete.Location = new System.Drawing.Point(167, 141);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(75, 23);
+            this.btnDelete.TabIndex = 8;
+            this.btnDelete.Text = "Xóa";
+            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            // 
+            // btnEdit
+            // 
+            this.btnEdit.Location = new System.Drawing.Point(86, 141);
+            this.btnEdit.Name = "btnEdit";
+            this.btnEdit.Size = new System.Drawing.Size(75, 23);
+            this.btnEdit.TabIndex = 7;
+            this.btnEdit.Text = "Sửa";
+            this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
+            // 
+            // btnAdd
+            // 
+            this.btnAdd.Location = new System.Drawing.Point(5, 141);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(75, 23);
+            this.btnAdd.TabIndex = 6;
+            this.btnAdd.Text = "Thêm";
+            this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // btnSearch
             // 
@@ -185,90 +255,6 @@
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
-            // lblCreatedDate
-            // 
-            this.lblCreatedDate.AutoSize = true;
-            this.lblCreatedDate.Location = new System.Drawing.Point(3, 133);
-            this.lblCreatedDate.Name = "lblCreatedDate";
-            this.lblCreatedDate.Size = new System.Drawing.Size(77, 13);
-            this.lblCreatedDate.TabIndex = 14;
-            this.lblCreatedDate.Text = "Ngày đăng ký:";
-            // 
-            // txtRegistrationDate
-            // 
-            this.txtRegistrationDate.Location = new System.Drawing.Point(95, 133);
-            this.txtRegistrationDate.Name = "txtRegistrationDate";
-            this.txtRegistrationDate.Size = new System.Drawing.Size(100, 20);
-            this.txtRegistrationDate.TabIndex = 13;
-            this.txtRegistrationDate.TextChanged += new System.EventHandler(this.txtRegistrationDate_TextChanged);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 55);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(73, 13);
-            this.label4.TabIndex = 12;
-            this.label4.Text = "Số điện thoại:";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 81);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(72, 13);
-            this.label3.TabIndex = 11;
-            this.label3.Text = "Điểm tích lũy:";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 29);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(42, 13);
-            this.label2.TabIndex = 10;
-            this.label2.Text = "Họ tên:";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 3);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(86, 13);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "Mã Khách hàng:";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
-            // 
-            // btnDelete
-            // 
-            this.btnDelete.Location = new System.Drawing.Point(166, 173);
-            this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(75, 23);
-            this.btnDelete.TabIndex = 8;
-            this.btnDelete.Text = "Xóa";
-            this.btnDelete.UseVisualStyleBackColor = true;
-            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
-            // 
-            // btnEdit
-            // 
-            this.btnEdit.Location = new System.Drawing.Point(85, 173);
-            this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(75, 23);
-            this.btnEdit.TabIndex = 7;
-            this.btnEdit.Text = "Sửa";
-            this.btnEdit.UseVisualStyleBackColor = true;
-            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
-            // 
-            // btnAdd
-            // 
-            this.btnAdd.Location = new System.Drawing.Point(4, 173);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(75, 23);
-            this.btnAdd.TabIndex = 6;
-            this.btnAdd.Text = "Thêm";
-            this.btnAdd.UseVisualStyleBackColor = true;
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
-            // 
             // txtSearch
             // 
             this.txtSearch.Location = new System.Drawing.Point(365, 4);
@@ -276,23 +262,6 @@
             this.txtSearch.Size = new System.Drawing.Size(159, 20);
             this.txtSearch.TabIndex = 13;
             this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
-            // 
-            // btnRefresh
-            // 
-            this.btnRefresh.Location = new System.Drawing.Point(247, 173);
-            this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(75, 23);
-            this.btnRefresh.TabIndex = 16;
-            this.btnRefresh.Text = "Làm mới";
-            this.btnRefresh.UseVisualStyleBackColor = true;
-            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
-            // 
-            // Id
-            // 
-            this.Id.DataPropertyName = "Id";
-            this.Id.HeaderText = "Mã Khách hàng";
-            this.Id.Name = "Id";
-            this.Id.ReadOnly = true;
             // 
             // CustomerName
             // 
@@ -354,7 +323,6 @@
         #endregion
 
         private System.Windows.Forms.DataGridView dgvCustomer;
-        private System.Windows.Forms.TextBox txtCustomerId;
         private System.Windows.Forms.TextBox txtRewardPoints;
         private System.Windows.Forms.TextBox txtCustomerName;
         private System.Windows.Forms.TextBox txtPhone;
@@ -364,7 +332,6 @@
         private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnSearch;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
@@ -376,7 +343,6 @@
         private System.Windows.Forms.TextBox txtMembershipTier;
         private System.Windows.Forms.BindingSource coffeeShopDBDataSetBindingSource1;
         private System.Windows.Forms.Button btnRefresh;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Id;
         private System.Windows.Forms.DataGridViewTextBoxColumn CustomerName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Phone;
         private System.Windows.Forms.DataGridViewTextBoxColumn RewardPoints;

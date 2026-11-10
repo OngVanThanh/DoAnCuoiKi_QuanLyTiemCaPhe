@@ -73,6 +73,7 @@
     <Compile Include="BLL\AppConfigService.cs" />
     <Compile Include="BLL\AuthService.cs" />
     <Compile Include="BLL\CustomerService.cs" />
+    <Compile Include="BLL\ReportService.cs" />
     <Compile Include="CoffeeShopDataContext.cs">
       <DependentUpon>CoffeeShopDataContext.dbml</DependentUpon>
     </Compile>
@@ -205,6 +206,7 @@
     <Compile Include="Utilities\ConfigHelper.cs" />
     <Compile Include="Utilities\SecurityHelper.cs" />
     <Compile Include="Utilities\UserSession.cs" />
+    <Compile Include="Utilities\WordExportHelper.cs" />
     <EmbeddedResource Include="Form\QuangHung\FrmChart.resx">
       <DependentUpon>FrmChart.cs</DependentUpon>
     </EmbeddedResource>
@@ -215,13 +217,13 @@
       <DependentUpon>FrmReportWord.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\QuangHung\RptBestSeller.rdlc">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\QuangHung\RptRevenue.rdlc">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\QuangHung\RptTopCustomers.rdlc">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\TanPhat\FrmOrder.resx">
       <DependentUpon>FrmOrder.cs</DependentUpon>
@@ -295,6 +297,8 @@
       <DependentUpon>CoffeeShopReportDataSet2.xsd</DependentUpon>
     </None>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\DoAnCuoiKi_QuanLyTiemCaPhe.DTO.CustomerDTO.datasource" />
+    <None Include="Properties\DataSources\DoAnCuoiKi_QuanLyTiemCaPhe.DTO.TopProductDTO.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
