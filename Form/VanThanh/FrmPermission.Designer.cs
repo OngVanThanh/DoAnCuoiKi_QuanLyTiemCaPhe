@@ -34,6 +34,9 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.FullName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Rolename = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Control = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.btnSearch = new System.Windows.Forms.Button();
+            this.txtSearch = new System.Windows.Forms.TextBox();
+            this.cboFilter = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsers)).BeginInit();
             this.SuspendLayout();
             // 
@@ -105,12 +108,40 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.Control.ReadOnly = true;
             this.Control.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             // 
+            // btnSearch
+            // 
+            this.btnSearch.Location = new System.Drawing.Point(450, 11);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(85, 25);
+            this.btnSearch.TabIndex = 21;
+            this.btnSearch.Text = "Tìm kiếm";
+            this.btnSearch.UseVisualStyleBackColor = true;
+            // 
+            // txtSearch
+            // 
+            this.txtSearch.Location = new System.Drawing.Point(35, 12);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(240, 22);
+            this.txtSearch.TabIndex = 20;
+            // 
+            // cboFilter
+            // 
+            this.cboFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboFilter.FormattingEnabled = true;
+            this.cboFilter.Location = new System.Drawing.Point(290, 11);
+            this.cboFilter.Name = "cboFilter";
+            this.cboFilter.Size = new System.Drawing.Size(145, 24);
+            this.cboFilter.TabIndex = 22;
+            // 
             // FrmPermission
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(248)))), ((int)(((byte)(245)))));
             this.ClientSize = new System.Drawing.Size(864, 338);
+            this.Controls.Add(this.cboFilter);
+            this.Controls.Add(this.btnSearch);
+            this.Controls.Add(this.txtSearch);
             this.Controls.Add(this.btnCreateUser);
             this.Controls.Add(this.dgvUsers);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -133,5 +164,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         private System.Windows.Forms.DataGridViewTextBoxColumn FullName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Rolename;
         private System.Windows.Forms.DataGridViewButtonColumn Control;
+        private System.Windows.Forms.Button btnSearch;
+        private System.Windows.Forms.TextBox txtSearch;
+        private System.Windows.Forms.ComboBox cboFilter;
     }
 }

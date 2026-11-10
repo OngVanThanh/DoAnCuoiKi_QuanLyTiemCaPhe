@@ -134,6 +134,96 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             }
         }
 
+        // Lấy danh sách ca làm trong ngày, hỗ trợ lọc theo nhiệm vụ và tìm kiếm từ khóa
+        public List<DailyShiftDTO> GetDailyShifts(DateTime date, int? missionId = null, string keyword = null)
+        {
+            List<DailyShiftDTO> list = new List<DailyShiftDTO>();
+            try
+            {
+                using (var db = GetContext())
+                {
+                    DateTime targetDate = date.Date;
+                    var shifts = db.EmployeeShifts
+                                   .Where(s => s.WorkDate == targetDate)
+                                   .ToList();
+
+                    var missions = db.Misions.OrderBy(m => m.Id).ToList();
+                    var employees = db.Employees.ToDictionary(e => e.Id, e => e.FullName.Trim());
+                    var shiftDefs = db.Shifts.OrderBy(s => s.Id).ToList();
+
+                    Dictionary<int, string> shiftNames = new Dictionary<int, string>
+                    {
+                        { 1, "Ca 1 (06:00 - 12:00)" },
+                        { 2, "Ca 2 (11:30 - 17:30)" },
+                        { 3, "Ca 3 (16:00 - 22:00)" }
+                    };
+
+                    foreach (var sDef in shiftDefs)
+                    {
+                        shiftNames[sDef.Id] = $"{sDef.ShiftName} ({sDef.StartTime:hh\\:mm} - {sDef.EndTime:hh\\:mm})";
+                    }
+
+                    for (int sId = 1; sId <= 3; sId++)
+                    {
+                        string sName = shiftNames.ContainsKey(sId) ? shiftNames[sId] : $"Ca {sId}";
+
+                        foreach (var m in missions)
+                        {
+                            var match = shifts.FirstOrDefault(s => s.ShiftId == sId && s.MisionId == m.Id);
+                            string empName = "— Chưa phân công —";
+                            string status = "Chưa phân công";
+                            int? empId = null;
+
+                            if (match != null && match.EmployeeId.HasValue)
+                            {
+                                empId = match.EmployeeId.Value;
+                                if (employees.ContainsKey(empId.Value))
+                                {
+                                    empName = employees[empId.Value];
+                                    status = "Đã phân công";
+                                }
+                            }
+
+                            list.Add(new DailyShiftDTO
+                            {
+                                ShiftId = sId,
+                                ShiftName = sName,
+                                MissionId = m.Id,
+                                MissionName = m.MissisonName,
+                                EmployeeId = empId,
+                                EmployeeName = empName,
+                                Status = status,
+                                WorkDate = targetDate
+                            });
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // Fallback nếu tạm thời chưa kết nối được CSDL
+            }
+
+            // Lọc theo nhiệm vụ nếu có
+            if (missionId.HasValue && missionId.Value > 0)
+            {
+                list = list.Where(x => x.MissionId == missionId.Value).ToList();
+            }
+
+            // Lọc theo từ khóa tìm kiếm nếu có
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                string kw = keyword.Trim();
+                list = list.Where(x =>
+                    (!string.IsNullOrEmpty(x.EmployeeName) && x.EmployeeName.IndexOf(kw, StringComparison.OrdinalIgnoreCase) >= 0) ||
+                    (!string.IsNullOrEmpty(x.MissionName) && x.MissionName.IndexOf(kw, StringComparison.OrdinalIgnoreCase) >= 0) ||
+                    (!string.IsNullOrEmpty(x.ShiftName) && x.ShiftName.IndexOf(kw, StringComparison.OrdinalIgnoreCase) >= 0)
+                ).ToList();
+            }
+
+            return list;
+        }
+
         // Hàm phụ trợ viết tắt tên nhiệm vụ (Ví dụ: "Thu ngân" -> "TN")
         private string GetMissionAbbreviation(string missionName)
         {

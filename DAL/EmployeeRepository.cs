@@ -67,8 +67,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             }
         }
 
-        // 2. Tìm kiếm nhân viên theo Họ tên hoặc SĐT
-        public List<EmployeeDTO> SearchEmployees(string keyword)
+        // 2. Tìm kiếm nhân viên theo Họ tên, SĐT hoặc ID, kèm lọc theo Vai trò
+        public List<EmployeeDTO> SearchEmployees(string keyword, int? roleId = null)
         {
             using (var db = GetContext())
             {
@@ -77,7 +77,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                     join r in db.Roles on e.RoleId equals r.Id
                     join s in db.Salaries on e.RoleId equals s.RoleId into salaries
                     from s in salaries.DefaultIfEmpty()
-                    where e.FullName.Contains(keyword) || e.Phone.Contains(keyword)
                     select new EmployeeDTO
                     {
                         Id = e.Id,
@@ -91,7 +90,46 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                         Salary = s != null ? (decimal?)s.Amount : null,
                         Image = e.Image
                     };
+
+                if (roleId.HasValue && roleId.Value > 0)
+                {
+                    query = query.Where(e => e.RoleId == roleId.Value);
+                }
+
+                if (!string.IsNullOrWhiteSpace(keyword))
+                {
+                    string kw = keyword.Trim();
+                    bool isNum = int.TryParse(kw, out int empId);
+
+                    if (isNum)
+                    {
+                        query = query.Where(e => e.Id == empId || (e.Phone != null && e.Phone.Contains(kw)) || e.FullName.Contains(kw));
+                    }
+                    else
+                    {
+                        query = query.Where(e => e.FullName.Contains(kw) || (e.Phone != null && e.Phone.Contains(kw)));
+                    }
+                }
+
                 return query.ToList();
+            }
+        }
+
+        public List<EmployeeDTO> SearchEmployees(string keyword)
+        {
+            return SearchEmployees(keyword, null);
+        }
+
+        // Lấy danh sách tất cả vai trò
+        public List<RoleDTO> GetAllRoles()
+        {
+            using (var db = GetContext())
+            {
+                return db.Roles.Select(r => new RoleDTO
+                {
+                    Id = r.Id,
+                    RoleName = r.RoleName
+                }).ToList();
             }
         }
 
