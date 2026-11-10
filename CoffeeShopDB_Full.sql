@@ -76,13 +76,22 @@ CREATE TABLE [dbo].[Shifts] (
 );
 GO
 
--- 6. BẢNG PHÂN CA NHÂN VIÊN (EmployeeShifts) - Văn Thanh
+-- 6. BẢNG NHIỆM VỤ PHÂN CA (Mision) - Văn Thanh
+CREATE TABLE [dbo].[Mision] (
+    [Id]           INT           IDENTITY (1, 1) NOT NULL PRIMARY KEY,
+    [MissisonName] NVARCHAR (50) NOT NULL
+);
+GO
+
+-- 7. BẢNG PHÂN CA NHÂN VIÊN (EmployeeShifts) - Văn Thanh
 CREATE TABLE [dbo].[EmployeeShifts] (
     [Id]         VARCHAR (20)  NOT NULL PRIMARY KEY,
     [EmployeeId] INT           NULL,
     [ShiftId]    INT           NULL,
     [WorkDate]   DATE          NULL,
     [Status]     NVARCHAR (50) DEFAULT (N'Chưa đăng ký') NULL,
+    [MisionId]   INT           NULL,
+    FOREIGN KEY ([MisionId]) REFERENCES [dbo].[Mision] ([Id]),
     FOREIGN KEY ([EmployeeId]) REFERENCES [dbo].[Employees] ([Id]),
     FOREIGN KEY ([ShiftId]) REFERENCES [dbo].[Shifts] ([Id])
 );
@@ -256,6 +265,13 @@ INSERT INTO Shifts (ShiftName, StartTime, EndTime) VALUES
 (N'Ca 1 (Sáng)', '06:00:00', '12:00:00'),
 (N'Ca 2 (Chiều)', '11:30:00', '17:30:00'),
 (N'Ca 3 (Tối)', '16:00:00', '22:00:00');
+GO
+
+-- 6. Mision (Nhiệm vụ phân ca)
+INSERT INTO Mision (MissisonName) VALUES 
+(N'Phục vụ'), 
+(N'Pha chế'), 
+(N'Thu ngân');
 GO
 
 -- 6. Areas
