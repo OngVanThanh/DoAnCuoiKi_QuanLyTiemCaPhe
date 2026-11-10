@@ -1,4 +1,4 @@
-﻿namespace DoAnCuoiKi_QuanLyTiemCaPhe
+namespace DoAnCuoiKi_QuanLyTiemCaPhe
 {
     partial class FrmMain
     {
@@ -18,6 +18,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            this.menuItemChangePassWord = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlSidebar = new System.Windows.Forms.Panel();
             this.pnlNavButtons = new System.Windows.Forms.Panel();
             this.btnNavAppConfig = new System.Windows.Forms.Button();
@@ -548,5 +549,6 @@
         private System.Windows.Forms.ToolStripStatusLabel lblSystemTime;
         private System.Windows.Forms.Panel pnlContent;
         private System.Windows.Forms.Timer tmrClock;
+        private System.Windows.Forms.ToolStripMenuItem menuItemChangePassWord;
     }
 }

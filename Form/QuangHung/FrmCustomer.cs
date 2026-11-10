@@ -1,4 +1,4 @@
-﻿using DoAnCuoiKi_QuanLyTiemCaPhe.BLL;
+using DoAnCuoiKi_QuanLyTiemCaPhe.BLL;
 using DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
 using System;
 using System.Collections.Generic;
@@ -20,6 +20,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         {
             dgvCustomer.AutoGenerateColumns = false;
             LoadCustomerList();
+            txtRegistrationDate.Text = DateTime.Today.ToString("dd/MM/yyyy");
         }
 
         private void LoadCustomerList()
@@ -28,8 +29,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             {
                 List<CustomerDTO> list = _customerService.GetAll();
                 dgvCustomer.AutoGenerateColumns = false;
-                dgvCustomer.DataSource = null; // Xóa nguồn cũ
-                dgvCustomer.DataSource = list; // Gán nguồn mới
+                dgvCustomer.DataSource = null;
+                dgvCustomer.DataSource = list;
             }
             catch (Exception ex)
             {
@@ -39,15 +40,32 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
+            string phone = txtPhone.Text.Trim();
+            string name = txtCustomerName.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(phone))
+            {
+                MessageBox.Show("Vui lòng nhập Số điện thoại khách hàng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtPhone.Focus();
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                MessageBox.Show("Vui lòng nhập Tên khách hàng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtCustomerName.Focus();
+                return;
+            }
+
             int points = int.TryParse(txtRewardPoints.Text.Trim(), out int pts) ? pts : 0;
 
             CustomerDTO newCustomer = new CustomerDTO
             {
-                CustomerName = txtCustomerName.Text.Trim(),
-                Phone = txtPhone.Text.Trim(),
+                Phone = phone,
+                CustomerName = name,
                 RewardPoints = points,
                 MembershipTier = _customerService.CalculateRank(points),
-                RegistrationDate = DateTime.Today // Chỉ lấy ngày hiện tại (không có giờ)
+                RegistrationDate = DateTime.Today
             };
 
             if (_customerService.Add(newCustomer, out string error))
@@ -64,12 +82,28 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
+            string phone = txtPhone.Text.Trim();
+            string name = txtCustomerName.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(phone))
+            {
+                MessageBox.Show("Vui lòng chọn khách hàng từ danh sách để sửa thông tin!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                MessageBox.Show("Tên khách hàng không được để trống!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtCustomerName.Focus();
+                return;
+            }
+
             int points = int.TryParse(txtRewardPoints.Text.Trim(), out int pts) ? pts : 0;
 
             CustomerDTO customer = new CustomerDTO
             {
-                CustomerName = txtCustomerName.Text.Trim(),
-                Phone = txtPhone.Text.Trim(),
+                Phone = phone,
+                CustomerName = name,
                 RewardPoints = points,
                 MembershipTier = _customerService.CalculateRank(points)
             };
@@ -88,10 +122,9 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            // Sử dụng số điện thoại làm khóa định danh để xóa
             string phone = txtPhone.Text.Trim();
 
-            if (string.IsNullOrEmpty(phone))
+            if (string.IsNullOrWhiteSpace(phone))
             {
                 MessageBox.Show("Vui lòng chọn khách hàng muốn xóa từ danh sách!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -123,7 +156,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
             if (string.IsNullOrWhiteSpace(searchKeyword))
             {
-                MessageBox.Show("Vui lòng nhập Số điện thoại vào ô tìm kiếm!",
+                MessageBox.Show("Vui lòng nhập Số điện thoại hoặc Họ tên để tìm kiếm!",
                                 "Thông báo",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Warning);
@@ -131,48 +164,54 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 return;
             }
 
-            if (!int.TryParse(searchKeyword, out int customerId))
-            {
-                MessageBox.Show("Số điện thoại không hợp lệ! Vui lòng chỉ nhập từ 9 đến 11 chữ số.",
-                                "Lỗi định dạng",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning);
-                txtSearch.SelectAll();
-                txtSearch.Focus();
-                return;
-            }
+            var results = _customerService.Search(searchKeyword);
+            dgvCustomer.AutoGenerateColumns = false;
+            dgvCustomer.DataSource = null;
+            dgvCustomer.DataSource = results;
 
-            CustomerDTO result = _customerService.GetById(customerId);
-
-            if (result != null)
+            if (results == null || results.Count == 0)
             {
-                dgvCustomer.AutoGenerateColumns = false;
-                dgvCustomer.DataSource = null;
-                dgvCustomer.DataSource = new List<CustomerDTO> { result };
-            }
-            else
-            {
-                MessageBox.Show($"Không tìm thấy khách hàng nào có Số điện thoại: {searchKeyword}!",
+                MessageBox.Show($"Không tìm thấy khách hàng nào khớp với: \"{searchKeyword}\"!",
                                 "Kết quả tìm kiếm",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
             }
         }
 
-        private void dgvCustomer_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvCustomer_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-        }
+            if (e.RowIndex >= 0 && dgvCustomer.CurrentRow != null)
+            {
+                var row = dgvCustomer.CurrentRow;
 
-        private void txtCustomerId_TextChanged(object sender, EventArgs e)
-        {
-        }
+                if (row.DataBoundItem is CustomerDTO dto)
+                {
+                    txtPhone.Text = dto.Phone ?? "";
+                    txtCustomerName.Text = dto.CustomerName ?? "";
+                    txtRewardPoints.Text = dto.RewardPoints.ToString();
+                    txtMembershipTier.Text = dto.MembershipTier ?? "Thường";
+                    txtRegistrationDate.Text = dto.RegistrationDate.ToString("dd/MM/yyyy");
+                }
+                else
+                {
+                    txtPhone.Text = row.Cells["Phone"].Value?.ToString() ?? "";
+                    txtCustomerName.Text = row.Cells["CustomerName"].Value?.ToString() ?? "";
+                    txtRewardPoints.Text = row.Cells["RewardPoints"].Value?.ToString() ?? "0";
+                    txtMembershipTier.Text = row.Cells["MembershipTier"].Value?.ToString() ?? "Thường";
 
-        private void txtCustomerName_TextChanged(object sender, EventArgs e)
-        {
-        }
+                    object regVal = row.Cells["RegistrationDate"].Value;
+                    if (regVal != null && DateTime.TryParse(regVal.ToString(), out DateTime regDate))
+                    {
+                        txtRegistrationDate.Text = regDate.ToString("dd/MM/yyyy");
+                    }
+                    else
+                    {
+                        txtRegistrationDate.Text = DateTime.Today.ToString("dd/MM/yyyy");
+                    }
+                }
 
-        private void txtPhone_TextChanged(object sender, EventArgs e)
-        {
+                txtPhone.ReadOnly = true; // Khóa trường SĐT khi chọn khách hàng đã có sẵn
+            }
         }
 
         private void txtRewardPoints_TextChanged(object sender, EventArgs e)
@@ -187,77 +226,30 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-        }
-
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
-            btnSearch.Enabled = !string.IsNullOrWhiteSpace(txtSearch.Text);
-        }
-
-        private void lblMembershipTier_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void txtMembershipTier_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void dgvCustomer_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0 && dgvCustomer.CurrentRow != null)
+            if (string.IsNullOrWhiteSpace(txtSearch.Text))
             {
-                var row = dgvCustomer.CurrentRow;
-
-                txtCustomerId.Text = row.Cells[0].Value?.ToString() ?? "";
-                if (row.Cells.Count > 1)
-                    txtCustomerName.Text = row.Cells[1].Value?.ToString() ?? "";
-                if (row.Cells.Count > 2)
-                    txtPhone.Text = row.Cells[2].Value?.ToString() ?? "";
-                if (row.Cells.Count > 3)
-                    txtRewardPoints.Text = row.Cells[3].Value?.ToString() ?? "0";
-                if (row.Cells.Count > 4)
-                    txtMembershipTier.Text = row.Cells[4].Value?.ToString() ?? "Bronze";
-                if (row.Cells.Count > 5)
-                {
-                    object regVal = row.Cells[4].Value;
-                    if (regVal != null && DateTime.TryParse(regVal.ToString(), out DateTime regDate))
-                    {
-                        txtRegistrationDate.Text = regDate.ToString("dd/MM/yyyy");
-                    }
-                    else
-                    {
-                        txtRegistrationDate.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                    }
-                }
-
-                txtCustomerId.ReadOnly = true;
+                LoadCustomerList();
             }
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             LoadCustomerList();
-            txtSearch.Clear();
             ClearInputs();
-            txtSearch.Focus();
         }
 
         private void ClearInputs()
         {
             txtPhone.ReadOnly = false;
-            txtCustomerName.Clear();
             txtPhone.Clear();
+            txtCustomerName.Clear();
             txtRewardPoints.Clear();
-            txtMembershipTier.Text = "";
-            if (txtRegistrationDate != null) txtRegistrationDate.Clear();
-            if (txtSearch != null) txtSearch.Clear();
-            txtCustomerName.Focus();
-        }
-
-        private void txtRegistrationDate_TextChanged(object sender, EventArgs e)
-        {
+            txtMembershipTier.Text = "Thường";
+            txtRegistrationDate.Text = DateTime.Today.ToString("dd/MM/yyyy");
+            txtSearch.Clear();
+            txtPhone.Focus();
         }
     }
 }
