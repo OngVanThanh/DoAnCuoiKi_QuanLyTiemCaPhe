@@ -146,5 +146,57 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             }
             return initials;
         }
+        // Lấy danh sách lịch làm việc tuần sau phục vụ in báo cáo RDLC / xuất Word
+        public List<ShiftDTO> GetNextWeekScheduleForReport()
+        {
+            List<ShiftDTO> result = new List<ShiftDTO>();
+
+            // 1. Xác định Thứ Hai và Chủ Nhật của tuần sau
+            DateTime today = DateTime.Today;
+            int daysUntilNextMonday = ((int)DayOfWeek.Monday - (int)today.DayOfWeek + 7) % 7;
+            if (daysUntilNextMonday == 0) daysUntilNextMonday = 7;
+
+            DateTime startDate = today.AddDays(daysUntilNextMonday).Date;
+            DateTime endDate = startDate.AddDays(6).Date;
+
+            using (var db = GetContext())
+            {
+                var shifts = db.EmployeeShifts
+                               .Where(s => s.WorkDate >= startDate && s.WorkDate <= endDate)
+                               .ToList();
+                var missions = db.Misions.OrderBy(m => m.Id).ToList();
+                var employees = db.Employees.ToDictionary(e => e.Id, e => e.FullName.Trim());
+
+                string GetEmpName(DateTime date, int sId, int mId)
+                {
+                    var match = shifts.FirstOrDefault(s => s.WorkDate == date && s.ShiftId == sId && s.MisionId == mId);
+                    if (match != null && match.EmployeeId.HasValue && employees.ContainsKey(match.EmployeeId.Value))
+                    {
+                        return employees[match.EmployeeId.Value];
+                    }
+                    return "-"; // Chưa phân công
+                }
+
+                // 2. Duyệt 7 ngày từ Thứ Hai đến Chủ Nhật
+                for (int i = 0; i < 7; i++)
+                {
+                    DateTime targetDate = startDate.AddDays(i);
+                    string dateStr = targetDate.ToString("dd/MM/yyyy") + " (" + targetDate.ToString("ddd") + ")";
+
+                    foreach (var mission in missions)
+                    {
+                        result.Add(new ShiftDTO
+                        {
+                            DateString = dateStr,
+                            MissionName = mission.MissisonName,
+                            Shift1 = GetEmpName(targetDate, 1, mission.Id),
+                            Shift2 = GetEmpName(targetDate, 2, mission.Id),
+                            Shift3 = GetEmpName(targetDate, 3, mission.Id)
+                        });
+                    }
+                }
+            }
+            return result;
+        }
     }
 }

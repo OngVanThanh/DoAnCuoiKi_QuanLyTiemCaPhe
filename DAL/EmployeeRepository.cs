@@ -187,6 +187,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                                 Id = e.Id,
                                 FullName = e.FullName,
                                 Phone = e.Phone,
+                                RoleId = e.RoleId,
                                 Position = r != null ? r.RoleName : "Chưa có"
                             };
 

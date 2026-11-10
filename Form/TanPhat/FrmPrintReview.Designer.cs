@@ -80,10 +80,6 @@
             this.pnlOrderMeta.SuspendLayout();
             this.SuspendLayout();
             // 
-            // orderDetailDTOBindingSource
-            // 
-            this.orderDetailDTOBindingSource.DataSource = typeof(DoAnCuoiKi_QuanLyTiemCaPhe.DTO.OrderDetailDTO);
-            // 
             // pnlHeader
             // 
             this.pnlHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(44)))), ((int)(((byte)(42)))));

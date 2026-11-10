@@ -35,7 +35,6 @@
             this.SDT = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Control = new System.Windows.Forms.DataGridViewButtonColumn();
             this.btnAdd = new System.Windows.Forms.Button();
-            this.btnBulkAttendance = new System.Windows.Forms.Button();
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.btnSearch = new System.Windows.Forms.Button();
             this.pnlEmployeeDetail = new System.Windows.Forms.Panel();
@@ -108,22 +107,13 @@
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(318, 533);
+            this.btnAdd.Location = new System.Drawing.Point(460, 533);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(129, 23);
             this.btnAdd.TabIndex = 1;
             this.btnAdd.Text = "Thêm nhân viên";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
-            // 
-            // btnBulkAttendance
-            // 
-            this.btnBulkAttendance.Location = new System.Drawing.Point(465, 533);
-            this.btnBulkAttendance.Name = "btnBulkAttendance";
-            this.btnBulkAttendance.Size = new System.Drawing.Size(122, 23);
-            this.btnBulkAttendance.TabIndex = 2;
-            this.btnBulkAttendance.Text = "Nhập công";
-            this.btnBulkAttendance.UseVisualStyleBackColor = true;
             // 
             // txtSearch
             // 
@@ -167,7 +157,6 @@
             this.Controls.Add(this.pnlEmployeeDetail);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.txtSearch);
-            this.Controls.Add(this.btnBulkAttendance);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.dgvEmployee);
             this.Name = "FrmEmployee";
@@ -185,7 +174,6 @@
 
         private System.Windows.Forms.DataGridView dgvEmployee;
         private System.Windows.Forms.Button btnAdd;
-        private System.Windows.Forms.Button btnBulkAttendance;
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.DataGridViewTextBoxColumn Id;
