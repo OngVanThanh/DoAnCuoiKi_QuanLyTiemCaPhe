@@ -1,4 +1,4 @@
-﻿using DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
+using DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
 using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
 using System;
 using System.Collections.Generic;
@@ -118,7 +118,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                     return true;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -151,7 +151,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                     return true;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }

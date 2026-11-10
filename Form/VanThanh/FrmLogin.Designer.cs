@@ -1,4 +1,4 @@
-﻿namespace DoAnCuoiKi_QuanLyTiemCaPhe
+namespace DoAnCuoiKi_QuanLyTiemCaPhe
 {
     partial class FrmLogin
     {
@@ -304,6 +304,5 @@
         private System.Windows.Forms.Button btnLogin;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.LinkLabel lnkForgotPassword;
-        private System.Windows.Forms.Button btnTogglePassword;
     }
 }

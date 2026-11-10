@@ -1,4 +1,4 @@
-﻿using DoAnCuoiKi_QuanLyTiemCaPhe.BLL;
+using DoAnCuoiKi_QuanLyTiemCaPhe.BLL;
 using System;
 using System.Data.SqlClient;
 using System.Windows.Forms;
@@ -94,11 +94,15 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 // Tạo chuỗi kết nối mới từ giao diện
                 string newConnString = BuildConnectionString();
 
-                // Lưu thông tin vào App.config (Bạn cần cấu hình chuỗi kết nối trong ConnectionStrings hoặc AppSettings tùy theo cách dùng của dự án)
-                // Ở đây ta lưu thông tin quán vào AppSettings
+                // Lưu chuỗi kết nối vào ConnectionStrings của App.config
+                _configService.UpdateConnectionString("CoffeeShopDB", newConnString);
+                _configService.UpdateConnectionString("DoAnCuoiKi_QuanLyTiemCaPhe.Properties.Settings.CoffeeShopDBConnectionString", newConnString);
+
+                // Lưu thông tin quán vào AppSettings
                 _configService.UpdateAppSetting("ShopName", txtShopName.Text.Trim());
                 _configService.UpdateAppSetting("ShopAddress", txtShopAddress.Text.Trim());
                 _configService.UpdateAppSetting("ShopPhone", txtShopPhone.Text.Trim());
+                _configService.UpdateAppSetting("VATPercent", txtVAT.Text.Trim());
                 _configService.UpdateAppSetting("VATRate", txtVAT.Text.Trim());
 
                 MessageBox.Show("Lưu cấu hình hệ thống thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Database Name="CoffeeShopDB" Class="CoffeeShopDataContextDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
 	<Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=CoffeeShopDB;Integrated Security=True;TrustServerCertificate=True" SettingsObjectName="DoAnCuoiKi_QuanLyTiemCaPhe.Properties.Settings" SettingsPropertyName="CoffeeShopDBConnectionString" Provider="System.Data.SqlClient" />
 	<Table Name="dbo.Areas" Member="Areas">
@@ -158,6 +158,13 @@
 			<Association Name="Shift_EmployeeShift" Member="EmployeeShifts" ThisKey="Id" OtherKey="ShiftId" Type="EmployeeShift" />
 		</Type>
 	</Table>
+	<Table Name="dbo.Mision" Member="Misions">
+		<Type Name="Mision">
+			<Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+			<Column Name="MissisonName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+			<Association Name="Mision_EmployeeShift" Member="EmployeeShifts" ThisKey="Id" OtherKey="MisionId" Type="EmployeeShift" />
+		</Type>
+	</Table>
 	<Table Name="dbo.EmployeeShifts" Member="EmployeeShifts">
 		<Type Name="EmployeeShift">
 			<Column Name="Id" Type="System.String" DbType="VarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -165,8 +172,10 @@
 			<Column Name="ShiftId" Type="System.Int32" DbType="Int" CanBeNull="true" />
 			<Column Name="WorkDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
 			<Column Name="Status" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+			<Column Name="MisionId" Type="System.Int32" DbType="Int" CanBeNull="true" />
 			<Association Name="Shift_EmployeeShift" Member="Shift" ThisKey="ShiftId" OtherKey="Id" Type="Shift" IsForeignKey="true" />
 			<Association Name="Employee_EmployeeShift" Member="Employee" ThisKey="EmployeeId" OtherKey="Id" Type="Employee" IsForeignKey="true" />
+			<Association Name="Mision_EmployeeShift" Member="Mision" ThisKey="MisionId" OtherKey="Id" Type="Mision" IsForeignKey="true" />
 		</Type>
 	</Table>
 	<Table Name="dbo.Orders" Member="Orders">

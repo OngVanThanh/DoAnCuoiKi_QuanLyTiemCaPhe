@@ -1,16 +1,21 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
+using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
 
 namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
 {
     public class ReportRepository
     {
+        private CoffeeShopDataContextDataContext GetContext()
+        {
+            return new CoffeeShopDataContextDataContext(ConfigHelper.GetConnectionString("CoffeeShopDB"));
+        }
         // 1. Thống kê doanh thu theo khoảng thời gian
         public List<RevenueStatisticDTO> GetRevenueReport(DateTime fromDate, DateTime toDate)
         {
-            using (var db = new CoffeeShopDataContextDataContext())
+            using (var db = GetContext())
             {
                 var endDate = toDate.Date.AddDays(1).AddSeconds(-1);
 
@@ -35,7 +40,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
         // 2. Thống kê Top món bán chạy nhất (Best Sellers)
         public List<TopProductDTO> GetBestSellingProducts(int topCount = 10)
         {
-            using (var db = new CoffeeShopDataContextDataContext())
+            using (var db = GetContext())
             {
                 return db.OrderDetails
                     .Where(d => d.Order.Status == "Đã thanh toán")
@@ -62,7 +67,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
         // 3. Top khách hàng có điểm tích lũy cao nhất
         public List<CustomerDTO> GetTopCustomersByPoints(int topCount = 10)
         {
-            using (var db = new CoffeeShopDataContextDataContext())
+            using (var db = GetContext())
             {
                 return db.Customers
                     .OrderByDescending(c => c.RewardPoints)

@@ -108,10 +108,12 @@ GO
 -- 8. BẢNG BÀN ĂN (Tables) - Tấn Phát
 CREATE TABLE [dbo].[Tables] (
     [Id]         INT           IDENTITY (1, 1) NOT NULL PRIMARY KEY,
-    [TableName]  NVARCHAR (50) NOT NULL,
+    [TableName]  NVARCHAR (80) NOT NULL,
     [AreaId]     INT           NOT NULL,
     [Status]     NVARCHAR (20) DEFAULT (N'Trống') NULL,
     [CustomerId] VARCHAR (15)  NULL,
+    [StartTime]  DATETIME      NULL,
+    [EndTime]    DATETIME      NULL,
     FOREIGN KEY ([AreaId]) REFERENCES [dbo].[Areas] ([Id]) ON DELETE CASCADE
 );
 GO
@@ -138,15 +140,29 @@ GO
 
 -- 11. BẢNG MÓN ĂN / ĐỒ UỐNG (Products) - Tuấn Hưng
 CREATE TABLE [dbo].[Products] (
-    [Id]          INT             IDENTITY (1, 1) NOT NULL PRIMARY KEY,
-    [ProductName] NVARCHAR (100)  NOT NULL,
-    [CategoryId]  INT             NOT NULL,
-    [Price]       DECIMAL (18, 2) NOT NULL,
-    [Unit]        NVARCHAR (20)   NOT NULL,
-    [ImagePath]   NVARCHAR (500)  NULL,
-    [IsActive]    BIT             DEFAULT (1) NULL,
+    [Id]               INT             IDENTITY (1, 1) NOT NULL PRIMARY KEY,
+    [ProductName]      NVARCHAR (100)  NOT NULL,
+    [CategoryId]       INT             NOT NULL,
+    [Price]            DECIMAL (18, 2) NOT NULL,
+    [Unit]             NVARCHAR (20)   NOT NULL,
+    [ImagePath]        NVARCHAR (500)  NULL,
+    [IsActive]         BIT             DEFAULT (1) NULL,
+    [PreparationSteps] NVARCHAR (MAX)  NULL,
     FOREIGN KEY ([CategoryId]) REFERENCES [dbo].[Categories] ([Id]) ON DELETE CASCADE,
     CHECK ([Price] >= 0)
+);
+GO
+
+-- 12. BẢNG CÔNG THỨC PHA CHẾ (Recipes) - Barista
+CREATE TABLE [dbo].[Recipes] (
+    [Id]             INT            IDENTITY (1, 1) NOT NULL PRIMARY KEY,
+    [ProductId]      INT            NOT NULL,
+    [IngredientName] NVARCHAR (100) NOT NULL,
+    [Quantity]       FLOAT (53)     NOT NULL,
+    [Unit]           NVARCHAR (20)  NOT NULL,
+    [Note]           NVARCHAR (200) NULL,
+    FOREIGN KEY ([ProductId]) REFERENCES [dbo].[Products] ([Id]) ON DELETE CASCADE,
+    CHECK ([Quantity] > 0)
 );
 GO
 
@@ -300,16 +316,29 @@ INSERT INTO Categories (CategoryName, Description) VALUES
 GO
 
 -- 9. Products
-INSERT INTO Products (ProductName, CategoryId, Price, Unit, ImagePath, IsActive) VALUES 
-(N'Cà phê đen đá', 1, 25000, N'Ly', '', 1),
-(N'Cà phê sữa đá', 1, 29000, N'Ly', '', 1),
-(N'Bạc xỉu', 1, 32000, N'Ly', '', 1),
-(N'Trà đào cam sả', 2, 40000, N'Ly', '', 1),
-(N'Trà sữa trân châu hoàng gia', 2, 45000, N'Ly', '', 1),
-(N'Nước ép cam tươi', 3, 38000, N'Ly', '', 1),
-(N'Sinh tố bơ sáp', 3, 45000, N'Ly', '', 1),
-(N'Bánh Tiramisu', 4, 35000, N'Cái', '', 1),
-(N'Bánh Croissant bơ tỏi', 4, 30000, N'Cái', '', 1);
+INSERT INTO Products (ProductName, CategoryId, Price, Unit, ImagePath, IsActive, PreparationSteps) VALUES 
+(N'Cà phê đen đá', 1, 25000, N'Ly', '', 1, N'1. Tráng phin bằng nước sôi 95°C.\n2. Cho 25g bột cà phê vào phin, ủ 30ml nước sôi trong 2 phút.\n3. Rót thêm 50ml nước sôi chiết xuất.\n4. Thêm 10g đường kính, khuấy đều và thêm đá viên đầy ly.'),
+(N'Cà phê sữa đá', 1, 29000, N'Ly', '', 1, N'1. Rót 30ml sữa đặc vào đáy ly.\n2. Cho 45ml cốt cà phê phin đậm đặc vào khuấy đều.\n3. Thêm đá bi đầy ly và phục vụ kèm ống hút.'),
+(N'Bạc xỉu', 1, 32000, N'Ly', '', 1, N'1. Rót 35ml sữa đặc và 60ml sữa tươi thanh trùng ấm.\n2. Đánh bọt nhẹ.\n3. Rót 20ml cốt cà phê lên bề mặt tạo tầng đẹp mắt.\n4. Thêm đá viên vừa phải.'),
+(N'Trà đào cam sả', 2, 40000, N'Ly', '', 1, N'1. Hãm 120ml cốt trà đen với 1 nhánh sả đập dập.\n2. Thêm 30ml siro đào, 20ml nước cam vắt.\n3. Lắc đều với đá viên trong bình shake.\n4. Rót ra ly, trang trí 2 lát đào ngâm và lát cam tươi.'),
+(N'Trà sữa trân châu hoàng gia', 2, 45000, N'Ly', '', 1, N'1. Pha 120ml cốt hồng trà với 30g bột sữa béo và 25ml nước đường.\n2. Khuấy tan hoàn toàn.\n3. Thêm đá và lắc lạnh.\n4. Múc 1 vá trân châu hoàng gia vào đáy ly, rót trà sữa lên trên.'),
+(N'Nước ép cam tươi', 3, 38000, N'Ly', '', 1, N'1. Vắt 3 quả cam sành mọng nước (khoảng 150ml).\n2. Thêm 20ml nước đường kính và một nhúm muối nhỏ.\n3. Khuấy đều và rót qua ly có sẵn đá.'),
+(N'Sinh tố bơ sáp', 3, 45000, N'Ly', '', 1, N'1. Cho 150g thịt bơ sáp, 40ml sữa đặc, 50ml sữa tươi và đá bào vào máy xay.\n2. Xay nhuyễn mịn trong 45 giây.\n3. Rót ra ly, trang trí lát bơ mỏng.'),
+(N'Bánh Tiramisu', 4, 35000, N'Cái', '', 1, N'Bảo quản mát 2-4°C, phục vụ đĩa nhỏ kèm muỗng tráng miệng.'),
+(N'Bánh Croissant bơ tỏi', 4, 30000, N'Cái', '', 1, N'Làm nóng bằng lò nướng 160°C trong 2 phút trước khi phục vụ.');
+GO
+
+-- 10. Recipes (Công thức thành phần món)
+INSERT INTO Recipes (ProductId, IngredientName, Quantity, Unit, Note) VALUES 
+(1, N'Hạt Cà Phê Robusta', 0.025, N'Kg', N'Xay mức mịn vừa'),
+(1, N'Đường kính trắng', 0.010, N'Kg', N'Gia giảm theo yêu cầu'),
+(2, N'Hạt Cà Phê Robusta', 0.025, N'Kg', N'Cốt phin 45ml'),
+(2, N'Sữa đặc Ngôi Sao', 0.030, N'Lon', N'Rót đáy ly'),
+(3, N'Hạt Cà Phê Robusta', 0.015, N'Kg', N'Tạo tầng cà phê'),
+(3, N'Sữa đặc Ngôi Sao', 0.035, N'Lon', N'Khuấy đều cùng sữa tươi'),
+(3, N'Sữa tươi thanh trùng', 0.060, N'Hộp', N'Sữa tươi không đường'),
+(4, N'Trà đen cao cấp', 0.010, N'Kg', N'Ủ nước 90 độ C'),
+(4, N'Đường kính trắng', 0.020, N'Kg', N'Nước đường tỉ lệ 1:1');
 GO
 
 -- 10. Promotions

@@ -2,15 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
+using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
 
 namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
 {
     public class CustomerRepository
     {
+        private CoffeeShopDataContextDataContext GetContext()
+        {
+            return new CoffeeShopDataContextDataContext(ConfigHelper.GetConnectionString("CoffeeShopDB"));
+        }
         // 1. Lấy toàn bộ danh sách khách hàng
         public List<CustomerDTO> GetAllCustomers()
         {
-            using (var db = new CoffeeShopDataContextDataContext())
+            using (var db = GetContext())
             {
                 return db.Customers
                          .OrderByDescending(c => c.RewardPoints ?? 0)
@@ -31,7 +36,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
         {
             if (string.IsNullOrWhiteSpace(phone)) return null;
 
-            using (var db = new CoffeeShopDataContextDataContext())
+            using (var db = GetContext())
             {
                 var customer = db.Customers.FirstOrDefault(c => c.Phone == phone.Trim());
                 if (customer == null) return null;
@@ -52,7 +57,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
         {
             if (string.IsNullOrWhiteSpace(phone)) return false;
 
-            using (var db = new CoffeeShopDataContextDataContext())
+            using (var db = GetContext())
             {
                 return db.Customers.Any(c => c.Phone == phone.Trim());
             }
@@ -64,7 +69,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             error = string.Empty;
             try
             {
-                using (var db = new CoffeeShopDataContextDataContext())
+                using (var db = GetContext())
                 {
                     if (PhoneExists(dto.Phone))
                     {
@@ -99,7 +104,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             error = string.Empty;
             try
             {
-                using (var db = new CoffeeShopDataContextDataContext())
+                using (var db = GetContext())
                 {
                     var customer = db.Customers.FirstOrDefault(c => c.Phone == dto.Phone.Trim());
                     if (customer == null)
@@ -129,7 +134,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             error = string.Empty;
             try
             {
-                using (var db = new CoffeeShopDataContextDataContext())
+                using (var db = GetContext())
                 {
                     var customer = db.Customers.FirstOrDefault(c => c.Phone == phone.Trim());
                     if (customer == null)
@@ -153,7 +158,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
         // 7. Tìm kiếm theo Số điện thoại hoặc Họ tên
         public List<CustomerDTO> SearchCustomers(string keyword)
         {
-            using (var db = new CoffeeShopDataContextDataContext())
+            using (var db = GetContext())
             {
                 return db.Customers
                          .Where(c => c.Phone.Contains(keyword) || c.CustomerName.Contains(keyword))
@@ -173,7 +178,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
         // 8. Lấy Top khách hàng cho báo cáo RDLC
         public List<CustomerDTO> GetTopCustomersByPoints(int topCount = 10)
         {
-            using (var db = new CoffeeShopDataContextDataContext())
+            using (var db = GetContext())
             {
                 return db.Customers
                          .OrderByDescending(c => c.RewardPoints ?? 0)
@@ -193,7 +198,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
         // 9. Hàm hỗ trợ tìm theo ID số (nếu có module cũ gọi)
         public CustomerDTO GetCustomerById(int id)
         {
-            using (var db = new CoffeeShopDataContextDataContext())
+            using (var db = GetContext())
             {
                 var customer = db.Customers.FirstOrDefault(c => c.Id == id);
                 if (customer == null) return null;

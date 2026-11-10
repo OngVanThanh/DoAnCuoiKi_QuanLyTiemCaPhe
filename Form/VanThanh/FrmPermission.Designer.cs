@@ -1,4 +1,4 @@
-﻿namespace DoAnCuoiKi_QuanLyTiemCaPhe
+namespace DoAnCuoiKi_QuanLyTiemCaPhe
 {
     partial class FrmPermission
     {
@@ -127,7 +127,6 @@
         }
 
         #endregion
-        private System.Windows.Forms.DataGridViewTextBoxColumn ID;
         private System.Windows.Forms.Button btnCreateUser;
         private System.Windows.Forms.DataGridView dgvUsers;
         private System.Windows.Forms.DataGridViewTextBoxColumn Username;

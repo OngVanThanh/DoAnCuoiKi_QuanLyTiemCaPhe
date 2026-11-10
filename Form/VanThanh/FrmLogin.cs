@@ -1,4 +1,4 @@
-﻿using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
+using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
 using System;
 using System.Windows.Forms;
 
@@ -59,31 +59,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             {
                 frm.ShowDialog(this);
             }
-        }
-        private bool _isPasswordHidden = true;
-        private void btnTogglePassword_Click(object sender, EventArgs e)
-        {
-            _isPasswordHidden = !_isPasswordHidden; // Đảo trạng thái
-
-            if (_isPasswordHidden)
-            {
-                // Chuyển về dạng ẩn mật khẩu (hiển thị ký tự *)
-                txtPassword.PasswordChar = '*';
-
-                // Đổi text hoặc icon trên nút (ví dụ dùng ký tự con mắt)
-                btnTogglePassword.Text = "👁";
-            }
-            else
-            {
-                // Chuyển về dạng hiện mật khẩu (ký tự '\0' nghĩa là hiển thị bình thường không che)
-                txtPassword.PasswordChar = '\0';
-
-                // Đổi text hoặc icon trên nút
-                btnTogglePassword.Text = "👁‍🗨";
-            }
-
-            // Đưa con trỏ chuột về lại cuối đoạn text trong ô mật khẩu để trải nghiệm nhập liệu mượt mà
-            txtPassword.SelectionStart = txtPassword.Text.Length;
         }
     }
 }
