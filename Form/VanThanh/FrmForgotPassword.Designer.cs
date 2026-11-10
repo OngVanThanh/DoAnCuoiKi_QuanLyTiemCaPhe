@@ -62,7 +62,6 @@
             // 
             this.txtId.Location = new System.Drawing.Point(196, 81);
             this.txtId.Name = "txtId";
-            this.txtId.PasswordChar = '*';
             this.txtId.Size = new System.Drawing.Size(335, 22);
             this.txtId.TabIndex = 0;
             // 
@@ -108,7 +107,6 @@
             // 
             this.txtPhone.Location = new System.Drawing.Point(196, 112);
             this.txtPhone.Name = "txtPhone";
-            this.txtPhone.PasswordChar = '*';
             this.txtPhone.Size = new System.Drawing.Size(335, 22);
             this.txtPhone.TabIndex = 1;
             // 
