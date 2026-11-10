@@ -18,39 +18,16 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         private void FrmPromotion_Load(object sender, EventArgs e)
         {
-            // Chuẩn hóa DataGridView qua UIHelper
-            UIHelper.StyleDataGridView(dgvPromotion);
-
-            // Khóa ô nhập, chỉ mở Thêm/Sửa/Xóa
+            dgvPromotion.AutoGenerateColumns = false;
             UIHelper.SetFormState(grpPromotionInfo, false, btnAdd, btnEdit, btnDelete, btnSave, btnCancel);
-
             LoadPromotionList();
         }
 
         private void LoadPromotionList()
         {
-            var list = _promotionService.GetAllPromotions();
-            dgvPromotion.DataSource = list;
-
-            if (dgvPromotion.Columns["Id"] != null) dgvPromotion.Columns["Id"].HeaderText = "Mã ID";
-            if (dgvPromotion.Columns["PromoCode"] != null) dgvPromotion.Columns["PromoCode"].HeaderText = "Mã giảm giá";
-            if (dgvPromotion.Columns["DiscountPercent"] != null)
-            {
-                dgvPromotion.Columns["DiscountPercent"].HeaderText = "% Giảm";
-                dgvPromotion.Columns["DiscountPercent"].DefaultCellStyle.Format = "0'%'";
-            }
-            if (dgvPromotion.Columns["StartDate"] != null)
-            {
-                dgvPromotion.Columns["StartDate"].HeaderText = "Ngày bắt đầu";
-                dgvPromotion.Columns["StartDate"].DefaultCellStyle.Format = "dd/MM/yyyy";
-            }
-            if (dgvPromotion.Columns["EndDate"] != null)
-            {
-                dgvPromotion.Columns["EndDate"].HeaderText = "Ngày kết thúc";
-                dgvPromotion.Columns["EndDate"].DefaultCellStyle.Format = "dd/MM/yyyy";
-            }
-            if (dgvPromotion.Columns["IsActive"] != null) dgvPromotion.Columns["IsActive"].HeaderText = "Kích hoạt";
-            if (dgvPromotion.Columns["IsValidNow"] != null) dgvPromotion.Columns["IsValidNow"].HeaderText = "Đang áp dụng";
+            dgvPromotion.AutoGenerateColumns = false;
+            dgvPromotion.DataSource = null;
+            dgvPromotion.DataSource = _promotionService.GetAllPromotions();
         }
 
         private void dgvPromotion_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -58,17 +35,17 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             if (e.RowIndex >= 0 && e.RowIndex < dgvPromotion.Rows.Count)
             {
                 var row = dgvPromotion.Rows[e.RowIndex];
-                txtPromoId.Text = row.Cells["Id"].Value?.ToString();
-                txtPromoCode.Text = row.Cells["PromoCode"].Value?.ToString();
-                txtDiscountPercent.Text = row.Cells["DiscountPercent"].Value?.ToString();
+                txtPromoId.Text = row.Cells["colPromoId"].Value?.ToString();
+                txtPromoCode.Text = row.Cells["colPromoCode"].Value?.ToString();
+                txtDiscountPercent.Text = row.Cells["colDiscountPercent"].Value?.ToString();
 
-                if (DateTime.TryParse(row.Cells["StartDate"].Value?.ToString(), out DateTime startDate))
+                if (DateTime.TryParse(row.Cells["colStartDate"].Value?.ToString(), out DateTime startDate))
                     dtpStartDate.Value = startDate;
 
-                if (DateTime.TryParse(row.Cells["EndDate"].Value?.ToString(), out DateTime endDate))
+                if (DateTime.TryParse(row.Cells["colEndDate"].Value?.ToString(), out DateTime endDate))
                     dtpEndDate.Value = endDate;
 
-                chkIsActive.Checked = Convert.ToBoolean(row.Cells["IsActive"].Value ?? true);
+                chkIsActive.Checked = Convert.ToBoolean(row.Cells["colIsActive"].Value ?? true);
             }
         }
 
@@ -76,9 +53,9 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         {
             _isAdding = true;
 
-            txtPromoId.Text = "";
-            txtPromoCode.Text = "";
-            txtDiscountPercent.Text = "";
+            txtPromoId.Clear();
+            txtPromoCode.Clear();
+            txtDiscountPercent.Clear();
             dtpStartDate.Value = DateTime.Now;
             dtpEndDate.Value = DateTime.Now.AddMonths(1);
             chkIsActive.Checked = true;
@@ -111,8 +88,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            double discount;
-            if (!double.TryParse(txtDiscountPercent.Text.Trim(), out discount))
+            if (!double.TryParse(txtDiscountPercent.Text.Trim(), out double discount))
             {
                 MessageBox.Show("Phần trăm giảm giá không hợp lệ (phải là số)!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -128,10 +104,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 IsActive = chkIsActive.Checked
             };
 
-            string errorMsg;
-            bool success = _promotionService.SavePromotion(dto, out errorMsg);
-
-            if (success)
+            if (_promotionService.SavePromotion(dto, out string errorMsg))
             {
                 MessageBox.Show(_isAdding ? "Tạo mã khuyến mãi thành công!" : "Cập nhật khuyến mãi thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LoadPromotionList();
@@ -156,15 +129,13 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
             if (confirm == DialogResult.Yes)
             {
-                string errorMsg;
-                bool success = _promotionService.DeletePromotion(id, out errorMsg);
-                if (success)
+                if (_promotionService.DeletePromotion(id, out string errorMsg))
                 {
                     MessageBox.Show("Xóa khuyến mãi thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LoadPromotionList();
-                    txtPromoId.Text = "";
-                    txtPromoCode.Text = "";
-                    txtDiscountPercent.Text = "";
+                    txtPromoId.Clear();
+                    txtPromoCode.Clear();
+                    txtDiscountPercent.Clear();
                 }
                 else
                 {

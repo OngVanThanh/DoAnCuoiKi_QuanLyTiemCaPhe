@@ -129,13 +129,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BLL\AppConfigService.cs" />
-        <Compile Include="BLL\CustomerService.cs" />
+    <Compile Include="BLL\CustomerService.cs" />
     <Compile Include="BLL\AuthService.cs" />
     <Compile Include="BLL\EmployeeService.cs" />
     <Compile Include="BLL\InventoryService.cs" />
     <Compile Include="BLL\OrderService.cs" />
     <Compile Include="BLL\ProductService.cs" />
     <Compile Include="BLL\PromotionService.cs" />
+    <Compile Include="BLL\RecipeService.cs" />
     <Compile Include="BLL\TableService.cs" />
     <Compile Include="CoffeeShopDataContext.cs">
       <DependentUpon>CoffeeShopDataContext.dbml</DependentUpon>
@@ -155,7 +156,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CoffeeShopDBDataSet11.xsd</DependentUpon>
     </Compile>
-        <Compile Include="CoffeeShopReportDataSet2.Designer.cs">
+    <Compile Include="CoffeeShopReportDataSet2.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CoffeeShopReportDataSet2.xsd</DependentUpon>
@@ -163,7 +164,9 @@
     <Compile Include="CoffeeShopReportDataSet2.cs">
       <DependentUpon>CoffeeShopReportDataSet2.xsd</DependentUpon>
     </Compile>
-        <Compile Include="DTO\RoleDTO.cs" />
+    <Compile Include="DAL\RecipeRepository.cs" />
+    <Compile Include="DTO\RecipeDTO.cs" />
+    <Compile Include="DTO\RoleDTO.cs" />
     <Compile Include="DTO\ShiftRTO.cs" />
     <Compile Include="DTO\TableDTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />
@@ -174,10 +177,10 @@
     <Compile Include="DAL\PromotionRepository.cs" />
     <Compile Include="DAL\TableRepository.cs" />
     <Compile Include="DAL\UserRepository.cs" />
-        <Compile Include="DAL\CustomerRepository.cs" />
+    <Compile Include="DAL\CustomerRepository.cs" />
     <Compile Include="DAL\ReportRepository.cs" />
     <Compile Include="DTO\AreaDTO.cs" />
-        <Compile Include="DTO\CustomerDTO.cs" />
+    <Compile Include="DTO\CustomerDTO.cs" />
     <Compile Include="DTO\RevenueStatisticDTO.cs" />
     <Compile Include="DTO\TopProductDTO.cs" />
     <Compile Include="DTO\Category.cs" />
@@ -192,6 +195,18 @@
     <Compile Include="DTO\RoleDTO.cs" />
     <Compile Include="DTO\ShiftRTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />
+    <Compile Include="Form\TanPhat\UcReservedTableCard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Form\TanPhat\UcReservedTableCard.Designer.cs">
+      <DependentUpon>UcReservedTableCard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\TuanHung\FrmRecipe.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\TuanHung\FrmRecipe.Designer.cs">
+      <DependentUpon>FrmRecipe.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form\VanThanh\FrmLogin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -234,12 +249,6 @@
     <Compile Include="Form\TanPhat\FrmPrintReview.Designer.cs">
       <DependentUpon>FrmPrintReview.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form\TanPhat\FrmTable.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form\TanPhat\FrmTable.Designer.cs">
-      <DependentUpon>FrmTable.cs</DependentUpon>
-    </Compile>
     <Compile Include="Form\QuangHung\FrmReportWord.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -275,12 +284,6 @@
     </Compile>
     <Compile Include="Form\VanThanh\FrmEmployee.Designer.cs">
       <DependentUpon>FrmEmployee.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Form\TuanHung\FrmInventory.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form\TuanHung\FrmInventory.Designer.cs">
-      <DependentUpon>FrmInventory.cs</DependentUpon>
     </Compile>
     <Compile Include="Form\TuanHung\FrmPromotion.cs">
       <SubType>Form</SubType>
@@ -374,14 +377,8 @@
     <EmbeddedResource Include="Form\TanPhat\RptInvoiceK80.rdlc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\TanPhat\FrmTable.resx">
-      <DependentUpon>FrmTable.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Form\TuanHung\FrmCategory.resx">
       <DependentUpon>FrmCategory.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Form\TuanHung\FrmInventory.resx">
-      <DependentUpon>FrmInventory.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\TuanHung\FrmProduct.resx">
       <DependentUpon>FrmProduct.cs</DependentUpon>
@@ -468,7 +465,7 @@
       <DependentUpon>CoffeeShopDBDataSet11.xsd</DependentUpon>
     </None>
     <None Include="packages.config" />
-        <None Include="CoffeeShopReportDataSet2.xsc">
+    <None Include="CoffeeShopReportDataSet2.xsc">
       <DependentUpon>CoffeeShopReportDataSet2.xsd</DependentUpon>
     </None>
     <None Include="CoffeeShopReportDataSet2.xsd">

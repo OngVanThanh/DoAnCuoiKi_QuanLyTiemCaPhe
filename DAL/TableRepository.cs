@@ -7,16 +7,10 @@ using System.Linq;
 
 namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
 {
-    /// <summary>
-    /// Lớp truy xuất dữ liệu (DAL) cho Bàn (Tables) và Khu vực (Areas).
-    /// Hỗ trợ kết nối SQL Server qua LINQ to SQL và tự động nạp dữ liệu mẫu (Seed Data từ CoffeeShopDB.sql)
-    /// khi máy trạm chưa khởi động dịch vụ SQL Server để phục vụ kiểm thử giao diện & nghiệp vụ.
-    /// </summary>
     internal class TableRepository
     {
         private static bool? _isSqlAvailable;
 
-        // Dữ liệu mẫu dự phòng (đồng bộ 100% với CoffeeShopDB.sql) khi chưa bật SQL Server
         private static readonly List<Area> _fallbackAreas = new List<Area>
         {
             new Area { Id = 1, AreaName = "Khu máy lạnh (Tầng 1)", Description = "Không gian yên tĩnh, làm việc" },
@@ -26,21 +20,16 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
 
         internal static readonly List<Table> FallbackTables = new List<Table>
         {
-            new Table { Id = 1, TableName = "Bàn 01", AreaId = 1, Status = "Trống" },
-            new Table { Id = 2, TableName = "Bàn 02", AreaId = 1, Status = "Trống" },
-            new Table { Id = 3, TableName = "Bàn 03", AreaId = 1, Status = "Trống" },
-            new Table { Id = 4, TableName = "Bàn 04", AreaId = 2, Status = "Trống" },
-            new Table { Id = 5, TableName = "Bàn 05", AreaId = 2, Status = "Trống" },
-            new Table { Id = 6, TableName = "Bàn VIP 01", AreaId = 3, Status = "Trống" }
+            new Table { Id = 1, TableName = "Khách tại quầy / Mang đi", AreaId = 1, Status = "Trống" },
+            new Table { Id = 2, TableName = "Bàn 01 - Khu máy lạnh", AreaId = 1, Status = "Đặt trước", StartTime = DateTime.Now.AddMinutes(-15), EndTime = DateTime.Now.AddHours(2) },
+            new Table { Id = 3, TableName = "Bàn VIP 01", AreaId = 3, Status = "Đặt trước", StartTime = DateTime.Now, EndTime = DateTime.Now.AddHours(3) }
         };
 
-        // 1. Khởi tạo DataContext kết nối cơ sở dữ liệu
         public CoffeeShopDataContextDataContext GetContext()
         {
             return new CoffeeShopDataContextDataContext(ConfigHelper.GetConnectionString("CoffeeShopDB"));
         }
 
-        // Kiểm tra nhanh kết nối SQL Server (Timeout 2 giây để không làm treo giao diện)
         public bool IsDatabaseOnline()
         {
             if (_isSqlAvailable.HasValue)
@@ -67,7 +56,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             return _isSqlAvailable.Value;
         }
 
-        // 2. Lấy toàn bộ danh sách Khu vực (Areas)
         public List<Area> GetAllAreas()
         {
             if (!IsDatabaseOnline())
@@ -79,7 +67,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             }
         }
 
-        // 3. Lấy danh sách Khu vực dưới dạng AreaDTO
         public List<AreaDTO> GetAllAreaDTOs()
         {
             return GetAllAreas()
@@ -92,7 +79,40 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                 .ToList();
         }
 
-        // 4. Lấy thông tin Khu vực theo Id
+        // Tự động tìm hoặc tạo mới Khu vực theo tên người dùng nhập tự do trên TextBox
+        public int GetOrCreateAreaIdByName(string areaName)
+        {
+            string cleanName = string.IsNullOrWhiteSpace(areaName) ? "Khu vực chung" : areaName.Trim();
+
+            if (!IsDatabaseOnline())
+            {
+                var existingFallback = _fallbackAreas.FirstOrDefault(a =>
+                    string.Equals(a.AreaName, cleanName, StringComparison.OrdinalIgnoreCase));
+                if (existingFallback != null)
+                    return existingFallback.Id;
+
+                int nextId = _fallbackAreas.Count > 0 ? _fallbackAreas.Max(a => a.Id) + 1 : 1;
+                _fallbackAreas.Add(new Area { Id = nextId, AreaName = cleanName, Description = "Khu vực đặt bàn" });
+                return nextId;
+            }
+
+            using (var db = GetContext())
+            {
+                var existing = db.Areas.FirstOrDefault(a => a.AreaName.ToLower() == cleanName.ToLower());
+                if (existing != null)
+                    return existing.Id;
+
+                var newArea = new Area
+                {
+                    AreaName = cleanName,
+                    Description = "Khu vực tạo từ màn hình đặt bàn"
+                };
+                db.Areas.InsertOnSubmit(newArea);
+                db.SubmitChanges();
+                return newArea.Id;
+            }
+        }
+
         public Area GetAreaById(int areaId)
         {
             if (!IsDatabaseOnline())
@@ -104,7 +124,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             }
         }
 
-        // 5. Kiểm tra Khu vực có tồn tại không
         public bool AreaExists(int areaId)
         {
             if (!IsDatabaseOnline())
@@ -116,7 +135,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             }
         }
 
-        // 6. Lấy toàn bộ danh sách Bàn (Entity)
         public List<Table> GetAllTables()
         {
             if (!IsDatabaseOnline())
@@ -128,21 +146,22 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             }
         }
 
-        // 7. Lấy danh sách Bàn kèm tên Khu vực để hiển thị lên giao diện
         public List<TableDTO> GetAllTablesWithArea()
         {
             if (!IsDatabaseOnline())
             {
                 return (from table in FallbackTables
                         join area in _fallbackAreas on table.AreaId equals area.Id
-                        orderby table.AreaId, table.Id
+                        orderby table.Id
                         select new TableDTO
                         {
                             Id = table.Id,
                             TableName = table.TableName,
                             AreaId = table.AreaId,
                             AreaName = area.AreaName,
-                            Status = table.Status
+                            Status = table.Status,
+                            StartTime = table.StartTime,
+                            EndTime = table.EndTime
                         }).ToList();
             }
 
@@ -150,29 +169,27 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             {
                 var query =
                     from table in db.Tables
-                    join area in db.Areas
-                        on table.AreaId equals area.Id
-                    orderby table.AreaId, table.Id
+                    join area in db.Areas on table.AreaId equals area.Id
+                    orderby table.Id
                     select new TableDTO
                     {
                         Id = table.Id,
                         TableName = table.TableName,
                         AreaId = table.AreaId,
                         AreaName = area.AreaName,
-                        Status = table.Status
+                        Status = table.Status,
+                        StartTime = table.StartTime,
+                        EndTime = table.EndTime
                     };
 
                 return query.ToList();
             }
         }
 
-        // 8. Lọc danh sách Bàn theo Khu vực (areaId <= 0 sẽ lấy tất cả)
         public List<TableDTO> GetTablesByAreaId(int areaId)
         {
             if (areaId <= 0)
-            {
                 return GetAllTablesWithArea();
-            }
 
             return GetAllTablesWithArea()
                 .Where(t => t.AreaId == areaId)
@@ -180,7 +197,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                 .ToList();
         }
 
-        // 9. Lấy thông tin Bàn theo Id
         public Table GetTableById(int tableId)
         {
             if (!IsDatabaseOnline())
@@ -192,7 +208,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             }
         }
 
-        // 10. Kiểm tra tên bàn đã tồn tại chưa (hỗ trợ loại trừ bàn hiện tại khi cập nhật)
         public bool IsTableNameDuplicate(string tableName, int excludeTableId = -1)
         {
             if (string.IsNullOrWhiteSpace(tableName))
@@ -215,13 +230,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             }
         }
 
-        // 11. Thêm bàn mới vào cơ sở dữ liệu
         public bool InsertTable(Table table)
         {
             if (table == null)
-            {
                 throw new ArgumentNullException(nameof(table));
-            }
 
             if (!IsDatabaseOnline())
             {
@@ -239,13 +251,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             }
         }
 
-        // 12. Cập nhật thông tin bàn
         public bool UpdateTable(Table table)
         {
             if (table == null)
-            {
                 throw new ArgumentNullException(nameof(table));
-            }
 
             if (!IsDatabaseOnline())
             {
@@ -256,6 +265,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                 existing.TableName = table.TableName;
                 existing.AreaId = table.AreaId;
                 existing.Status = table.Status;
+                existing.StartTime = table.StartTime;
+                existing.EndTime = table.EndTime;
                 return true;
             }
 
@@ -267,6 +278,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                     existing.TableName = table.TableName;
                     existing.AreaId = table.AreaId;
                     existing.Status = table.Status;
+                    existing.StartTime = table.StartTime;
+                    existing.EndTime = table.EndTime;
                     db.SubmitChanges();
                     return true;
                 }
@@ -274,7 +287,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             }
         }
 
-        // 13. Cập nhật trạng thái bàn ("Trống", "Có khách", "Đặt trước")
         public bool UpdateTableStatus(int tableId, string status)
         {
             if (!IsDatabaseOnline())
@@ -299,7 +311,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             }
         }
 
-        // 14. Kiểm tra bàn có đang có hóa đơn chưa thanh toán hay không
         public bool HasUnpaidOrders(int tableId)
         {
             if (!IsDatabaseOnline())
@@ -317,7 +328,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             }
         }
 
-        // 15. Kiểm tra bàn đã có lịch sử hóa đơn liên kết trong bảng Orders chưa
         public bool HasAnyOrders(int tableId)
         {
             if (!IsDatabaseOnline())
@@ -331,9 +341,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             }
         }
 
-        // 16. Xóa bàn theo Id
         public bool DeleteTable(int tableId)
         {
+            if (tableId <= 1) return false;
+
             if (!IsDatabaseOnline())
             {
                 var existing = FallbackTables.FirstOrDefault(t => t.Id == tableId);
@@ -349,12 +360,75 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                 var table = db.Tables.FirstOrDefault(t => t.Id == tableId);
                 if (table != null)
                 {
-                    db.Tables.DeleteOnSubmit(table);
+                    if (db.Orders.Any(o => o.TableId == tableId))
+                    {
+                        table.Status = "Trống";
+                        table.StartTime = null;
+                        table.EndTime = null;
+                    }
+                    else
+                    {
+                        db.Tables.DeleteOnSubmit(table);
+                    }
                     db.SubmitChanges();
                     return true;
                 }
                 return false;
             }
+        }
+
+        public int DeleteExpiredReservations()
+        {
+            DateTime now = DateTime.Now;
+            int removedCount = 0;
+
+            if (!IsDatabaseOnline())
+            {
+                var expired = FallbackTables
+                    .Where(t => t.Id > 1 && t.EndTime.HasValue && t.EndTime.Value < now && !HasUnpaidOrders(t.Id))
+                    .ToList();
+
+                foreach (var t in expired)
+                {
+                    FallbackTables.Remove(t);
+                    removedCount++;
+                }
+                return removedCount;
+            }
+
+            using (var db = GetContext())
+            {
+                var expiredTables = db.Tables
+                    .Where(t => t.Id > 1 && t.EndTime != null && t.EndTime < now)
+                    .ToList();
+
+                foreach (var table in expiredTables)
+                {
+                    bool hasUnpaid = db.Orders.Any(o => o.TableId == table.Id && o.Status == "Chưa thanh toán");
+                    if (hasUnpaid)
+                        continue;
+
+                    bool hasHistory = db.Orders.Any(o => o.TableId == table.Id);
+                    if (hasHistory)
+                    {
+                        table.Status = "Trống";
+                        table.StartTime = null;
+                        table.EndTime = null;
+                    }
+                    else
+                    {
+                        db.Tables.DeleteOnSubmit(table);
+                    }
+                    removedCount++;
+                }
+
+                if (removedCount > 0)
+                {
+                    db.SubmitChanges();
+                }
+            }
+
+            return removedCount;
         }
     }
 }

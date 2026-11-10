@@ -16,7 +16,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmOrder());
+            Application.Run(new FrmLogin());
         }
     }
 }

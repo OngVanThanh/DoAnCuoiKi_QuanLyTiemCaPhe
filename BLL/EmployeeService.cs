@@ -45,7 +45,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.BLL
 
             // Kiểm tra độ dài số điện thoại (từ 9 đến 12 ký tự)
             string phone = dto.Phone.Trim();
-            if (phone.Length < 9 || phone.Length > 12)
+            if (phone.Length != 10)
             {
                 errorMsg = "Số điện thoại không đúng định dạng (từ 9 đến 12 chữ số)!";
                 return false;

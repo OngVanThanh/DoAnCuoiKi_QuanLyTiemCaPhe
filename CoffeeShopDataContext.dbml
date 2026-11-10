@@ -48,8 +48,21 @@
 			<Column Name="Unit" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
 			<Column Name="ImagePath" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
 			<Column Name="IsActive" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+			<Column Name="PreparationSteps" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
 			<Association Name="Product_OrderDetail" Member="OrderDetails" ThisKey="Id" OtherKey="ProductId" Type="OrderDetail" />
+			<Association Name="Product_Recipe" Member="Recipes" ThisKey="Id" OtherKey="ProductId" Type="Recipe" />
 			<Association Name="Category_Product" Member="Category" ThisKey="CategoryId" OtherKey="Id" Type="Category" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+		</Type>
+	</Table>
+	<Table Name="dbo.Recipes" Member="Recipes">
+		<Type Name="Recipe">
+			<Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+			<Column Name="ProductId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+			<Column Name="IngredientName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+			<Column Name="Quantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+			<Column Name="Unit" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+			<Column Name="Note" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+			<Association Name="Product_Recipe" Member="Product" ThisKey="ProductId" OtherKey="Id" Type="Product" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
 		</Type>
 	</Table>
 	<Table Name="dbo.Promotions" Member="Promotions">
@@ -66,10 +79,12 @@
 	<Table Name="dbo.Tables" Member="Tables">
 		<Type Name="Table">
 			<Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-			<Column Name="TableName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+			<Column Name="TableName" Type="System.String" DbType="NVarChar(80) NOT NULL" CanBeNull="false" />
 			<Column Name="AreaId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
 			<Column Name="Status" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
 			<Column Name="CustomerId" Type="System.String" DbType="VarChar(15)" CanBeNull="true" />
+			<Column Name="StartTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+			<Column Name="EndTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
 			<Association Name="Table_Order" Member="Orders" ThisKey="Id" OtherKey="TableId" Type="Order" />
 			<Association Name="Area_Table" Member="Area" ThisKey="AreaId" OtherKey="Id" Type="Area" IsForeignKey="true" />
 		</Type>

@@ -1,56 +1,89 @@
 ﻿using DoAnCuoiKi_QuanLyTiemCaPhe.DAL;
+using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DoAnCuoiKi_QuanLyTiemCaPhe
 {
     public partial class FrmMain : Form
     {
-        private User _currentUser;
+        private readonly User _currentUser;
         private Role _currentRole;
-        private Timer _systemTimer;
+
+        public FrmMain() : this(null)
+        {
+        }
+
         public FrmMain(User user)
         {
             InitializeComponent();
             _currentUser = user;
+            if (user != null)
+            {
+                UserSession.Login(user);
+            }
         }
+
         private void FrmMain_Load(object sender, EventArgs e)
         {
-
-            // 1. Hiển thị thông tin người dùng và quyền lên StatusStrip
             if (_currentUser != null)
             {
                 lblCurrentUser.Text = $"Người dùng: {_currentUser.Username}";
                 var userRepository = new UserRepository();
                 _currentRole = userRepository.GetRoleById(_currentUser.RoleId);
-
-                lblCurrentRole.Text = _currentRole != null ? $"Vai trò: {_currentRole.RoleName}" : "Vai trò: Chưa xác định";
-                ApplyPermisisonsToMenu();
+                lblCurrentRole.Text = _currentRole != null ? $"Vai trò: {_currentRole.RoleName}" : "Vai trò: Nhân viên";
+                ApplyPermissionsToSidebar();
             }
-            lblSystemTime.Text = $"Thời gian: {DateTime.Now:dd/MM/yyyy HH:mm:ss}";
-            // 2. Khởi tạo đồng hồ hệ thống để hiển thị thời gian thực trên StatusStrip
-            _systemTimer = new Timer();
-            _systemTimer.Interval = 1000; // Cập nhật mỗi giây
-            _systemTimer.Tick += (s, args) =>
-            {
-                lblSystemTime.Text = $"Thời gian: {DateTime.Now:dd/MM/yyyy HH:mm:ss}";
 
-            };
-            _systemTimer.Start();
-            this.BeginInvoke((MethodInvoker)delegate {
-                FrmOrder frmOrder = new FrmOrder();
-                OpenChildForm(frmOrder);
+            lblSystemTime.Text = $"Thời gian: {DateTime.Now:dd/MM/yyyy HH:mm:ss}";
+
+            // Mở sẵn màn hình POS Bán hàng & Đặt bàn khi vừa đăng nhập
+            this.BeginInvoke((MethodInvoker)delegate
+            {
+                SetActiveSidebarButton(btnNavOrder);
+                OpenChildForm(new FrmOrder());
             });
         }
+
+        private void tmrClock_Tick(object sender, EventArgs e)
+        {
+            lblSystemTime.Text = $"Thời gian: {DateTime.Now:dd/MM/yyyy HH:mm:ss}";
+        }
+
+        private void SetActiveSidebarButton(Button activeBtn)
+        {
+            foreach (Control ctrl in pnlNavButtons.Controls)
+            {
+                if (ctrl is Button btn)
+                {
+                    if (btn == activeBtn)
+                    {
+                        btn.BackColor = Color.FromArgb(111, 78, 55);
+                        btn.ForeColor = Color.White;
+                        btn.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+                    }
+                    else
+                    {
+                        btn.BackColor = Color.FromArgb(48, 29, 26);
+                        btn.ForeColor = Color.FromArgb(240, 232, 225);
+                        btn.Font = new Font("Segoe UI", 9.5F, FontStyle.Regular);
+                    }
+                }
+            }
+        }
+
         private void OpenChildForm(Form childForm)
         {
+            foreach (Control ctrl in pnlContent.Controls)
+            {
+                if (ctrl is Form oldForm)
+                {
+                    oldForm.Close();
+                    oldForm.Dispose();
+                }
+            }
+
             pnlContent.Controls.Clear();
             childForm.TopLevel = false;
             childForm.FormBorderStyle = FormBorderStyle.None;
@@ -58,109 +91,123 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             pnlContent.Controls.Add(childForm);
             childForm.Show();
         }
-        private  void ApplyPermisisonsToMenu()
+
+        private void ApplyPermissionsToSidebar()
         {
-            int roleId = _currentUser.RoleId;
-            if (roleId == 1) // Admin
+            int roleId = _currentUser != null ? _currentUser.RoleId : 1;
+
+            if (roleId == 1) // Quản lý / Admin: toàn quyền
             {
-                menuSystem.Visible = true;
-                menuCategory.Visible = true;
-                menuBusiness.Visible = true;
-                menuReport.Visible = true;
-                menuPermission.Visible = true;
+                return;
             }
-            else if (roleId == 2)
+            else if (roleId == 2) // Thu ngân: Bán hàng, Công thức, Khách hàng, Khuyến mãi, Thống kê & Báo cáo
             {
-                menuItemAppConfig.Visible = false;
-                menuItemCategory.Visible = false;
-                menuItemProduct.Visible = false;
-                menuItemEmployee.Visible = false;
-                menuItemInventory.Visible = false;
-                menuPermission.Visible = false;
+                btnNavProduct.Visible = false;
+                btnNavCategory.Visible = false;
+                lblGroupAdmin.Visible = false;
+                btnNavEmployee.Visible = false;
+                btnNavPermission.Visible = false;
+                btnNavAppConfig.Visible = false;
             }
-            else if (roleId == 3) // Staff
+            else // Pha chế / Phục vụ: POS Bán hàng, Công thức Barista, Khách hàng
             {
-                menuItemAppConfig.Visible = false;
-                menuCategory.Visible = false;
-                menuItemPromotion.Visible = false;
-                menuReport.Visible = false;
-                menuPermission.Visible = false;
+                lblGroupCatalog.Visible = false;
+                btnNavProduct.Visible = false;
+                btnNavCategory.Visible = false;
+                btnNavPromotion.Visible = false;
+                lblGroupReport.Visible = false;
+                btnNavChart.Visible = false;
+                btnNavReport.Visible = false;
+                lblGroupAdmin.Visible = false;
+                btnNavEmployee.Visible = false;
+                btnNavPermission.Visible = false;
+                btnNavAppConfig.Visible = false;
             }
         }
-        private void menuItemAppConfig_Click(object sender, EventArgs e)
+
+        private void btnNavOrder_Click(object sender, EventArgs e)
         {
-            FrmAppConfig frm = new FrmAppConfig();
-            frm.ShowDialog();
+            SetActiveSidebarButton(btnNavOrder);
+            OpenChildForm(new FrmOrder());
         }
 
-        private void menuItemLogout_Click(object sender, EventArgs e)
+        private void btnNavRecipe_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            FrmLogin frmLogin = new FrmLogin();
-            frmLogin.ShowDialog();
-            this.Close();
+            SetActiveSidebarButton(btnNavRecipe);
+            OpenChildForm(new FrmRecipe());
         }
 
-        private void menuItemExit_Click(object sender, EventArgs e)
+        private void btnNavCustomer_Click(object sender, EventArgs e)
         {
-            Application.Exit();
-        }
-
-        private void menuItemProduct_Click(object sender, EventArgs e)
-        {
-            OpenChildForm(new FrmProduct());
-        }
-
-        private void menuItemCategory_Click(object sender, EventArgs e)
-        {
-            OpenChildForm(new FrmCategory());
-        }
-
-        private void menuItemEmployee_Click(object sender, EventArgs e)
-        {
-            OpenChildForm(new FrmEmployee());
-        }
-
-        private void menuItemTable_Click(object sender, EventArgs e)
-        {
-            OpenChildForm(new FrmTable());
-        }
-
-        private void menuItemCustomer_Click(object sender, EventArgs e)
-        {
+            SetActiveSidebarButton(btnNavCustomer);
             OpenChildForm(new FrmCustomer());
         }
 
-        private void menuItemOrder_Click(object sender, EventArgs e)
+        private void btnNavProduct_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new FrmOrder());
-
+            SetActiveSidebarButton(btnNavProduct);
+            OpenChildForm(new FrmProduct());
         }
 
-        private void menuItemInventory_Click(object sender, EventArgs e)
+        private void btnNavCategory_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new FrmInventory());
+            SetActiveSidebarButton(btnNavCategory);
+            OpenChildForm(new FrmCategory());
         }
 
-        private void menuItemPromotion_Click(object sender, EventArgs e)
+        private void btnNavPromotion_Click(object sender, EventArgs e)
         {
+            SetActiveSidebarButton(btnNavPromotion);
             OpenChildForm(new FrmPromotion());
         }
 
-        private void menuItemReprotWord_Click(object sender, EventArgs e)
+        private void btnNavChart_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new FrmReportWord());
-        }
-
-        private void menuItemChart_Click(object sender, EventArgs e)
-        {
+            SetActiveSidebarButton(btnNavChart);
             OpenChildForm(new FrmChart());
         }
 
-        private void menuItemPermission_Click(object sender, EventArgs e)
+        private void btnNavReport_Click(object sender, EventArgs e)
         {
-            FrmPermission frm = new FrmPermission();
-            frm.ShowDialog();
+            SetActiveSidebarButton(btnNavReport);
+            OpenChildForm(new FrmReportWord());
+        }
+
+        private void btnNavEmployee_Click(object sender, EventArgs e)
+        {
+            SetActiveSidebarButton(btnNavEmployee);
+            OpenChildForm(new FrmEmployee());
+        }
+
+        private void btnNavPermission_Click(object sender, EventArgs e)
+        {
+            SetActiveSidebarButton(btnNavPermission);
+            OpenChildForm(new FrmPermission());
+        }
+
+        private void btnNavAppConfig_Click(object sender, EventArgs e)
+        {
+            SetActiveSidebarButton(btnNavAppConfig);
+            using (FrmAppConfig frm = new FrmAppConfig())
+            {
+                frm.ShowDialog(this);
+            }
+        }
+
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            UserSession.Logout();
+            this.Hide();
+            using (FrmLogin frmLogin = new FrmLogin())
+            {
+                frmLogin.ShowDialog();
+            }
+            this.Close();
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
