@@ -10,22 +10,25 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
         // 1. Thống kê doanh thu theo khoảng thời gian
         public List<RevenueStatisticDTO> GetRevenueReport(DateTime fromDate, DateTime toDate)
         {
-            using (var db = new CoffeeShopDataContextDataContext()) // Đổi đúng tên DataContext của bạn
+            using (var db = new CoffeeShopDataContextDataContext())
             {
-                var query = from o in db.Orders
-                            where o.OrderDate >= fromDate.Date
-                               && o.OrderDate <= toDate.Date.AddDays(1).AddSeconds(-1)
-                               && o.Status == "Đã thanh toán"
-                            group o by o.OrderDate.Value.Date into g
-                            select new RevenueStatisticDTO
-                            {
-                                Date = g.Key,
-                                TotalOrders = g.Count(),
-                                TotalDiscount = g.Sum(x => x.DiscountAmount ?? 0m),
-                                TotalRevenue = g.Sum(x => x.FinalAmount)
-                            };
+                var endDate = toDate.Date.AddDays(1).AddSeconds(-1);
 
-                return query.OrderBy(x => x.Date).ToList();
+                return db.Orders
+                    .Where(o => o.OrderDate >= fromDate.Date
+                             && o.OrderDate <= endDate
+                             && o.Status == "Đã thanh toán")
+                    .GroupBy(o => o.OrderDate.Value.Date)
+                    .Select(g => new RevenueStatisticDTO
+                    {
+                        Date = g.Key,
+                        TotalOrders = g.Count(),
+                        TotalAmount = g.Sum(x => x.TotalAmount),            // Tiền gốc trước giảm
+                        TotalDiscount = g.Sum(x => x.DiscountAmount ?? 0m), // Chiết khấu
+                        TotalRevenue = g.Sum(x => x.FinalAmount)            // Thực thu
+                    })
+                    .OrderBy(x => x.Date)
+                    .ToList();
             }
         }
 
@@ -34,19 +37,25 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
         {
             using (var db = new CoffeeShopDataContextDataContext())
             {
-                var query = from d in db.OrderDetails
-                            where d.Order.Status == "Đã thanh toán"
-                            group d by new { d.ProductId, d.Product.ProductName, d.Product.Category.CategoryName } into g
-                            select new TopProductDTO
-                            {
-                                ProductId = g.Key.ProductId,
-                                ProductName = g.Key.ProductName,
-                                CategoryName = g.Key.CategoryName,
-                                QuantitySold = g.Sum(x => x.Quantity),
-                                TotalAmount = g.Sum(x => (x.Quantity) * (x.UnitPrice))
-                            };
-
-                return query.OrderByDescending(x => x.QuantitySold).Take(topCount).ToList();
+                return db.OrderDetails
+                    .Where(d => d.Order.Status == "Đã thanh toán")
+                    .GroupBy(d => new
+                    {
+                        d.ProductId,
+                        d.Product.ProductName,
+                        d.Product.Category.CategoryName
+                    })
+                    .Select(g => new TopProductDTO
+                    {
+                        ProductId = g.Key.ProductId,
+                        ProductName = g.Key.ProductName,
+                        CategoryName = g.Key.CategoryName,
+                        QuantitySold = g.Sum(x => x.Quantity),
+                        TotalAmount = g.Sum(x => x.Quantity * x.UnitPrice)
+                    })
+                    .OrderByDescending(x => x.QuantitySold)
+                    .Take(topCount)
+                    .ToList();
             }
         }
 
@@ -55,19 +64,18 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
         {
             using (var db = new CoffeeShopDataContextDataContext())
             {
-                var query = from c in db.Customers
-                            orderby c.RewardPoints descending
-                            select new CustomerDTO
-                            {
-                                Id = c.Id.ToString(),
-                                CustomerName = c.CustomerName,
-                                Phone = c.Phone,
-                                RewardPoints = c.RewardPoints ?? 0,
-                                MembershipTier = c.MembershipTier,
-                                RegistrationDate = (c.RegistrationDate ?? DateTime.Now).Date
-                            };
-
-                return query.Take(topCount).ToList();
+                return db.Customers
+                    .OrderByDescending(c => c.RewardPoints)
+                    .Take(topCount)
+                    .Select(c => new CustomerDTO
+                    {
+                        CustomerName = c.CustomerName,
+                        Phone = c.Phone,
+                        RewardPoints = c.RewardPoints ?? 0,
+                        MembershipTier = c.MembershipTier,
+                        RegistrationDate = (c.RegistrationDate ?? DateTime.Now).Date
+                    })
+                    .ToList();
             }
         }
     }

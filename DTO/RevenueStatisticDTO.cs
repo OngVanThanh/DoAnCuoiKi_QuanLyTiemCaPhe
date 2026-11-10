@@ -4,33 +4,28 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DTO
 {
     public class RevenueStatisticDTO
     {
-        // 1. Các trường thông tin cho báo cáo doanh thu
         public DateTime Date { get; set; }
         public int TotalOrders { get; set; }
-        public decimal TotalDiscount { get; set; }
-        public decimal TotalRevenue { get; set; }
+        public decimal TotalAmount { get; set; }     // Thêm thuộc tính này (Tiền gốc trước giảm)
+        public decimal TotalDiscount { get; set; }   // Tiền giảm giá
+        public decimal TotalRevenue { get; set; }    // Tiền thực thu sau giảm (FinalAmount)
 
-        // 2. Constructor không tham số (Bắt buộc để RDLC nhận diện Object DataSource)
         public RevenueStatisticDTO()
         {
             Date = DateTime.Today;
             TotalOrders = 0;
+            TotalAmount = 0m;
             TotalDiscount = 0m;
             TotalRevenue = 0m;
         }
 
-        // 3. Constructor đầy đủ tham số
-        public RevenueStatisticDTO(DateTime date, int totalOrders, decimal totalDiscount, decimal totalRevenue)
+        public RevenueStatisticDTO(DateTime date, int totalOrders, decimal totalAmount, decimal totalDiscount, decimal totalRevenue)
         {
             Date = date;
             TotalOrders = totalOrders;
+            TotalAmount = totalAmount;
             TotalDiscount = totalDiscount;
             TotalRevenue = totalRevenue;
-        }
-
-        public override string ToString()
-        {
-            return $"{Date:dd/MM/yyyy}: {TotalOrders} đơn - Doanh thu: {TotalRevenue:N0} đ";
         }
     }
 }

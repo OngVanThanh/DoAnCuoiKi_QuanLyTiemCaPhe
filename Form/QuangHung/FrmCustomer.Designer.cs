@@ -43,7 +43,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
@@ -78,7 +77,6 @@
             this.dgvCustomer.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgvCustomer.ColumnHeadersHeight = 36;
             this.dgvCustomer.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Id,
             this.CustomerName,
             this.Phone,
             this.RewardPoints,
@@ -224,11 +222,9 @@
             this.pnlAddData.Controls.Add(this.label4);
             this.pnlAddData.Controls.Add(this.label3);
             this.pnlAddData.Controls.Add(this.label2);
-            this.pnlAddData.Controls.Add(this.label1);
             this.pnlAddData.Controls.Add(this.btnDelete);
             this.pnlAddData.Controls.Add(this.btnEdit);
             this.pnlAddData.Controls.Add(this.btnAdd);
-            this.pnlAddData.Controls.Add(this.txtCustomerId);
             this.pnlAddData.Controls.Add(this.lblMembershipTier);
             this.pnlAddData.Controls.Add(this.txtRewardPoints);
             this.pnlAddData.Controls.Add(this.txtPhone);
@@ -417,7 +413,6 @@
         #endregion
 
         private System.Windows.Forms.DataGridView dgvCustomer;
-        private System.Windows.Forms.TextBox txtCustomerId;
         private System.Windows.Forms.TextBox txtRewardPoints;
         private System.Windows.Forms.TextBox txtCustomerName;
         private System.Windows.Forms.TextBox txtPhone;
@@ -427,7 +422,6 @@
         private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnSearch;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
@@ -436,7 +430,6 @@
         private System.Windows.Forms.TextBox txtRegistrationDate;
         private System.Windows.Forms.TextBox txtMembershipTier;
         private System.Windows.Forms.Button btnRefresh;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Id;
         private System.Windows.Forms.DataGridViewTextBoxColumn CustomerName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Phone;
         private System.Windows.Forms.DataGridViewTextBoxColumn RewardPoints;

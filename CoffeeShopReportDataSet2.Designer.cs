@@ -357,6 +357,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe {
             
             private global::System.Data.DataColumn columnTotalRevenue;
             
+            private global::System.Data.DataColumn columnTotalAmount;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "18.0.0.0")]
             public RevenueStatisticDTODataTable() {
@@ -424,6 +426,14 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "18.0.0.0")]
+            public global::System.Data.DataColumn TotalAmountColumn {
+                get {
+                    return this.columnTotalAmount;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "18.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -459,13 +469,14 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "18.0.0.0")]
-            public RevenueStatisticDTORow AddRevenueStatisticDTORow(System.DateTime Date, int TotalOrders, decimal TotalDiscount, decimal TotalRevenue) {
+            public RevenueStatisticDTORow AddRevenueStatisticDTORow(System.DateTime Date, int TotalOrders, decimal TotalDiscount, decimal TotalRevenue, decimal TotalAmount) {
                 RevenueStatisticDTORow rowRevenueStatisticDTORow = ((RevenueStatisticDTORow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Date,
                         TotalOrders,
                         TotalDiscount,
-                        TotalRevenue};
+                        TotalRevenue,
+                        TotalAmount};
                 rowRevenueStatisticDTORow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowRevenueStatisticDTORow);
                 return rowRevenueStatisticDTORow;
@@ -492,6 +503,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe {
                 this.columnTotalOrders = base.Columns["TotalOrders"];
                 this.columnTotalDiscount = base.Columns["TotalDiscount"];
                 this.columnTotalRevenue = base.Columns["TotalRevenue"];
+                this.columnTotalAmount = base.Columns["TotalAmount"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -505,6 +517,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe {
                 base.Columns.Add(this.columnTotalDiscount);
                 this.columnTotalRevenue = new global::System.Data.DataColumn("TotalRevenue", typeof(decimal), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTotalRevenue);
+                this.columnTotalAmount = new global::System.Data.DataColumn("TotalAmount", typeof(decimal), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTotalAmount);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1331,6 +1345,22 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "18.0.0.0")]
+            public decimal TotalAmount {
+                get {
+                    try {
+                        return ((decimal)(this[this.tableRevenueStatisticDTO.TotalAmountColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'TotalAmount\' in table \'RevenueStatisticDTO\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableRevenueStatisticDTO.TotalAmountColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "18.0.0.0")]
             public bool IsDateNull() {
                 return this.IsNull(this.tableRevenueStatisticDTO.DateColumn);
             }
@@ -1375,6 +1405,18 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "18.0.0.0")]
             public void SetTotalRevenueNull() {
                 this[this.tableRevenueStatisticDTO.TotalRevenueColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "18.0.0.0")]
+            public bool IsTotalAmountNull() {
+                return this.IsNull(this.tableRevenueStatisticDTO.TotalAmountColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "18.0.0.0")]
+            public void SetTotalAmountNull() {
+                this[this.tableRevenueStatisticDTO.TotalAmountColumn] = global::System.Convert.DBNull;
             }
         }
         

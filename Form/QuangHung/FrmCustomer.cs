@@ -43,7 +43,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
             CustomerDTO newCustomer = new CustomerDTO
             {
-                Id = txtCustomerId.Text.Trim(),
                 CustomerName = txtCustomerName.Text.Trim(),
                 Phone = txtPhone.Text.Trim(),
                 RewardPoints = points,
@@ -69,7 +68,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
             CustomerDTO customer = new CustomerDTO
             {
-                Id = txtCustomerId.Text.Trim(),
                 CustomerName = txtCustomerName.Text.Trim(),
                 Phone = txtPhone.Text.Trim(),
                 RewardPoints = points,
@@ -90,22 +88,23 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            string id = txtCustomerId.Text.Trim();
+            // Sử dụng số điện thoại làm khóa định danh để xóa
+            string phone = txtPhone.Text.Trim();
 
-            if (string.IsNullOrEmpty(id))
+            if (string.IsNullOrEmpty(phone))
             {
                 MessageBox.Show("Vui lòng chọn khách hàng muốn xóa từ danh sách!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            var confirm = MessageBox.Show($"Bạn có chắc chắn muốn xóa khách hàng có mã [{id}] không?",
+            var confirm = MessageBox.Show($"Bạn có chắc chắn muốn xóa khách hàng có số điện thoại [{phone}] không?",
                                           "Xác nhận xóa",
                                           MessageBoxButtons.YesNo,
                                           MessageBoxIcon.Question);
 
             if (confirm == DialogResult.Yes)
             {
-                if (_customerService.Delete(id, out string error))
+                if (_customerService.Delete(phone, out string error))
                 {
                     MessageBox.Show("Đã xóa khách hàng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LoadCustomerList();
@@ -124,7 +123,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
             if (string.IsNullOrWhiteSpace(searchKeyword))
             {
-                MessageBox.Show("Vui lòng nhập Mã khách hàng (ID) vào ô tìm kiếm!",
+                MessageBox.Show("Vui lòng nhập Số điện thoại vào ô tìm kiếm!",
                                 "Thông báo",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Warning);
@@ -134,7 +133,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
             if (!int.TryParse(searchKeyword, out int customerId))
             {
-                MessageBox.Show("Mã khách hàng tìm kiếm phải là chữ số!",
+                MessageBox.Show("Số điện thoại không hợp lệ! Vui lòng chỉ nhập từ 9 đến 11 chữ số.",
                                 "Lỗi định dạng",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Warning);
@@ -153,7 +152,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
             else
             {
-                MessageBox.Show($"Không tìm thấy khách hàng nào có Mã ID: {customerId}!",
+                MessageBox.Show($"Không tìm thấy khách hàng nào có Số điện thoại: {searchKeyword}!",
                                 "Kết quả tìm kiếm",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
@@ -222,7 +221,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                     txtMembershipTier.Text = row.Cells[4].Value?.ToString() ?? "Bronze";
                 if (row.Cells.Count > 5)
                 {
-                    object regVal = row.Cells[5].Value;
+                    object regVal = row.Cells[4].Value;
                     if (regVal != null && DateTime.TryParse(regVal.ToString(), out DateTime regDate))
                     {
                         txtRegistrationDate.Text = regDate.ToString("dd/MM/yyyy");
@@ -247,15 +246,14 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         private void ClearInputs()
         {
-            txtCustomerId.ReadOnly = false;
-            txtCustomerId.Clear();
+            txtPhone.ReadOnly = false;
             txtCustomerName.Clear();
             txtPhone.Clear();
             txtRewardPoints.Clear();
             txtMembershipTier.Text = "";
             if (txtRegistrationDate != null) txtRegistrationDate.Clear();
             if (txtSearch != null) txtSearch.Clear();
-            txtCustomerId.Focus();
+            txtCustomerName.Focus();
         }
 
         private void txtRegistrationDate_TextChanged(object sender, EventArgs e)

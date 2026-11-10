@@ -1,10 +1,12 @@
-﻿using System;
+﻿using DoAnCuoiKi_QuanLyTiemCaPhe.DAL;
+using DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
+using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
+using Microsoft.Reporting.WinForms;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-using Microsoft.Reporting.WinForms;
-using DoAnCuoiKi_QuanLyTiemCaPhe.DAL;
-using DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
+using System.Configuration;
 
 namespace DoAnCuoiKi_QuanLyTiemCaPhe
 {
@@ -72,6 +74,17 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 reportViewer1.LocalReport.DataSources.Clear();
                 string rdlcPath = "";
 
+                // 1. ĐỌC THÔNG TIN QUÁN TRỰC TIẾP TỪ THẺ <appSettings> CỦA App.config
+                string storeName = ConfigurationManager.AppSettings["ShopName"] ?? "Tên Quán Cà Phê";
+                string storeAddress = ConfigurationManager.AppSettings["ShopAddress"] ?? "Địa chỉ quán";
+
+                // Khởi tạo danh sách tham số thông tin quán
+                List<ReportParameter> shopParams = new List<ReportParameter>
+        {
+            new ReportParameter("StoreName", storeName),
+            new ReportParameter("StoreAddress", storeAddress)
+        };
+
                 switch (cboReportType.SelectedIndex)
                 {
                     case 0: // Báo cáo Doanh thu
@@ -79,15 +92,28 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                         var revenueData = _reportRepo.GetRevenueReport(dtpFromDate.Value, dtpToDate.Value);
 
                         reportViewer1.LocalReport.ReportPath = rdlcPath;
+                        reportViewer1.LocalReport.DataSources.Clear();
                         reportViewer1.LocalReport.DataSources.Add(new ReportDataSource("DataSetReport", revenueData));
+
+                        // CHỈ TRUYỀN CÁC PARAMETER CÓ THẬT TRONG FILE RDLC (Ví dụ StoreName, StoreAddress)
+                        List<ReportParameter> reportParams = new List<ReportParameter>
+    {
+        new ReportParameter("StoreName", ConfigurationManager.AppSettings["ShopName"] ?? "Tên Quán"),
+        new ReportParameter("StoreAddress", ConfigurationManager.AppSettings["ShopAddress"] ?? "Địa chỉ quán")
+    };
+
+                        reportViewer1.LocalReport.SetParameters(reportParams);
                         break;
 
-                    case 1: // Top Món bán chạy
+                    case 1: // Top Món bán chạy nhất
                         rdlcPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Form\QuangHung\RptBestSeller.rdlc");
                         var productData = _reportRepo.GetBestSellingProducts(10);
 
                         reportViewer1.LocalReport.ReportPath = rdlcPath;
                         reportViewer1.LocalReport.DataSources.Add(new ReportDataSource("DataSetReport", productData));
+
+                        // Gán tham số Tên và Địa chỉ quán vào RptBestSeller.rdlc
+                        reportViewer1.LocalReport.SetParameters(shopParams);
                         break;
 
                     case 2: // Top Khách hàng thân thiết
@@ -96,10 +122,12 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
                         reportViewer1.LocalReport.ReportPath = rdlcPath;
                         reportViewer1.LocalReport.DataSources.Add(new ReportDataSource("DataSetReport", customerData));
+
+                        // Gán tham số Tên và Địa chỉ quán vào RptTopCustomers.rdlc
+                        reportViewer1.LocalReport.SetParameters(shopParams);
                         break;
                 }
 
-                // Cấu hình chế độ hiển thị trang in
                 reportViewer1.SetDisplayMode(DisplayMode.PrintLayout);
                 reportViewer1.ZoomMode = ZoomMode.Percent;
                 reportViewer1.ZoomPercent = 100;
@@ -108,7 +136,12 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi hiển thị báo cáo: " + ex.Message, "Thông báo lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string msg = ex.Message;
+                if (ex.InnerException != null)
+                {
+                    msg += "\nChi tiết lỗi: " + ex.InnerException.Message;
+                }
+                MessageBox.Show("Lỗi hiển thị báo cáo: " + msg, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -119,80 +152,51 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         {
             try
             {
-                // Kiểm tra xem báo cáo đã được nạp hay chưa
+                // 1. Kiểm tra xem báo cáo đã được nạp hay chưa
                 if (string.IsNullOrEmpty(reportViewer1.LocalReport.ReportPath))
                 {
-                    MessageBox.Show("Vui lòng tải dữ liệu báo cáo trước khi xuất file!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Vui lòng tải dữ liệu báo cáo trước khi xuất file!",
+                                    "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // Đặt tên file gợi ý theo loại báo cáo và ngày giờ hiện tại
-                string reportName = "";
-                switch (cboReportType.SelectedIndex)
-                {
-                    case 0:
-                        reportName = $"BaoCaoDoanhThu_{dtpFromDate.Value:yyyyMMdd}_{dtpToDate.Value:yyyyMMdd}";
-                        break;
-                    case 1:
-                        reportName = $"TopMonBanChay_{DateTime.Now:yyyyMMdd_HHmm}";
-                        break;
-                    case 2:
-                        reportName = $"TopKhachHangVIP_{DateTime.Now:yyyyMMdd_HHmm}";
-                        break;
-                    default:
-                        reportName = "BaoCao";
-                        break;
-                }
-
+                // 2. Mở hộp thoại chọn nơi lưu file Word
                 using (SaveFileDialog sfd = new SaveFileDialog())
                 {
-                    sfd.Filter = "Word Document (*.docx)|*.docx|Word 97-2003 (*.doc)|*.doc";
-                    sfd.FileName = reportName;
+                    sfd.Filter = "Word Document (*.docx)|*.docx";
+                    sfd.FileName = $"BaoCao_{DateTime.Now:yyyyMMdd_HHmmss}";
                     sfd.Title = "Lưu Báo Cáo Sang Microsoft Word";
 
                     if (sfd.ShowDialog() == DialogResult.OK)
                     {
-                        // Chọn định dạng phù hợp dựa theo phần mở rộng người dùng chọn
-                        string format = sfd.FileName.EndsWith(".doc", StringComparison.OrdinalIgnoreCase) ? "WORD" : "WORDOPENXML";
+                        // 3. GỌI LỚP WORDEXPORTHELPER TẠI ĐÂY
+                        string errorMessage;
+                        bool isSuccess = WordExportHelper.ExportReportToWord(reportViewer1.LocalReport, sfd.FileName, out errorMessage);
 
-                        Warning[] warnings;
-                        string[] streamIds;
-                        string mimeType = string.Empty;
-                        string encoding = string.Empty;
-                        string extension = string.Empty;
-
-                        // Kết xuất trực tiếp nội dung RDLC sang mảng byte của Word
-                        byte[] bytes = reportViewer1.LocalReport.Render(
-                            format,
-                            null,
-                            out mimeType,
-                            out encoding,
-                            out extension,
-                            out streamIds,
-                            out warnings
-                        );
-
-                        // Ghi dữ liệu ra file
-                        File.WriteAllBytes(sfd.FileName, bytes);
-
-                        var confirmOpen = MessageBox.Show(
-                            "Xuất báo cáo sang Word thành công!\nBạn có muốn mở file vừa xuất không?",
-                            "Thành công",
-                            MessageBoxButtons.YesNo,
-                            MessageBoxIcon.Information
-                        );
-
-                        // Mở ngay file Word nếu người dùng chọn Yes
-                        if (confirmOpen == DialogResult.Yes)
+                        if (isSuccess)
                         {
-                            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(sfd.FileName) { UseShellExecute = true });
+                            var confirm = MessageBox.Show(
+                                "Xuất báo cáo sang Word thành công!\nBạn có muốn mở file vừa xuất không?",
+                                "Thành công",
+                                MessageBoxButtons.YesNo,
+                                MessageBoxIcon.Information
+                            );
+
+                            if (confirm == DialogResult.Yes)
+                            {
+                                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(sfd.FileName) { UseShellExecute = true });
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Lỗi xuất file Word: " + errorMessage, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi xuất file Word: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Đã xảy ra lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
