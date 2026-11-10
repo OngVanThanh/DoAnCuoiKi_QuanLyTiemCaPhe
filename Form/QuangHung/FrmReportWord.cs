@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using System.Configuration;
 
 namespace DoAnCuoiKi_QuanLyTiemCaPhe
 {
@@ -73,12 +74,12 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 reportViewer1.LocalReport.DataSources.Clear();
                 string rdlcPath = "";
 
-                // 1. Khai báo thông tin quán (có thể lấy từ CSDL hoặc biến cấu hình chung)
-                string storeName = "THE COFFEE HOUSE - QUẬN 1";
-                string storeAddress = "123 Đường Cà Phê, Phường Bến Nghé, Quận 1, TP.HCM";
+                // 1. ĐỌC THÔNG TIN QUÁN TRỰC TIẾP TỪ THẺ <appSettings> CỦA App.config
+                string storeName = ConfigurationManager.AppSettings["ShopName"] ?? "Tên Quán Cà Phê";
+                string storeAddress = ConfigurationManager.AppSettings["ShopAddress"] ?? "Địa chỉ quán";
 
-                // Khởi tạo danh sách tham số
-                List<ReportParameter> reportParams = new List<ReportParameter>
+                // Khởi tạo danh sách tham số thông tin quán
+                List<ReportParameter> shopParams = new List<ReportParameter>
         {
             new ReportParameter("StoreName", storeName),
             new ReportParameter("StoreAddress", storeAddress)
@@ -91,21 +92,28 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                         var revenueData = _reportRepo.GetRevenueReport(dtpFromDate.Value, dtpToDate.Value);
 
                         reportViewer1.LocalReport.ReportPath = rdlcPath;
+                        reportViewer1.LocalReport.DataSources.Clear();
                         reportViewer1.LocalReport.DataSources.Add(new ReportDataSource("DataSetReport", revenueData));
 
-                        // 2. Gán các tham số vào báo cáo
+                        // CHỈ TRUYỀN CÁC PARAMETER CÓ THẬT TRONG FILE RDLC (Ví dụ StoreName, StoreAddress)
+                        List<ReportParameter> reportParams = new List<ReportParameter>
+    {
+        new ReportParameter("StoreName", ConfigurationManager.AppSettings["ShopName"] ?? "Tên Quán"),
+        new ReportParameter("StoreAddress", ConfigurationManager.AppSettings["ShopAddress"] ?? "Địa chỉ quán")
+    };
+
                         reportViewer1.LocalReport.SetParameters(reportParams);
                         break;
 
-                    case 1: // Top Món bán chạy
+                    case 1: // Top Món bán chạy nhất
                         rdlcPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Form\QuangHung\RptBestSeller.rdlc");
                         var productData = _reportRepo.GetBestSellingProducts(10);
 
                         reportViewer1.LocalReport.ReportPath = rdlcPath;
                         reportViewer1.LocalReport.DataSources.Add(new ReportDataSource("DataSetReport", productData));
 
-                        // (Nếu file RptBestSeller.rdlc cũng tạo 2 tham số trên thì gọi dòng này)
-                        reportViewer1.LocalReport.SetParameters(reportParams);
+                        // Gán tham số Tên và Địa chỉ quán vào RptBestSeller.rdlc
+                        reportViewer1.LocalReport.SetParameters(shopParams);
                         break;
 
                     case 2: // Top Khách hàng thân thiết
@@ -115,8 +123,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                         reportViewer1.LocalReport.ReportPath = rdlcPath;
                         reportViewer1.LocalReport.DataSources.Add(new ReportDataSource("DataSetReport", customerData));
 
-                        // (Nếu file RptTopCustomers.rdlc cũng tạo 2 tham số trên thì gọi dòng này)
-                        reportViewer1.LocalReport.SetParameters(reportParams);
+                        // Gán tham số Tên và Địa chỉ quán vào RptTopCustomers.rdlc
+                        reportViewer1.LocalReport.SetParameters(shopParams);
                         break;
                 }
 
@@ -128,7 +136,12 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi hiển thị báo cáo: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string msg = ex.Message;
+                if (ex.InnerException != null)
+                {
+                    msg += "\nChi tiết lỗi: " + ex.InnerException.Message;
+                }
+                MessageBox.Show("Lỗi hiển thị báo cáo: " + msg, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
