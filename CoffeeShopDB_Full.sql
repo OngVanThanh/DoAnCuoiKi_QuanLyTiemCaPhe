@@ -30,10 +30,11 @@ GO
 -- 2. BẢNG MỨC LƯƠNG THEO CHỨC VỤ (Salaries) - Văn Thanh
 CREATE TABLE [dbo].[Salaries] (
     [Id]       INT             IDENTITY (1, 1) NOT NULL PRIMARY KEY,
-    [RoleId]   INT             NOT NULL,
+    [RoleId]   INT             NOT NULL UNIQUE,
     [Amount]   DECIMAL (18, 2) NOT NULL,
     [TimeUnit] NVARCHAR (20)  NOT NULL,
-    FOREIGN KEY ([RoleId]) REFERENCES [dbo].[Roles] ([Id])
+    FOREIGN KEY ([RoleId]) REFERENCES [dbo].[Roles] ([Id]),
+    CHECK ([Amount] >= 0)
 );
 GO
 
@@ -79,7 +80,7 @@ GO
 -- 6. BẢNG NHIỆM VỤ PHÂN CA (Mision) - Văn Thanh
 CREATE TABLE [dbo].[Mision] (
     [Id]           INT           IDENTITY (1, 1) NOT NULL PRIMARY KEY,
-    [MissisonName] NVARCHAR (50) NOT NULL
+    [MissisonName] NVARCHAR (50) NOT NULL UNIQUE
 );
 GO
 
@@ -100,7 +101,7 @@ GO
 -- 7. BẢNG KHU VỰC BÀN (Areas) - Tấn Phát
 CREATE TABLE [dbo].[Areas] (
     [Id]          INT            IDENTITY (1, 1) NOT NULL PRIMARY KEY,
-    [AreaName]    NVARCHAR (50)  NOT NULL,
+    [AreaName]    NVARCHAR (50)  NOT NULL UNIQUE,
     [Description] NVARCHAR (200) NULL
 );
 GO
@@ -141,7 +142,7 @@ GO
 -- 11. BẢNG MÓN ĂN / ĐỒ UỐNG (Products) - Tuấn Hưng
 CREATE TABLE [dbo].[Products] (
     [Id]               INT             IDENTITY (1, 1) NOT NULL PRIMARY KEY,
-    [ProductName]      NVARCHAR (100)  NOT NULL,
+    [ProductName]      NVARCHAR (100)  NOT NULL UNIQUE,
     [CategoryId]       INT             NOT NULL,
     [Price]            DECIMAL (18, 2) NOT NULL,
     [Unit]             NVARCHAR (20)   NOT NULL,
@@ -222,8 +223,8 @@ CREATE TABLE [dbo].[Orders] (
     [OrderId]        INT             NULL,
     FOREIGN KEY ([TableId]) REFERENCES [dbo].[Tables] ([Id]),
     FOREIGN KEY ([EmployeeId]) REFERENCES [dbo].[Employees] ([Id]),
-    FOREIGN KEY ([CustomerId]) REFERENCES [dbo].[Customers] ([Id]),
-    FOREIGN KEY ([PromotionId]) REFERENCES [dbo].[Promotions] ([Id]),
+    FOREIGN KEY ([CustomerId]) REFERENCES [dbo].[Customers] ([Id]) ON DELETE SET NULL,
+    FOREIGN KEY ([PromotionId]) REFERENCES [dbo].[Promotions] ([Id]) ON DELETE SET NULL,
     FOREIGN KEY ([OrderId]) REFERENCES [dbo].[Users] ([Id]),
     CHECK ([TotalAmount] >= 0),
     CHECK ([DiscountAmount] >= 0),

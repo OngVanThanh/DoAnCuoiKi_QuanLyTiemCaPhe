@@ -130,6 +130,17 @@ BEGIN
 END
 GO
 
+-- 8. BẢNG SALARIES: Thêm ràng buộc kiểm tra lương không âm nếu chưa có
+IF EXISTS (SELECT * FROM sys.tables WHERE name = 'Salaries')
+BEGIN
+    IF NOT EXISTS (SELECT * FROM sys.check_constraints WHERE name = 'CK_Salaries_Amount')
+    BEGIN
+        ALTER TABLE [dbo].[Salaries] ADD CONSTRAINT CK_Salaries_Amount CHECK ([Amount] >= 0);
+        PRINT N'[OK] Đã bổ sung ràng buộc kiểm tra lương không âm.';
+    END
+END
+GO
+
 PRINT N'============================================================================';
 PRINT N'=== HOÀN TẤT ĐỒNG BỘ 100% TOÀN BỘ CẤU TRÚC DATABASE! ===';
 PRINT N'============================================================================';
