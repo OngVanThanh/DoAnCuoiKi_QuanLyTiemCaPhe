@@ -485,6 +485,13 @@
             this.tmrClock.Interval = 1000;
             this.tmrClock.Tick += new System.EventHandler(this.tmrClock_Tick);
             // 
+            // menuItemChangePassWord
+            // 
+            this.menuItemChangePassWord.Name = "menuItemChangePassWord";
+            this.menuItemChangePassWord.Size = new System.Drawing.Size(255, 26);
+            this.menuItemChangePassWord.Text = "Đổi mật khẩu";
+            this.menuItemChangePassWord.Click += new System.EventHandler(this.menuItemChangePassWord_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);

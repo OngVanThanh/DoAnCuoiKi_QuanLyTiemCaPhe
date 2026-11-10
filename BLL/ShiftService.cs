@@ -67,9 +67,5 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.BLL
         }
 
         // 4. Lưu lượt đăng ký ca xuống Database thông qua ShiftRepository
-        public bool SaveShift(int employeeId, int shiftId, DateTime workDate)
-        {
-            return _shiftRepo.RegisterShift(employeeId, shiftId, workDate);
-        }
     }
 }

@@ -209,5 +209,11 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         {
             Application.Exit();
         }
+
+        private void menuItemChangePassWord_Click(object sender, EventArgs e)
+        {
+            FrmChangePassword frm = new FrmChangePassword(_currentUser.Username);
+            frm.ShowDialog();
+        }
     }
 }

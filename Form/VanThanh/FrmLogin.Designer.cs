@@ -216,7 +216,7 @@
             this.chkShowPassword.UseVisualStyleBackColor = true;
             this.chkShowPassword.CheckedChanged += new System.EventHandler(this.chkShowPassword_CheckedChanged);
             // 
-            // lnkForgotPassword
+            // btnTogglePassword
             // 
             this.lnkForgotPassword.ActiveLinkColor = System.Drawing.Color.FromArgb(211, 84, 0);
             this.lnkForgotPassword.AutoSize = true;
@@ -304,5 +304,6 @@
         private System.Windows.Forms.Button btnLogin;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.LinkLabel lnkForgotPassword;
+        private System.Windows.Forms.Button btnTogglePassword;
     }
 }

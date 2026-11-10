@@ -47,7 +47,7 @@
             this.txtNewPassword.Name = "txtNewPassword";
             this.txtNewPassword.PasswordChar = '*';
             this.txtNewPassword.Size = new System.Drawing.Size(335, 22);
-            this.txtNewPassword.TabIndex = 35;
+            this.txtNewPassword.TabIndex = 2;
             // 
             // lblNewPassword
             // 
@@ -62,9 +62,8 @@
             // 
             this.txtId.Location = new System.Drawing.Point(196, 81);
             this.txtId.Name = "txtId";
-            this.txtId.PasswordChar = '*';
             this.txtId.Size = new System.Drawing.Size(335, 22);
-            this.txtId.TabIndex = 33;
+            this.txtId.TabIndex = 0;
             // 
             // lblId
             // 
@@ -108,9 +107,8 @@
             // 
             this.txtPhone.Location = new System.Drawing.Point(196, 112);
             this.txtPhone.Name = "txtPhone";
-            this.txtPhone.PasswordChar = '*';
             this.txtPhone.Size = new System.Drawing.Size(335, 22);
-            this.txtPhone.TabIndex = 28;
+            this.txtPhone.TabIndex = 1;
             // 
             // lblPhone
             // 
@@ -127,7 +125,7 @@
             this.txtCheckPassword.Name = "txtCheckPassword";
             this.txtCheckPassword.PasswordChar = '*';
             this.txtCheckPassword.Size = new System.Drawing.Size(335, 22);
-            this.txtCheckPassword.TabIndex = 37;
+            this.txtCheckPassword.TabIndex = 3;
             // 
             // lblCheckPassword
             // 

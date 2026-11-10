@@ -29,13 +29,14 @@
         private void InitializeComponent()
         {
             this.dgvSchedule = new System.Windows.Forms.DataGridView();
-            this.Date = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Shift1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Shift2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Shift3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.coffeeShopDBDataSet1 = new DoAnCuoiKi_QuanLyTiemCaPhe.CoffeeShopDBDataSet();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
+            this.Date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Mision = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Shift1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Shift2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Shift3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSchedule)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.coffeeShopDBDataSet1)).BeginInit();
             this.SuspendLayout();
@@ -46,6 +47,7 @@
             this.dgvSchedule.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvSchedule.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Date,
+            this.Mision,
             this.Shift1,
             this.Shift2,
             this.Shift3});
@@ -57,6 +59,31 @@
             this.dgvSchedule.Size = new System.Drawing.Size(743, 276);
             this.dgvSchedule.TabIndex = 0;
             // 
+            // coffeeShopDBDataSet1
+            // 
+            this.coffeeShopDBDataSet1.DataSetName = "CoffeeShopDBDataSet";
+            this.coffeeShopDBDataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // btnSave
+            // 
+            this.btnSave.Location = new System.Drawing.Point(632, 381);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(75, 23);
+            this.btnSave.TabIndex = 1;
+            this.btnSave.Text = "Lưu";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // btnExit
+            // 
+            this.btnExit.Location = new System.Drawing.Point(753, 381);
+            this.btnExit.Name = "btnExit";
+            this.btnExit.Size = new System.Drawing.Size(75, 23);
+            this.btnExit.TabIndex = 2;
+            this.btnExit.Text = "Thoát";
+            this.btnExit.UseVisualStyleBackColor = true;
+            this.btnExit.Click += new System.EventHandler(this.btnClose_Click);
+            // 
             // Date
             // 
             this.Date.HeaderText = "Ngày";
@@ -65,6 +92,13 @@
             this.Date.ReadOnly = true;
             this.Date.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.Date.Width = 125;
+            // 
+            // Mision
+            // 
+            this.Mision.HeaderText = "Nhiệm vụ";
+            this.Mision.MinimumWidth = 6;
+            this.Mision.Name = "Mision";
+            this.Mision.Width = 125;
             // 
             // Shift1
             // 
@@ -96,31 +130,6 @@
             this.Shift3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             this.Shift3.Width = 125;
             // 
-            // coffeeShopDBDataSet1
-            // 
-            this.coffeeShopDBDataSet1.DataSetName = "CoffeeShopDBDataSet";
-            this.coffeeShopDBDataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // btnSave
-            // 
-            this.btnSave.Location = new System.Drawing.Point(632, 381);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 1;
-            this.btnSave.Text = "Lưu";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // btnExit
-            // 
-            this.btnExit.Location = new System.Drawing.Point(753, 381);
-            this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(75, 23);
-            this.btnExit.TabIndex = 2;
-            this.btnExit.Text = "Thoát";
-            this.btnExit.UseVisualStyleBackColor = true;
-            this.btnExit.Click += new System.EventHandler(this.btnClose_Click);
-            // 
             // FrmShiftSchedule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -129,7 +138,10 @@
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.dgvSchedule);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "FrmShiftSchedule";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FrmShiftSchedule";
             this.Load += new System.EventHandler(this.FrmShiftSchedule_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvSchedule)).EndInit();
@@ -145,6 +157,7 @@
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.DataGridViewTextBoxColumn Date;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Mision;
         private System.Windows.Forms.DataGridViewComboBoxColumn Shift1;
         private System.Windows.Forms.DataGridViewComboBoxColumn Shift2;
         private System.Windows.Forms.DataGridViewComboBoxColumn Shift3;

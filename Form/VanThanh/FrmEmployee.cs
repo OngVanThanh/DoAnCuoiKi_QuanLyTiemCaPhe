@@ -20,6 +20,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         private UCEmployeeControl _ucEmployeeControl;
         private UCEmployeeInform _ucEmployeeInform;
         private UCEmployeeEdit _ucEmployeeEdit;
+        private UCEmployeeAdd _ucEmployeeAdd;
         private int _selectedRowIndex = -1; //
         private EmployeeService _employeeService = new EmployeeService();
         private ShiftService _shiftService = new ShiftService();
@@ -217,11 +218,11 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             pnlEmployeeDetail.Controls.Clear();
 
             // 2. Khởi tạo User Control thêm mới nhân viên
-            _ucEmployeeEdit = new UCEmployeeEdit();
-            _ucEmployeeEdit.Dock = DockStyle.Fill; // Trải đầy khung Panel
+            _ucEmployeeAdd = new UCEmployeeAdd();
+            _ucEmployeeAdd.Dock = DockStyle.Fill; // Trải đầy khung Panel
 
             // 3. Lắng nghe sự kiện khi thêm thành công từ UC
-            _ucEmployeeEdit.SaveCompleted += (s, ev) => {
+            _ucEmployeeAdd.SaveCompleted += (s, ev) => {
                 pnlEmployeeDetail.Controls.Clear();
                 pnlEmployeeDetail.Visible = false;  // Ẩn panel đi sau khi thêm xong
                 LoadEmployeeData();                 // Tải lại DataGridView để hiện nhân viên mới
@@ -229,14 +230,14 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             };
 
             // 4. Lắng nghe sự kiện khi bấm nút Hủy / Thoát từ UC
-            _ucEmployeeEdit.CancelClicked += (s, ev) => {
+            _ucEmployeeAdd.CancelClicked += (s, ev) => {
                 pnlEmployeeDetail.Controls.Clear();
                 pnlEmployeeDetail.Visible = false;
             };
 
             // 5. Thêm UC vào Panel và đưa lên lớp trên cùng
-            pnlEmployeeDetail.Controls.Add(_ucEmployeeEdit);
-            _ucEmployeeEdit.BringToFront();
+            pnlEmployeeDetail.Controls.Add(_ucEmployeeAdd);
+            _ucEmployeeAdd.BringToFront();
             pnlEmployeeDetail.Visible = true;
         }
 
@@ -244,12 +245,17 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         {
             try
             {
-                // Xác định khoảng thời gian tuần tới (ví dụ: từ ngày mai đến 7 ngày sau)
-                DateTime startDate = DateTime.Now.AddDays(1).Date;
-                DateTime endDate = startDate.AddDays(6).Date;
+                DateTime today = DateTime.Today;
 
-                // 1. Tự động khởi tạo 21 ca vào Database nếu chưa có sẵn
-                _shiftRepo.InitializeWeekShiftsIfNeeded(startDate, endDate);
+                // Tính số ngày để nhảy tới Thứ Hai tuần sau
+                int daysUntilNextMonday = ((int)DayOfWeek.Monday - (int)today.DayOfWeek + 7) % 7;
+                if (daysUntilNextMonday == 0) daysUntilNextMonday = 7; // Nếu hôm nay là Thứ Hai, lấy Thứ Hai tuần sau
+
+                DateTime nextMonday = today.AddDays(daysUntilNextMonday).Date;
+                DateTime nextSunday = nextMonday.AddDays(6).Date; // Chủ Nhật của tuần sau
+
+                // 1. Tự động khởi tạo lịch tuần tới (63 bản ghi phân tách theo nhiệm vụ) vào Database nếu chưa có sẵn
+                _shiftRepo.InitializeWeekShiftsIfNeeded(nextMonday, nextSunday);
 
                 // 2. Mở form quản lý lịch làm việc
                 FrmShiftSchedule frm = new FrmShiftSchedule();

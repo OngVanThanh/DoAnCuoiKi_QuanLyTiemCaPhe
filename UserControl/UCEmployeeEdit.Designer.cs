@@ -52,9 +52,10 @@
             // 
             // ptbAvatar
             // 
-            this.ptbAvatar.Location = new System.Drawing.Point(49, 68);
+            this.ptbAvatar.Location = new System.Drawing.Point(49, 67);
             this.ptbAvatar.Name = "ptbAvatar";
-            this.ptbAvatar.Size = new System.Drawing.Size(218, 132);
+            this.ptbAvatar.Size = new System.Drawing.Size(218, 133);
+            this.ptbAvatar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.ptbAvatar.TabIndex = 26;
             this.ptbAvatar.TabStop = false;
             // 
@@ -63,21 +64,21 @@
             this.dtpBirthDate.Location = new System.Drawing.Point(124, 300);
             this.dtpBirthDate.Name = "dtpBirthDate";
             this.dtpBirthDate.Size = new System.Drawing.Size(200, 22);
-            this.dtpBirthDate.TabIndex = 25;
+            this.dtpBirthDate.TabIndex = 3;
             // 
             // dtpHireDate
             // 
             this.dtpHireDate.Location = new System.Drawing.Point(141, 386);
             this.dtpHireDate.Name = "dtpHireDate";
             this.dtpHireDate.Size = new System.Drawing.Size(200, 22);
-            this.dtpHireDate.TabIndex = 24;
+            this.dtpHireDate.TabIndex = 6;
             // 
             // txtAddress
             // 
             this.txtAddress.Location = new System.Drawing.Point(141, 272);
             this.txtAddress.Name = "txtAddress";
             this.txtAddress.Size = new System.Drawing.Size(100, 22);
-            this.txtAddress.TabIndex = 23;
+            this.txtAddress.TabIndex = 2;
             // 
             // cbPosition
             // 
@@ -85,7 +86,7 @@
             this.cbPosition.Location = new System.Drawing.Point(141, 328);
             this.cbPosition.Name = "cbPosition";
             this.cbPosition.Size = new System.Drawing.Size(121, 24);
-            this.cbPosition.TabIndex = 22;
+            this.cbPosition.TabIndex = 4;
             this.cbPosition.SelectedIndexChanged += new System.EventHandler(this.cbPosition_SelectedIndexChanged);
             // 
             // txtSalary
@@ -93,21 +94,21 @@
             this.txtSalary.Location = new System.Drawing.Point(157, 358);
             this.txtSalary.Name = "txtSalary";
             this.txtSalary.Size = new System.Drawing.Size(100, 22);
-            this.txtSalary.TabIndex = 21;
+            this.txtSalary.TabIndex = 5;
             // 
             // txtPhone
             // 
             this.txtPhone.Location = new System.Drawing.Point(140, 244);
             this.txtPhone.Name = "txtPhone";
             this.txtPhone.Size = new System.Drawing.Size(100, 22);
-            this.txtPhone.TabIndex = 20;
+            this.txtPhone.TabIndex = 1;
             // 
             // txtFullName
             // 
             this.txtFullName.Location = new System.Drawing.Point(141, 219);
             this.txtFullName.Name = "txtFullName";
             this.txtFullName.Size = new System.Drawing.Size(100, 22);
-            this.txtFullName.TabIndex = 19;
+            this.txtFullName.TabIndex = 0;
             // 
             // lblHireDate
             // 
@@ -170,7 +171,7 @@
             this.btnExit.Location = new System.Drawing.Point(292, 443);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 23);
-            this.btnExit.TabIndex = 28;
+            this.btnExit.TabIndex = 8;
             this.btnExit.Text = "Thoát";
             this.btnExit.UseVisualStyleBackColor = true;
             this.btnExit.Click += new System.EventHandler(this.btnCancel_Click);
@@ -183,13 +184,14 @@
             this.btnEditAvatar.TabIndex = 29;
             this.btnEditAvatar.Text = "Đổi ảnh";
             this.btnEditAvatar.UseVisualStyleBackColor = true;
+            this.btnEditAvatar.Click += new System.EventHandler(this.btnAddAvatar_Click);
             // 
             // btnSave
             // 
             this.btnSave.Location = new System.Drawing.Point(211, 443);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 27;
+            this.btnSave.TabIndex = 7;
             this.btnSave.Text = "Lưu";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);

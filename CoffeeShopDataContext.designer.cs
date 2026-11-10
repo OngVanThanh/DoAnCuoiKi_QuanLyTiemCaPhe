@@ -69,22 +69,25 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
     partial void InsertUser(User instance);
     partial void UpdateUser(User instance);
     partial void DeleteUser(User instance);
-    partial void InsertShift(Shift instance);
-    partial void UpdateShift(Shift instance);
-    partial void DeleteShift(Shift instance);
-    partial void InsertEmployeeShift(EmployeeShift instance);
-    partial void UpdateEmployeeShift(EmployeeShift instance);
-    partial void DeleteEmployeeShift(EmployeeShift instance);
     partial void InsertOrder(Order instance);
     partial void UpdateOrder(Order instance);
     partial void DeleteOrder(Order instance);
     partial void InsertOrderDetail(OrderDetail instance);
     partial void UpdateOrderDetail(OrderDetail instance);
     partial void DeleteOrderDetail(OrderDetail instance);
+    partial void InsertMision(Mision instance);
+    partial void UpdateMision(Mision instance);
+    partial void DeleteMision(Mision instance);
+    partial void InsertEmployeeShift(EmployeeShift instance);
+    partial void UpdateEmployeeShift(EmployeeShift instance);
+    partial void DeleteEmployeeShift(EmployeeShift instance);
+    partial void InsertShift(Shift instance);
+    partial void UpdateShift(Shift instance);
+    partial void DeleteShift(Shift instance);
     #endregion
 		
 		public CoffeeShopDataContextDataContext() : 
-				base(global::DoAnCuoiKi_QuanLyTiemCaPhe.Properties.Settings.Default.CoffeeShopDBConnectionString, mappingSource)
+				base(global::DoAnCuoiKi_QuanLyTiemCaPhe.Properties.Settings.Default.CoffeeShopDBConnectionString1, mappingSource)
 		{
 			OnCreated();
 		}
@@ -217,22 +220,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 			}
 		}
 		
-		public System.Data.Linq.Table<Shift> Shifts
-		{
-			get
-			{
-				return this.GetTable<Shift>();
-			}
-		}
-		
-		public System.Data.Linq.Table<EmployeeShift> EmployeeShifts
-		{
-			get
-			{
-				return this.GetTable<EmployeeShift>();
-			}
-		}
-		
 		public System.Data.Linq.Table<Order> Orders
 		{
 			get
@@ -246,6 +233,30 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 			get
 			{
 				return this.GetTable<OrderDetail>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Mision> Misions
+		{
+			get
+			{
+				return this.GetTable<Mision>();
+			}
+		}
+		
+		public System.Data.Linq.Table<EmployeeShift> EmployeeShifts
+		{
+			get
+			{
+				return this.GetTable<EmployeeShift>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Shift> Shifts
+		{
+			get
+			{
+				return this.GetTable<Shift>();
 			}
 		}
 	}
@@ -2592,9 +2603,9 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 		
 		private EntitySet<User> _Users;
 		
-		private EntitySet<EmployeeShift> _EmployeeShifts;
-		
 		private EntitySet<Order> _Orders;
+		
+		private EntitySet<EmployeeShift> _EmployeeShifts;
 		
 		private EntityRef<Role> _Role;
 		
@@ -2624,8 +2635,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 		{
 			this._InventoryTransactions = new EntitySet<InventoryTransaction>(new Action<InventoryTransaction>(this.attach_InventoryTransactions), new Action<InventoryTransaction>(this.detach_InventoryTransactions));
 			this._Users = new EntitySet<User>(new Action<User>(this.attach_Users), new Action<User>(this.detach_Users));
-			this._EmployeeShifts = new EntitySet<EmployeeShift>(new Action<EmployeeShift>(this.attach_EmployeeShifts), new Action<EmployeeShift>(this.detach_EmployeeShifts));
 			this._Orders = new EntitySet<Order>(new Action<Order>(this.attach_Orders), new Action<Order>(this.detach_Orders));
+			this._EmployeeShifts = new EntitySet<EmployeeShift>(new Action<EmployeeShift>(this.attach_EmployeeShifts), new Action<EmployeeShift>(this.detach_EmployeeShifts));
 			this._Role = default(EntityRef<Role>);
 			OnCreated();
 		}
@@ -2820,19 +2831,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeShift", Storage="_EmployeeShifts", ThisKey="Id", OtherKey="EmployeeId")]
-		public EntitySet<EmployeeShift> EmployeeShifts
-		{
-			get
-			{
-				return this._EmployeeShifts;
-			}
-			set
-			{
-				this._EmployeeShifts.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_Order", Storage="_Orders", ThisKey="Id", OtherKey="EmployeeId")]
 		public EntitySet<Order> Orders
 		{
@@ -2843,6 +2841,19 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 			set
 			{
 				this._Orders.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeShift", Storage="_EmployeeShifts", ThisKey="Id", OtherKey="EmployeeId")]
+		public EntitySet<EmployeeShift> EmployeeShifts
+		{
+			get
+			{
+				return this._EmployeeShifts;
+			}
+			set
+			{
+				this._EmployeeShifts.Assign(value);
 			}
 		}
 		
@@ -2924,18 +2935,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 			entity.Employee = null;
 		}
 		
-		private void attach_EmployeeShifts(EmployeeShift entity)
-		{
-			this.SendPropertyChanging();
-			entity.Employee = this;
-		}
-		
-		private void detach_EmployeeShifts(EmployeeShift entity)
-		{
-			this.SendPropertyChanging();
-			entity.Employee = null;
-		}
-		
 		private void attach_Orders(Order entity)
 		{
 			this.SendPropertyChanging();
@@ -2943,6 +2942,18 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 		}
 		
 		private void detach_Orders(Order entity)
+		{
+			this.SendPropertyChanging();
+			entity.Employee = null;
+		}
+		
+		private void attach_EmployeeShifts(EmployeeShift entity)
+		{
+			this.SendPropertyChanging();
+			entity.Employee = this;
+		}
+		
+		private void detach_EmployeeShifts(EmployeeShift entity)
 		{
 			this.SendPropertyChanging();
 			entity.Employee = null;
@@ -3262,408 +3273,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 		{
 			this.SendPropertyChanging();
 			entity.User = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Shifts")]
-	public partial class Shift : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private string _ShiftName;
-		
-		private System.TimeSpan _StartTime;
-		
-		private System.TimeSpan _EndTime;
-		
-		private EntitySet<EmployeeShift> _EmployeeShifts;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnShiftNameChanging(string value);
-    partial void OnShiftNameChanged();
-    partial void OnStartTimeChanging(System.TimeSpan value);
-    partial void OnStartTimeChanged();
-    partial void OnEndTimeChanging(System.TimeSpan value);
-    partial void OnEndTimeChanged();
-    #endregion
-		
-		public Shift()
-		{
-			this._EmployeeShifts = new EntitySet<EmployeeShift>(new Action<EmployeeShift>(this.attach_EmployeeShifts), new Action<EmployeeShift>(this.detach_EmployeeShifts));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ShiftName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string ShiftName
-		{
-			get
-			{
-				return this._ShiftName;
-			}
-			set
-			{
-				if ((this._ShiftName != value))
-				{
-					this.OnShiftNameChanging(value);
-					this.SendPropertyChanging();
-					this._ShiftName = value;
-					this.SendPropertyChanged("ShiftName");
-					this.OnShiftNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartTime", DbType="Time NOT NULL")]
-		public System.TimeSpan StartTime
-		{
-			get
-			{
-				return this._StartTime;
-			}
-			set
-			{
-				if ((this._StartTime != value))
-				{
-					this.OnStartTimeChanging(value);
-					this.SendPropertyChanging();
-					this._StartTime = value;
-					this.SendPropertyChanged("StartTime");
-					this.OnStartTimeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndTime", DbType="Time NOT NULL")]
-		public System.TimeSpan EndTime
-		{
-			get
-			{
-				return this._EndTime;
-			}
-			set
-			{
-				if ((this._EndTime != value))
-				{
-					this.OnEndTimeChanging(value);
-					this.SendPropertyChanging();
-					this._EndTime = value;
-					this.SendPropertyChanged("EndTime");
-					this.OnEndTimeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Shift_EmployeeShift", Storage="_EmployeeShifts", ThisKey="Id", OtherKey="ShiftId")]
-		public EntitySet<EmployeeShift> EmployeeShifts
-		{
-			get
-			{
-				return this._EmployeeShifts;
-			}
-			set
-			{
-				this._EmployeeShifts.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_EmployeeShifts(EmployeeShift entity)
-		{
-			this.SendPropertyChanging();
-			entity.Shift = this;
-		}
-		
-		private void detach_EmployeeShifts(EmployeeShift entity)
-		{
-			this.SendPropertyChanging();
-			entity.Shift = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.EmployeeShifts")]
-	public partial class EmployeeShift : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private string _Id;
-		
-		private System.Nullable<int> _EmployeeId;
-		
-		private System.Nullable<int> _ShiftId;
-		
-		private System.Nullable<System.DateTime> _WorkDate;
-		
-		private string _Status;
-		
-		private EntityRef<Shift> _Shift;
-		
-		private EntityRef<Employee> _Employee;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(string value);
-    partial void OnIdChanged();
-    partial void OnEmployeeIdChanging(System.Nullable<int> value);
-    partial void OnEmployeeIdChanged();
-    partial void OnShiftIdChanging(System.Nullable<int> value);
-    partial void OnShiftIdChanged();
-    partial void OnWorkDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnWorkDateChanged();
-    partial void OnStatusChanging(string value);
-    partial void OnStatusChanged();
-    #endregion
-		
-		public EmployeeShift()
-		{
-			this._Shift = default(EntityRef<Shift>);
-			this._Employee = default(EntityRef<Employee>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="VarChar(20) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
-		public string Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EmployeeId", DbType="Int")]
-		public System.Nullable<int> EmployeeId
-		{
-			get
-			{
-				return this._EmployeeId;
-			}
-			set
-			{
-				if ((this._EmployeeId != value))
-				{
-					if (this._Employee.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnEmployeeIdChanging(value);
-					this.SendPropertyChanging();
-					this._EmployeeId = value;
-					this.SendPropertyChanged("EmployeeId");
-					this.OnEmployeeIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ShiftId", DbType="Int")]
-		public System.Nullable<int> ShiftId
-		{
-			get
-			{
-				return this._ShiftId;
-			}
-			set
-			{
-				if ((this._ShiftId != value))
-				{
-					if (this._Shift.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnShiftIdChanging(value);
-					this.SendPropertyChanging();
-					this._ShiftId = value;
-					this.SendPropertyChanged("ShiftId");
-					this.OnShiftIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WorkDate", DbType="Date")]
-		public System.Nullable<System.DateTime> WorkDate
-		{
-			get
-			{
-				return this._WorkDate;
-			}
-			set
-			{
-				if ((this._WorkDate != value))
-				{
-					this.OnWorkDateChanging(value);
-					this.SendPropertyChanging();
-					this._WorkDate = value;
-					this.SendPropertyChanged("WorkDate");
-					this.OnWorkDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="NVarChar(50)")]
-		public string Status
-		{
-			get
-			{
-				return this._Status;
-			}
-			set
-			{
-				if ((this._Status != value))
-				{
-					this.OnStatusChanging(value);
-					this.SendPropertyChanging();
-					this._Status = value;
-					this.SendPropertyChanged("Status");
-					this.OnStatusChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Shift_EmployeeShift", Storage="_Shift", ThisKey="ShiftId", OtherKey="Id", IsForeignKey=true)]
-		public Shift Shift
-		{
-			get
-			{
-				return this._Shift.Entity;
-			}
-			set
-			{
-				Shift previousValue = this._Shift.Entity;
-				if (((previousValue != value) 
-							|| (this._Shift.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Shift.Entity = null;
-						previousValue.EmployeeShifts.Remove(this);
-					}
-					this._Shift.Entity = value;
-					if ((value != null))
-					{
-						value.EmployeeShifts.Add(this);
-						this._ShiftId = value.Id;
-					}
-					else
-					{
-						this._ShiftId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("Shift");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeShift", Storage="_Employee", ThisKey="EmployeeId", OtherKey="Id", IsForeignKey=true)]
-		public Employee Employee
-		{
-			get
-			{
-				return this._Employee.Entity;
-			}
-			set
-			{
-				Employee previousValue = this._Employee.Entity;
-				if (((previousValue != value) 
-							|| (this._Employee.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Employee.Entity = null;
-						previousValue.EmployeeShifts.Remove(this);
-					}
-					this._Employee.Entity = value;
-					if ((value != null))
-					{
-						value.EmployeeShifts.Add(this);
-						this._EmployeeId = value.Id;
-					}
-					else
-					{
-						this._EmployeeId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("Employee");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
 		}
 	}
 	
@@ -4487,6 +4096,587 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Mision")]
+	public partial class Mision : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _MissisonName;
+		
+		private EntitySet<EmployeeShift> _EmployeeShifts;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnMissisonNameChanging(string value);
+    partial void OnMissisonNameChanged();
+    #endregion
+		
+		public Mision()
+		{
+			this._EmployeeShifts = new EntitySet<EmployeeShift>(new Action<EmployeeShift>(this.attach_EmployeeShifts), new Action<EmployeeShift>(this.detach_EmployeeShifts));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MissisonName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string MissisonName
+		{
+			get
+			{
+				return this._MissisonName;
+			}
+			set
+			{
+				if ((this._MissisonName != value))
+				{
+					this.OnMissisonNameChanging(value);
+					this.SendPropertyChanging();
+					this._MissisonName = value;
+					this.SendPropertyChanged("MissisonName");
+					this.OnMissisonNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Mision_EmployeeShift", Storage="_EmployeeShifts", ThisKey="Id", OtherKey="MisionId")]
+		public EntitySet<EmployeeShift> EmployeeShifts
+		{
+			get
+			{
+				return this._EmployeeShifts;
+			}
+			set
+			{
+				this._EmployeeShifts.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_EmployeeShifts(EmployeeShift entity)
+		{
+			this.SendPropertyChanging();
+			entity.Mision = this;
+		}
+		
+		private void detach_EmployeeShifts(EmployeeShift entity)
+		{
+			this.SendPropertyChanging();
+			entity.Mision = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.EmployeeShifts")]
+	public partial class EmployeeShift : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private string _Id;
+		
+		private System.Nullable<int> _EmployeeId;
+		
+		private System.Nullable<int> _ShiftId;
+		
+		private System.Nullable<System.DateTime> _WorkDate;
+		
+		private string _Status;
+		
+		private System.Nullable<int> _MisionId;
+		
+		private EntityRef<Employee> _Employee;
+		
+		private EntityRef<Mision> _Mision;
+		
+		private EntityRef<Shift> _Shift;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(string value);
+    partial void OnIdChanged();
+    partial void OnEmployeeIdChanging(System.Nullable<int> value);
+    partial void OnEmployeeIdChanged();
+    partial void OnShiftIdChanging(System.Nullable<int> value);
+    partial void OnShiftIdChanged();
+    partial void OnWorkDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnWorkDateChanged();
+    partial void OnStatusChanging(string value);
+    partial void OnStatusChanged();
+    partial void OnMisionIdChanging(System.Nullable<int> value);
+    partial void OnMisionIdChanged();
+    #endregion
+		
+		public EmployeeShift()
+		{
+			this._Employee = default(EntityRef<Employee>);
+			this._Mision = default(EntityRef<Mision>);
+			this._Shift = default(EntityRef<Shift>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="VarChar(20) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EmployeeId", DbType="Int")]
+		public System.Nullable<int> EmployeeId
+		{
+			get
+			{
+				return this._EmployeeId;
+			}
+			set
+			{
+				if ((this._EmployeeId != value))
+				{
+					if (this._Employee.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnEmployeeIdChanging(value);
+					this.SendPropertyChanging();
+					this._EmployeeId = value;
+					this.SendPropertyChanged("EmployeeId");
+					this.OnEmployeeIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ShiftId", DbType="Int")]
+		public System.Nullable<int> ShiftId
+		{
+			get
+			{
+				return this._ShiftId;
+			}
+			set
+			{
+				if ((this._ShiftId != value))
+				{
+					if (this._Shift.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnShiftIdChanging(value);
+					this.SendPropertyChanging();
+					this._ShiftId = value;
+					this.SendPropertyChanged("ShiftId");
+					this.OnShiftIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WorkDate", DbType="Date")]
+		public System.Nullable<System.DateTime> WorkDate
+		{
+			get
+			{
+				return this._WorkDate;
+			}
+			set
+			{
+				if ((this._WorkDate != value))
+				{
+					this.OnWorkDateChanging(value);
+					this.SendPropertyChanging();
+					this._WorkDate = value;
+					this.SendPropertyChanged("WorkDate");
+					this.OnWorkDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="NVarChar(50)")]
+		public string Status
+		{
+			get
+			{
+				return this._Status;
+			}
+			set
+			{
+				if ((this._Status != value))
+				{
+					this.OnStatusChanging(value);
+					this.SendPropertyChanging();
+					this._Status = value;
+					this.SendPropertyChanged("Status");
+					this.OnStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MisionId", DbType="Int")]
+		public System.Nullable<int> MisionId
+		{
+			get
+			{
+				return this._MisionId;
+			}
+			set
+			{
+				if ((this._MisionId != value))
+				{
+					if (this._Mision.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnMisionIdChanging(value);
+					this.SendPropertyChanging();
+					this._MisionId = value;
+					this.SendPropertyChanged("MisionId");
+					this.OnMisionIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeShift", Storage="_Employee", ThisKey="EmployeeId", OtherKey="Id", IsForeignKey=true)]
+		public Employee Employee
+		{
+			get
+			{
+				return this._Employee.Entity;
+			}
+			set
+			{
+				Employee previousValue = this._Employee.Entity;
+				if (((previousValue != value) 
+							|| (this._Employee.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Employee.Entity = null;
+						previousValue.EmployeeShifts.Remove(this);
+					}
+					this._Employee.Entity = value;
+					if ((value != null))
+					{
+						value.EmployeeShifts.Add(this);
+						this._EmployeeId = value.Id;
+					}
+					else
+					{
+						this._EmployeeId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Employee");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Mision_EmployeeShift", Storage="_Mision", ThisKey="MisionId", OtherKey="Id", IsForeignKey=true)]
+		public Mision Mision
+		{
+			get
+			{
+				return this._Mision.Entity;
+			}
+			set
+			{
+				Mision previousValue = this._Mision.Entity;
+				if (((previousValue != value) 
+							|| (this._Mision.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Mision.Entity = null;
+						previousValue.EmployeeShifts.Remove(this);
+					}
+					this._Mision.Entity = value;
+					if ((value != null))
+					{
+						value.EmployeeShifts.Add(this);
+						this._MisionId = value.Id;
+					}
+					else
+					{
+						this._MisionId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Mision");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Shift_EmployeeShift", Storage="_Shift", ThisKey="ShiftId", OtherKey="Id", IsForeignKey=true)]
+		public Shift Shift
+		{
+			get
+			{
+				return this._Shift.Entity;
+			}
+			set
+			{
+				Shift previousValue = this._Shift.Entity;
+				if (((previousValue != value) 
+							|| (this._Shift.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Shift.Entity = null;
+						previousValue.EmployeeShifts.Remove(this);
+					}
+					this._Shift.Entity = value;
+					if ((value != null))
+					{
+						value.EmployeeShifts.Add(this);
+						this._ShiftId = value.Id;
+					}
+					else
+					{
+						this._ShiftId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Shift");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Shifts")]
+	public partial class Shift : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _ShiftName;
+		
+		private System.TimeSpan _StartTime;
+		
+		private System.TimeSpan _EndTime;
+		
+		private EntitySet<EmployeeShift> _EmployeeShifts;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnShiftNameChanging(string value);
+    partial void OnShiftNameChanged();
+    partial void OnStartTimeChanging(System.TimeSpan value);
+    partial void OnStartTimeChanged();
+    partial void OnEndTimeChanging(System.TimeSpan value);
+    partial void OnEndTimeChanged();
+    #endregion
+		
+		public Shift()
+		{
+			this._EmployeeShifts = new EntitySet<EmployeeShift>(new Action<EmployeeShift>(this.attach_EmployeeShifts), new Action<EmployeeShift>(this.detach_EmployeeShifts));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ShiftName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string ShiftName
+		{
+			get
+			{
+				return this._ShiftName;
+			}
+			set
+			{
+				if ((this._ShiftName != value))
+				{
+					this.OnShiftNameChanging(value);
+					this.SendPropertyChanging();
+					this._ShiftName = value;
+					this.SendPropertyChanged("ShiftName");
+					this.OnShiftNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartTime", DbType="Time NOT NULL")]
+		public System.TimeSpan StartTime
+		{
+			get
+			{
+				return this._StartTime;
+			}
+			set
+			{
+				if ((this._StartTime != value))
+				{
+					this.OnStartTimeChanging(value);
+					this.SendPropertyChanging();
+					this._StartTime = value;
+					this.SendPropertyChanged("StartTime");
+					this.OnStartTimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndTime", DbType="Time NOT NULL")]
+		public System.TimeSpan EndTime
+		{
+			get
+			{
+				return this._EndTime;
+			}
+			set
+			{
+				if ((this._EndTime != value))
+				{
+					this.OnEndTimeChanging(value);
+					this.SendPropertyChanging();
+					this._EndTime = value;
+					this.SendPropertyChanged("EndTime");
+					this.OnEndTimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Shift_EmployeeShift", Storage="_EmployeeShifts", ThisKey="Id", OtherKey="ShiftId")]
+		public EntitySet<EmployeeShift> EmployeeShifts
+		{
+			get
+			{
+				return this._EmployeeShifts;
+			}
+			set
+			{
+				this._EmployeeShifts.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_EmployeeShifts(EmployeeShift entity)
+		{
+			this.SendPropertyChanging();
+			entity.Shift = this;
+		}
+		
+		private void detach_EmployeeShifts(EmployeeShift entity)
+		{
+			this.SendPropertyChanging();
+			entity.Shift = null;
 		}
 	}
 }
