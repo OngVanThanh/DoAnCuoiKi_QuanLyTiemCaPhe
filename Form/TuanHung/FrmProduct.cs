@@ -80,10 +80,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
                     _selectedImagePath = ofd.FileName;
-                    using (var fs = new FileStream(_selectedImagePath, FileMode.Open, FileAccess.Read))
-                    {
-                        picProductImage.Image = System.Drawing.Image.FromStream(fs);
-                    }
+                    UIHelper.LoadImageToPictureBox(picProductImage, _selectedImagePath);
                 }
             }
         }
@@ -138,9 +135,19 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 return;
             }
 
+            int prodId = 0;
+            if (!_isAdding && !string.IsNullOrEmpty(txtProductId.Text))
+            {
+                if (!int.TryParse(txtProductId.Text, out prodId))
+                {
+                    MessageBox.Show("Mã sản phẩm không hợp lệ!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+            }
+
             var dto = new ProductDTO
             {
-                Id = _isAdding ? 0 : int.Parse(txtProductId.Text),
+                Id = prodId,
                 ProductName = txtProductName.Text,
                 CategoryId = Convert.ToInt32(cboCategory.SelectedValue),
                 Price = price,
@@ -170,7 +177,12 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 return;
             }
 
-            int id = int.Parse(txtProductId.Text);
+            if (!int.TryParse(txtProductId.Text, out int id))
+            {
+                MessageBox.Show("Mã sản phẩm không hợp lệ!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             var confirm = MessageBox.Show($"Bạn có chắc chắn muốn xóa món '{txtProductName.Text}' không?", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (confirm == DialogResult.Yes)

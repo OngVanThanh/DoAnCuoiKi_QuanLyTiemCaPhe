@@ -99,7 +99,32 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.Utilities
             if (btnCancel != null) btnCancel.Enabled = isEditing;
         }
 
-        // 4. LOAD ẢNH THEO ĐƯỜNG DẪN TƯƠNG ĐỐI (Đúng yêu cầu Giảng viên)
+        // Lấy thư mục gốc thực thi của phần mềm (hỗ trợ cả WinForms runtime lẫn Unit Test reflection)
+        public static string GetApplicationDirectory()
+        {
+            try
+            {
+                string asmLocation = typeof(UIHelper).Assembly.Location;
+                if (!string.IsNullOrEmpty(asmLocation) && File.Exists(asmLocation))
+                {
+                    return Path.GetDirectoryName(asmLocation);
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (!string.IsNullOrEmpty(Application.StartupPath))
+                {
+                    return Application.StartupPath;
+                }
+            }
+            catch { }
+
+            return AppDomain.CurrentDomain.BaseDirectory;
+        }
+
+        // 4. LOAD ẢNH THEO ĐƯỜNG DẪN TƯƠNG ĐỐI (Đúng yêu cầu Giảng viên, không khóa file)
         public static void LoadImageToPictureBox(PictureBox pic, string relativePath)
         {
             if (pic == null) return;
@@ -108,30 +133,110 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.Utilities
             {
                 if (string.IsNullOrWhiteSpace(relativePath))
                 {
-                    pic.Image = null;
+                    if (pic.Image != null)
+                    {
+                        var oldImage = pic.Image;
+                        pic.Image = null;
+                        oldImage.Dispose();
+                    }
                     return;
                 }
 
-                // Kết hợp đường dẫn tương đối với thư mục chạy của phần mềm
-                string fullPath = Path.Combine(Application.StartupPath, relativePath);
+                string fullPath = null;
+                string trimmed = relativePath.Trim();
+                string cleanRelative = trimmed.TrimStart('\\', '/');
+                string appDir = GetApplicationDirectory();
 
-                if (File.Exists(fullPath))
+                // 1. Kiểm tra nếu đã là đường dẫn tuyệt đối hợp lệ và file tồn tại
+                if (Path.IsPathRooted(trimmed) && File.Exists(trimmed))
                 {
-                    // Dùng MemoryStream để không bị khóa file (File Lock)
-                    using (var fs = new FileStream(fullPath, FileMode.Open, FileAccess.Read))
+                    fullPath = trimmed;
+                }
+                // 2. Kết hợp với Application Directory (bin\Debug hoặc runtime StartupPath)
+                else if (File.Exists(Path.Combine(appDir, cleanRelative)))
+                {
+                    fullPath = Path.Combine(appDir, cleanRelative);
+                }
+                // 3. Kết hợp với Application.StartupPath
+                else if (File.Exists(Path.Combine(Application.StartupPath, cleanRelative)))
+                {
+                    fullPath = Path.Combine(Application.StartupPath, cleanRelative);
+                }
+                // 4. Kết hợp với AppDomain.CurrentDomain.BaseDirectory
+                else if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, cleanRelative)))
+                {
+                    fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, cleanRelative);
+                }
+                // 5. Kết hợp với Directory.GetCurrentDirectory()
+                else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), cleanRelative)))
+                {
+                    fullPath = Path.Combine(Directory.GetCurrentDirectory(), cleanRelative);
+                }
+                // 6. Fallback: Nếu chuỗi chứa "Images", tìm relative từ "Images" trở đi
+                else
+                {
+                    int imgIdx = trimmed.IndexOf("Images", StringComparison.OrdinalIgnoreCase);
+                    if (imgIdx >= 0)
                     {
-                        pic.Image = Image.FromStream(fs);
+                        string subRelative = trimmed.Substring(imgIdx).TrimStart('\\', '/');
+                        string[] candidates = new string[]
+                        {
+                            Path.Combine(appDir, subRelative),
+                            Path.Combine(Application.StartupPath, subRelative),
+                            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, subRelative),
+                            Path.Combine(Directory.GetCurrentDirectory(), subRelative)
+                        };
+
+                        foreach (var cand in candidates)
+                        {
+                            if (File.Exists(cand))
+                            {
+                                fullPath = cand;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // Nếu tìm thấy file tồn tại trên đĩa
+                if (!string.IsNullOrEmpty(fullPath) && File.Exists(fullPath))
+                {
+                    // Đọc toàn bộ byte vào MemoryStream rồi tạo bản sao Bitmap độc lập trong RAM
+                    // Đảm bảo không bao giờ khóa file trên đĩa (Zero File Lock)
+                    byte[] imageBytes = File.ReadAllBytes(fullPath);
+                    using (var ms = new MemoryStream(imageBytes))
+                    {
+                        using (var temp = Image.FromStream(ms))
+                        {
+                            var oldImage = pic.Image;
+                            pic.Image = new Bitmap(temp);
+                            oldImage?.Dispose();
+                        }
                     }
                     pic.SizeMode = PictureBoxSizeMode.Zoom;
                 }
                 else
                 {
-                    pic.Image = null;
+                    if (pic.Image != null)
+                    {
+                        var oldImage = pic.Image;
+                        pic.Image = null;
+                        oldImage.Dispose();
+                    }
                 }
             }
             catch
             {
-                pic.Image = null;
+                if (pic.Image != null)
+                {
+                    try
+                    {
+                        var oldImage = pic.Image;
+                        pic.Image = null;
+                        oldImage.Dispose();
+                    }
+                    catch { }
+                }
             }
         }
 

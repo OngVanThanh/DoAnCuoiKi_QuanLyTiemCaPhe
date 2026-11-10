@@ -1,6 +1,7 @@
 ﻿using DoAnCuoiKi_QuanLyTiemCaPhe.BLL;
 using DoAnCuoiKi_QuanLyTiemCaPhe.DAL;
 using DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
+using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
 using System;
 using System.Drawing;
 using System.IO;
@@ -39,7 +40,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi tải danh sách chức vụ: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine("Lỗi tải danh sách chức vụ: " + ex.Message);
             }
         }
 
@@ -66,10 +67,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
         }
 
-        // Sự kiện chọn ảnh đại diện (nếu bạn có nút chọn ảnh ptbAvatar / btnUpload)
+        // Sự kiện chọn ảnh đại diện khi click trực tiếp vào PictureBox
         private void ptbAvatar_Click(object sender, EventArgs e)
         {
-
+            btnAddAvatar_Click(sender, e);
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -142,12 +143,45 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
-                    // Lưu lại đường dẫn tệp ảnh vào biến toàn cục (ví dụ: _currentImagePath hoặc _imagePath)
-                    _imagePath = ofd.FileName;
+                    try
+                    {
+                        // 1. Chuẩn bị thư mục đích Images\Employees
+                        string baseDir = UIHelper.GetApplicationDirectory();
+                        string destFolder = Path.Combine(baseDir, "Images", "Employees");
+                        if (!Directory.Exists(destFolder))
+                        {
+                            Directory.CreateDirectory(destFolder);
+                        }
 
-                    // Hiển thị ảnh lên PictureBox và căn chỉnh vừa khít
-                    ptbAvatar.Image = Image.FromFile(_imagePath);
-                    ptbAvatar.SizeMode = PictureBoxSizeMode.Zoom;
+                        // 2. Tạo tên file định danh duy nhất kèm ticks thời gian
+                        string extension = Path.GetExtension(ofd.FileName);
+                        string fileName = $"emp_{DateTime.Now.Ticks}{extension}";
+                        string destFullPath = Path.Combine(destFolder, fileName);
+
+                        // 3. Sao chép file được chọn vào thư mục dự án
+                        File.Copy(ofd.FileName, destFullPath, true);
+
+                        try
+                        {
+                            string currentFolder = Path.Combine(Directory.GetCurrentDirectory(), "Images", "Employees");
+                            if (!string.Equals(currentFolder, destFolder, StringComparison.OrdinalIgnoreCase))
+                            {
+                                if (!Directory.Exists(currentFolder)) Directory.CreateDirectory(currentFolder);
+                                File.Copy(ofd.FileName, Path.Combine(currentFolder, fileName), true);
+                            }
+                        }
+                        catch { }
+
+                        // 4. Lưu ĐƯỜNG DẪN TƯƠNG ĐỐI vào biến toàn cục (chuẩn kiến trúc không dùng đường dẫn tuyệt đối)
+                        _imagePath = Path.Combine("Images", "Employees", fileName);
+
+                        // 5. Hiển thị ảnh lên PictureBox thông qua UIHelper (MemoryStream, non-locking)
+                        UIHelper.LoadImageToPictureBox(ptbAvatar, _imagePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi khi tải ảnh đại diện: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
         }

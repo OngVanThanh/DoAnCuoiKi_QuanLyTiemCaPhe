@@ -190,7 +190,21 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.Utilities
                 g.DrawString("TỔNG THANH TOÁN:", fontTotal, Brushes.Black, startX, currentY);
                 g.DrawString($"{finalAmount:N0} đ", fontTotal, Brushes.Black,
                     new RectangleF(startX, currentY, contentWidth, 22), rightFormat);
-                currentY += 28;
+                currentY += 26;
+
+                // Dòng Tiền khách đưa & Tiền thối lại
+                decimal cashTendered = order != null && order.CashTendered > 0 ? order.CashTendered : finalAmount;
+                decimal changeDue = order != null && order.ChangeDue > 0 ? order.ChangeDue : Math.Max(0m, cashTendered - finalAmount);
+
+                g.DrawString("Tiền khách đưa:", fontRegular, Brushes.Black, startX, currentY);
+                g.DrawString($"{cashTendered:N0} đ", fontRegular, Brushes.Black,
+                    new RectangleF(startX, currentY, contentWidth, 18), rightFormat);
+                currentY += 18;
+
+                g.DrawString("Tiền thối lại:", fontRegular, Brushes.Black, startX, currentY);
+                g.DrawString($"{changeDue:N0} đ", fontRegular, Brushes.Black,
+                    new RectangleF(startX, currentY, contentWidth, 18), rightFormat);
+                currentY += 22;
 
                 g.DrawLine(dashPen, startX, currentY, startX + contentWidth, currentY);
                 currentY += 12;

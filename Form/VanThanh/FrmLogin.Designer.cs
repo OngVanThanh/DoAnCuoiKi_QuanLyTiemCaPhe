@@ -28,8 +28,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.pnlLineUser = new System.Windows.Forms.Panel();
             this.lblSubtitle = new System.Windows.Forms.Label();
             this.lnkForgotPassword = new System.Windows.Forms.LinkLabel();
-            this.btnExit = new System.Windows.Forms.Button();
-            this.btnLogin = new System.Windows.Forms.Button();
+            this.btnExit = new Guna.UI2.WinForms.Guna2Button();
+            this.btnLogin = new Guna.UI2.WinForms.Guna2Button();
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.lblPassword = new System.Windows.Forms.Label();
             this.lblUsername = new System.Windows.Forms.Label();
@@ -232,10 +232,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             // 
             // btnLogin
             // 
-            this.btnLogin.BackColor = System.Drawing.Color.FromArgb(74, 44, 42);
+            this.btnLogin.Animated = true;
+            this.btnLogin.BorderRadius = 8;
             this.btnLogin.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnLogin.FlatAppearance.BorderSize = 0;
-            this.btnLogin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLogin.FillColor = System.Drawing.Color.FromArgb(74, 44, 42);
             this.btnLogin.Font = new System.Drawing.Font("Segoe UI", 10.5F, System.Drawing.FontStyle.Bold);
             this.btnLogin.ForeColor = System.Drawing.Color.White;
             this.btnLogin.Location = new System.Drawing.Point(42, 304);
@@ -243,23 +243,21 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.btnLogin.Size = new System.Drawing.Size(228, 44);
             this.btnLogin.TabIndex = 10;
             this.btnLogin.Text = "ĐĂNG NHẬP VÀO CA";
-            this.btnLogin.UseVisualStyleBackColor = false;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
             // btnExit
             // 
-            this.btnExit.BackColor = System.Drawing.Color.FromArgb(235, 230, 225);
+            this.btnExit.Animated = true;
+            this.btnExit.BorderRadius = 8;
             this.btnExit.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnExit.FlatAppearance.BorderSize = 0;
-            this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExit.FillColor = System.Drawing.Color.FromArgb(235, 230, 225);
             this.btnExit.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnExit.ForeColor = System.Drawing.Color.FromArgb(74, 44, 42);
             this.btnExit.Location = new System.Drawing.Point(282, 304);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(120, 44);
             this.btnExit.TabIndex = 11;
-            this.btnExit.Text = "Thoát";
-            this.btnExit.UseVisualStyleBackColor = false;
+            this.btnExit.Text = "THOÁT";
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // FrmLogin
@@ -278,6 +276,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.Name = "FrmLogin";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Đăng nhập Hệ thống — Mộc Cafe POS";
+            this.Load += new System.EventHandler(this.FrmLogin_Load);
             this.pnlLeftBrand.ResumeLayout(false);
             this.pnlCard.ResumeLayout(false);
             this.pnlCard.PerformLayout();
@@ -301,8 +300,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         private System.Windows.Forms.TextBox txtUsername;
         private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.Label lblPassword;
-        private System.Windows.Forms.Button btnLogin;
-        private System.Windows.Forms.Button btnExit;
+        private Guna.UI2.WinForms.Guna2Button btnLogin;
+        private Guna.UI2.WinForms.Guna2Button btnExit;
         private System.Windows.Forms.LinkLabel lnkForgotPassword;
     }
 }

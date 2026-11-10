@@ -70,85 +70,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         }
         private bool ShowAdminAuthDialog()
         {
-            using (Form authForm = new Form())
+            using (FrmAdminAuth authForm = new FrmAdminAuth())
             {
-                authForm.Width = 420;
-                authForm.Height = 240;
-                authForm.Text = "Xác nhận quyền Quản lý";
-                authForm.FormBorderStyle = FormBorderStyle.FixedDialog;
-                authForm.MaximizeBox = false;
-                authForm.MinimizeBox = false;
-                authForm.StartPosition = FormStartPosition.CenterParent;
-
-                // Dòng thông báo
-                Label lblNotice = new Label()
-                {
-                    Left = 20,
-                    Top = 15,
-                    Width = 360,
-                    Height = 30,
-                    Text = "Vui lòng đăng nhập tài khoản quản lý để tiếp tục:",
-                    Font = new System.Drawing.Font(this.Font, System.Drawing.FontStyle.Bold)
-                };
-
-                // Label & TextBox Username
-                Label lblUser = new Label() { Left = 20, Top = 60, Width = 90, Text = "Tài khoản:" };
-                TextBox txtAdminUser = new TextBox() { Left = 120, Top = 58, Width = 250 };
-
-                // Label & TextBox Password
-                Label lblPass = new Label() { Left = 20, Top = 100, Width = 90, Text = "Mật khẩu:" };
-                TextBox txtAdminPass = new TextBox() { Left = 120, Top = 98, Width = 250, UseSystemPasswordChar = true };
-
-                // Nút Xác nhận
-                Button btnConfirm = new Button() { Text = "Xác nhận", Left = 150, Top = 145, Width = 100, Height = 30 };
-
-                // Nút Thoát / Hủy
-                Button btnExit = new Button() { Text = "Thoát", Left = 270, Top = 145, Width = 100, Height = 30 };
-
-                bool isSuccess = false;
-
-                btnConfirm.Click += (sender, e) => {
-                    string adminUser = txtAdminUser.Text.Trim();
-                    string adminPass = txtAdminPass.Text;
-
-                    if (string.IsNullOrEmpty(adminUser) || string.IsNullOrEmpty(adminPass))
-                    {
-                        MessageBox.Show("Vui lòng nhập đầy đủ tài khoản và mật khẩu quản lý!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-
-                    // Gọi BLL kiểm tra tài khoản quản lý
-                    bool isValid = _permissionService.ValidateManagerCredentials(adminUser, adminPass);
-                    if (isValid)
-                    {
-                        isSuccess = true;
-                        authForm.Close();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Tài khoản quản lý không đúng hoặc không có quyền!", "Lỗi bảo mật", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        txtAdminUser.Focus();
-                    }
-                };
-
-                btnExit.Click += (sender, e) => {
-                    isSuccess = false;
-                    authForm.Close();
-                };
-
-                authForm.Controls.Add(lblNotice);
-                authForm.Controls.Add(lblUser);
-                authForm.Controls.Add(txtAdminUser);
-                authForm.Controls.Add(lblPass);
-                authForm.Controls.Add(txtAdminPass);
-                authForm.Controls.Add(btnConfirm);
-                authForm.Controls.Add(btnExit);
-
-                authForm.AcceptButton = btnConfirm;
-                authForm.CancelButton = btnExit;
-
-                authForm.ShowDialog();
-                return isSuccess;
+                DialogResult dr = authForm.ShowDialog(this);
+                return dr == DialogResult.OK && authForm.IsSuccess;
             }
         }
 

@@ -94,9 +94,19 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 return;
             }
 
+            int promoId = 0;
+            if (!_isAdding && !string.IsNullOrEmpty(txtPromoId.Text))
+            {
+                if (!int.TryParse(txtPromoId.Text, out promoId))
+                {
+                    MessageBox.Show("Mã khuyến mãi không hợp lệ!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+            }
+
             var dto = new PromotionDTO
             {
-                Id = _isAdding ? 0 : int.Parse(txtPromoId.Text),
+                Id = promoId,
                 PromoCode = txtPromoCode.Text,
                 DiscountPercent = discount,
                 StartDate = dtpStartDate.Value,
@@ -124,7 +134,12 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 return;
             }
 
-            int id = int.Parse(txtPromoId.Text);
+            if (!int.TryParse(txtPromoId.Text, out int id))
+            {
+                MessageBox.Show("Mã khuyến mãi không hợp lệ!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             var confirm = MessageBox.Show($"Bạn có chắc chắn muốn xóa mã '{txtPromoCode.Text}' không?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (confirm == DialogResult.Yes)

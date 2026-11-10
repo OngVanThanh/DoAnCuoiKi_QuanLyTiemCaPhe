@@ -177,10 +177,10 @@ INSERT INTO Employees (FullName, Phone, Address, Position, Salary, HireDate) VAL
 GO
 
 -- 3. Tài khoản đăng nhập (Users)
--- Mật khẩu được lưu trực tiếp dạng chuỗi như logic AuthService.cs
+-- Mật khẩu được băm bằng thuật toán PBKDF2 (admin/admin123 & thungan/123456)
 INSERT INTO Users (EmployeeId, Username, PasswordHash, Salt, RoleId, IsActive) VALUES 
-(1, 'admin', 'admin123', '', 1, 1),
-(2, 'thungan', '123456', '', 2, 1);
+(1, 'admin', '4YUma6Q69CiQ97YVG17kFFFVD1HGqb2exAjnTpdQe0g=', 'MvzYIcst8H+HCiQecovlBA==', 1, 1),
+(2, 'thungan', 'ExGmL2DJ+2fEVbrgGAtbpkBl0c2eNsKncAH/rmQawuY=', 'RAq3VsoVEEY92GOgn+/wCA==', 2, 1);
 GO
 
 -- 4. Khu vực (Areas)
@@ -190,14 +190,9 @@ INSERT INTO Areas (AreaName, Description) VALUES
 (N'Phòng VIP (Tầng 2)', N'Phòng họp nhóm riêng tư');
 GO
 
--- 5. Bàn (Tables)
+-- 5. Bàn (Tables) - Khách tại quầy mặc định, các bàn khác do quán tự quản lý / thêm khi đặt trước
 INSERT INTO Tables (TableName, AreaId, Status) VALUES 
-(N'Bàn 01', 1, N'Trống'),
-(N'Bàn 02', 1, N'Trống'),
-(N'Bàn 03', 1, N'Trống'),
-(N'Bàn 04', 2, N'Trống'),
-(N'Bàn 05', 2, N'Trống'),
-(N'Bàn VIP 01', 3, N'Trống');
+(N'Khách tại quầy / Mang đi', 1, N'Trống');
 GO
 
 -- 6. Danh mục món (Categories)

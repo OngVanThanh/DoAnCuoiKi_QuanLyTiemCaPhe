@@ -123,6 +123,17 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 lblDiscountValue.Text = $"-{_order.DiscountAmount:N0} đ";
                 lblFinalValue.Text = $"{_order.FinalAmount:N0} đ";
 
+                decimal cashTendered = _order.CashTendered > 0 ? _order.CashTendered : _order.FinalAmount;
+                decimal changeDue = _order.ChangeDue >= 0 ? _order.ChangeDue : Math.Max(0, cashTendered - _order.FinalAmount);
+                if (lblCashTenderedValue != null)
+                {
+                    lblCashTenderedValue.Text = $"{cashTendered:N0} đ";
+                }
+                if (lblChangeDueValue != null)
+                {
+                    lblChangeDueValue.Text = $"{changeDue:N0} đ";
+                }
+
                 if (!string.IsNullOrWhiteSpace(_order.PromoCode))
                 {
                     lblDiscountCaption.Text = $"Giảm giá ({_order.PromoCode}):";
@@ -188,6 +199,9 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 string vatDisplay = vatAmount > 0 ? $"+{vatAmount:N0} đ" : "0 đ";
                 DateTime orderDateValue = _order.OrderDate ?? DateTime.Now;
 
+                decimal cashTendered = _order.CashTendered > 0 ? _order.CashTendered : _order.FinalAmount;
+                decimal changeDue = _order.ChangeDue >= 0 ? _order.ChangeDue : Math.Max(0, cashTendered - _order.FinalAmount);
+
                 ReportParameter[] parameters = new ReportParameter[]
                 {
                     new ReportParameter("pShopName", shopName.ToUpper()),
@@ -201,7 +215,9 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                     new ReportParameter("pDiscountAmount", discountDisplay),
                     new ReportParameter("pVatAmount", vatDisplay),
                     new ReportParameter("pFinalAmount", $"{_order.FinalAmount:N0} đ"),
-                    new ReportParameter("pWifiInfo", "Wifi: TheCoffeeHouse_Free  |  Pass: 12345678")
+                    new ReportParameter("pWifiInfo", "Wifi: TheCoffeeHouse_Free  |  Pass: 12345678"),
+                    new ReportParameter("pCashTendered", $"{cashTendered:N0} đ"),
+                    new ReportParameter("pChangeDue", $"{changeDue:N0} đ")
                 };
 
                 reportViewerInvoice.LocalReport.SetParameters(parameters);

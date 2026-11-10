@@ -1,5 +1,6 @@
 ﻿using DoAnCuoiKi_QuanLyTiemCaPhe.DAL;
 using DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
+using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -27,23 +28,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             // Lưu lại đối tượng nhân viên hiện tại để phục vụ việc chuyển qua form sửa
             _currentEmployee = emp;
 
-            // Hiển thị Avatar từ đường dẫn chuỗi (ImgPath kiểu string)
-            try
-            {
-                if (!string.IsNullOrEmpty(emp.Image) && System.IO.File.Exists(emp.Image))
-                {
-                    ptbAvatar.Image = Image.FromFile(emp.Image);
-                }
-                else
-                {
-                    ptbAvatar.Image = null;
-                }
-                ptbAvatar.SizeMode = PictureBoxSizeMode.Zoom;
-            }
-            catch (Exception)
-            {
-                ptbAvatar.Image = null;
-            }
+            // Hiển thị Avatar thông qua UIHelper (đường dẫn tương đối, MemoryStream, non-locking)
+            UIHelper.LoadImageToPictureBox(ptbAvatar, emp.Image);
 
             lblIdDetail.Text = emp.Id.ToString();
             lblFullNameDetail.Text = emp.FullName;
@@ -53,10 +39,16 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             lblPositionDetail.Text = emp.Position;
 
             // Lấy thông tin lương và đơn vị tính từ bảng Salaries
-            EmployeeRepository empRepo = new EmployeeRepository();
-            var salaryInfo = empRepo.GetSalaryInfoByRoleId(emp.RoleId);
-
-            lblSalaryDetail.Text = $"{salaryInfo.Amount:N0} VNĐ / {salaryInfo.TimeUnit}";
+            try
+            {
+                EmployeeRepository empRepo = new EmployeeRepository();
+                var salaryInfo = empRepo.GetSalaryInfoByRoleId(emp.RoleId);
+                lblSalaryDetail.Text = $"{salaryInfo.Amount:N0} VNĐ / {salaryInfo.TimeUnit}";
+            }
+            catch
+            {
+                lblSalaryDetail.Text = "N/A";
+            }
             lblHireDateDetail.Text = emp.HireDate.HasValue ? emp.HireDate.Value.ToString("dd/MM/yyyy") : "";
         }
 

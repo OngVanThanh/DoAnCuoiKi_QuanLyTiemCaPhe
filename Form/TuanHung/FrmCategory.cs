@@ -81,7 +81,12 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
             if (MessageBox.Show("Bạn có chắc chắn muốn xóa nhóm sản phẩm này?", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                int id = int.Parse(txtCategoryId.Text);
+                if (!int.TryParse(txtCategoryId.Text, out int id))
+                {
+                    MessageBox.Show("Mã nhóm sản phẩm không hợp lệ!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 if (_productService.DeleteCategory(id, out string errorMsg))
                 {
                     MessageBox.Show("Xóa nhóm sản phẩm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -97,9 +102,19 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            int catId = 0;
+            if (!_isAdding && !string.IsNullOrEmpty(txtCategoryId.Text))
+            {
+                if (!int.TryParse(txtCategoryId.Text, out catId))
+                {
+                    MessageBox.Show("Mã nhóm sản phẩm không hợp lệ!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+            }
+
             CategoryDTO cat = new CategoryDTO
             {
-                Id = _isAdding || string.IsNullOrEmpty(txtCategoryId.Text) ? 0 : int.Parse(txtCategoryId.Text),
+                Id = catId,
                 CategoryName = txtCategoryName.Text.Trim(),
                 Description = txtDescription.Text.Trim()
             };

@@ -1,11 +1,13 @@
 ﻿using DoAnCuoiKi_QuanLyTiemCaPhe.BLL;
 using DoAnCuoiKi_QuanLyTiemCaPhe.DAL;
 using DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
+using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,11 +32,18 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         }
         private void LoadRolesToComboBox()
         {
-            cbPosition.DataSource = _permissionService.GetAllRoles();
-            cbPosition.DisplayMember = "RoleName";
-            cbPosition.ValueMember = "Id";
-            cbPosition.DataSource = _permissionService.GetAllRoles();
-            cbPosition.SelectedIndex = -1;
+            try
+            {
+                var roles = _permissionService.GetAllRoles();
+                cbPosition.DataSource = roles;
+                cbPosition.DisplayMember = "RoleName";
+                cbPosition.ValueMember = "Id";
+                cbPosition.SelectedIndex = -1;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi tải danh sách chức vụ: " + ex.Message);
+            }
         }
         public void SetEmployeeData(EmployeeDTO emp)
         {
@@ -52,12 +61,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 cbPosition.SelectedValue = emp.RoleId;
                 _currentImagePath = emp.Image; // Lưu lại đường dẫn ảnh cũ
 
-                // Hiển thị ảnh nếu có
-                if (!string.IsNullOrEmpty(emp.Image) && System.IO.File.Exists(emp.Image))
-                {
-                    // Giả sử bạn có ptbAvatar trên giao diện sửa
-                    ptbAvatar.Image = Image.FromFile(emp.Image);
-                }
+                // Hiển thị ảnh đại diện thông qua UIHelper (đường dẫn tương đối, non-locking)
+                UIHelper.LoadImageToPictureBox(ptbAvatar, emp.Image);
             }
         }
         private void btnSave_Click(object sender, EventArgs e)
@@ -161,12 +166,45 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
-                    // Lưu lại đường dẫn tệp ảnh vào biến toàn cục (ví dụ: _currentImagePath hoặc _imagePath)
-                    _currentImagePath = ofd.FileName;
+                    try
+                    {
+                        // 1. Chuẩn bị thư mục đích Images\Employees
+                        string baseDir = UIHelper.GetApplicationDirectory();
+                        string destFolder = Path.Combine(baseDir, "Images", "Employees");
+                        if (!Directory.Exists(destFolder))
+                        {
+                            Directory.CreateDirectory(destFolder);
+                        }
 
-                    // Hiển thị ảnh lên PictureBox và căn chỉnh vừa khít
-                    ptbAvatar.Image = Image.FromFile(_currentImagePath);
-                    ptbAvatar.SizeMode = PictureBoxSizeMode.Zoom;
+                        // 2. Tạo tên file định danh duy nhất kèm ticks thời gian
+                        string extension = Path.GetExtension(ofd.FileName);
+                        string fileName = $"emp_{DateTime.Now.Ticks}{extension}";
+                        string destFullPath = Path.Combine(destFolder, fileName);
+
+                        // 3. Sao chép file được chọn vào thư mục dự án
+                        File.Copy(ofd.FileName, destFullPath, true);
+
+                        try
+                        {
+                            string currentFolder = Path.Combine(Directory.GetCurrentDirectory(), "Images", "Employees");
+                            if (!string.Equals(currentFolder, destFolder, StringComparison.OrdinalIgnoreCase))
+                            {
+                                if (!Directory.Exists(currentFolder)) Directory.CreateDirectory(currentFolder);
+                                File.Copy(ofd.FileName, Path.Combine(currentFolder, fileName), true);
+                            }
+                        }
+                        catch { }
+
+                        // 4. Lưu ĐƯỜNG DẪN TƯƠNG ĐỐI vào biến toàn cục (chuẩn kiến trúc không dùng đường dẫn tuyệt đối)
+                        _currentImagePath = Path.Combine("Images", "Employees", fileName);
+
+                        // 5. Hiển thị ảnh lên PictureBox thông qua UIHelper (MemoryStream, non-locking)
+                        UIHelper.LoadImageToPictureBox(ptbAvatar, _currentImagePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi khi tải ảnh đại diện: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
         }

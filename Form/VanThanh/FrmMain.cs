@@ -25,8 +25,20 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
         }
 
+        public void LoadBrandIdentity()
+        {
+            string shopName = ConfigHelper.GetShopName();
+            string shopSlogan = ConfigHelper.GetShopSlogan();
+
+            this.Text = $"{shopSlogan} — {shopName}";
+            lblBrandName.Text = $"☕ {shopName.ToUpper()}";
+            lblBrandSub.Text = shopSlogan;
+        }
+
         private void FrmMain_Load(object sender, EventArgs e)
         {
+            LoadBrandIdentity();
+
             if (_currentUser != null)
             {
                 lblCurrentUser.Text = $"Người dùng: {_currentUser.Username}";
@@ -190,7 +202,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             SetActiveSidebarButton(btnNavAppConfig);
             using (FrmAppConfig frm = new FrmAppConfig())
             {
-                frm.ShowDialog(this);
+                if (frm.ShowDialog(this) == DialogResult.OK)
+                {
+                    LoadBrandIdentity();
+                }
             }
         }
 

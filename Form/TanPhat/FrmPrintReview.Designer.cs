@@ -46,6 +46,10 @@
             this.lblThanks = new System.Windows.Forms.Label();
             this.lblDash5 = new System.Windows.Forms.Label();
             this.pnlTotals = new System.Windows.Forms.Panel();
+            this.lblCashTenderedCaption = new System.Windows.Forms.Label();
+            this.lblCashTenderedValue = new System.Windows.Forms.Label();
+            this.lblChangeDueCaption = new System.Windows.Forms.Label();
+            this.lblChangeDueValue = new System.Windows.Forms.Label();
             this.lblFinalValue = new System.Windows.Forms.Label();
             this.lblFinalCaption = new System.Windows.Forms.Label();
             this.lblDiscountValue = new System.Windows.Forms.Label();
@@ -82,7 +86,7 @@
             // 
             // orderDetailDTOBindingSource
             // 
-            this.orderDetailDTOBindingSource.DataSource = typeof(DoAnCuoiKi_QuanLyTiemCaPhe.DTO.OrderDetailDTO);
+            // (Đã dời việc gán DataSource vào FrmPrintReview.cs để tránh lỗi Designer màn hình vàng)
             // 
             // pnlHeader
             // 
@@ -265,6 +269,10 @@
             // 
             // pnlTotals
             // 
+            this.pnlTotals.Controls.Add(this.lblChangeDueValue);
+            this.pnlTotals.Controls.Add(this.lblChangeDueCaption);
+            this.pnlTotals.Controls.Add(this.lblCashTenderedValue);
+            this.pnlTotals.Controls.Add(this.lblCashTenderedCaption);
             this.pnlTotals.Controls.Add(this.lblFinalValue);
             this.pnlTotals.Controls.Add(this.lblFinalCaption);
             this.pnlTotals.Controls.Add(this.lblDiscountValue);
@@ -274,8 +282,51 @@
             this.pnlTotals.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlTotals.Location = new System.Drawing.Point(12, 342);
             this.pnlTotals.Name = "pnlTotals";
-            this.pnlTotals.Size = new System.Drawing.Size(316, 76);
+            this.pnlTotals.Size = new System.Drawing.Size(316, 120);
             this.pnlTotals.TabIndex = 11;
+            // 
+            // lblCashTenderedCaption
+            // 
+            this.lblCashTenderedCaption.AutoSize = true;
+            this.lblCashTenderedCaption.Font = new System.Drawing.Font("Segoe UI", 8.5F);
+            this.lblCashTenderedCaption.Location = new System.Drawing.Point(4, 72);
+            this.lblCashTenderedCaption.Name = "lblCashTenderedCaption";
+            this.lblCashTenderedCaption.Size = new System.Drawing.Size(107, 19);
+            this.lblCashTenderedCaption.TabIndex = 6;
+            this.lblCashTenderedCaption.Text = "Tiền khách đưa:";
+            // 
+            // lblCashTenderedValue
+            // 
+            this.lblCashTenderedValue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblCashTenderedValue.Font = new System.Drawing.Font("Segoe UI", 8.5F);
+            this.lblCashTenderedValue.Location = new System.Drawing.Point(160, 72);
+            this.lblCashTenderedValue.Name = "lblCashTenderedValue";
+            this.lblCashTenderedValue.Size = new System.Drawing.Size(150, 18);
+            this.lblCashTenderedValue.TabIndex = 7;
+            this.lblCashTenderedValue.Text = "0 đ";
+            this.lblCashTenderedValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblChangeDueCaption
+            // 
+            this.lblChangeDueCaption.AutoSize = true;
+            this.lblChangeDueCaption.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
+            this.lblChangeDueCaption.Location = new System.Drawing.Point(4, 94);
+            this.lblChangeDueCaption.Name = "lblChangeDueCaption";
+            this.lblChangeDueCaption.Size = new System.Drawing.Size(91, 19);
+            this.lblChangeDueCaption.TabIndex = 8;
+            this.lblChangeDueCaption.Text = "Tiền thối lại:";
+            // 
+            // lblChangeDueValue
+            // 
+            this.lblChangeDueValue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblChangeDueValue.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
+            this.lblChangeDueValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(174)))), ((int)(((byte)(96)))));
+            this.lblChangeDueValue.Location = new System.Drawing.Point(160, 94);
+            this.lblChangeDueValue.Name = "lblChangeDueValue";
+            this.lblChangeDueValue.Size = new System.Drawing.Size(150, 18);
+            this.lblChangeDueValue.TabIndex = 9;
+            this.lblChangeDueValue.Text = "0 đ";
+            this.lblChangeDueValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblFinalValue
             // 
@@ -583,6 +634,10 @@
         private System.Windows.Forms.Label lblDiscountValue;
         private System.Windows.Forms.Label lblFinalCaption;
         private System.Windows.Forms.Label lblFinalValue;
+        private System.Windows.Forms.Label lblCashTenderedCaption;
+        private System.Windows.Forms.Label lblCashTenderedValue;
+        private System.Windows.Forms.Label lblChangeDueCaption;
+        private System.Windows.Forms.Label lblChangeDueValue;
         private System.Windows.Forms.Label lblDash5;
         private System.Windows.Forms.Label lblThanks;
     }

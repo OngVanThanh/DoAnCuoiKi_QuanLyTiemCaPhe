@@ -1,0 +1,474 @@
+﻿[
+    {
+        "Category":  "DirRelocation",
+        "TestName":  "Load relative image while CurrentDirectory is \u0027C:\\\u0027",
+        "Passed":  true,
+        "Expected":  "Image loaded (100x100)",
+        "Actual":  "Loaded=True, Width=100",
+        "Details":  ""
+    },
+    {
+        "Category":  "DirRelocation",
+        "TestName":  "PictureBox.SizeMode is Zoom while at \u0027C:\\\u0027",
+        "Passed":  true,
+        "Expected":  "Zoom",
+        "Actual":  "Zoom",
+        "Details":  ""
+    },
+    {
+        "Category":  "DirRelocation",
+        "TestName":  "UCEmployeeInform.BindData works while CurrentDirectory is \u0027C:\\\u0027",
+        "Passed":  true,
+        "Expected":  "True",
+        "Actual":  "True",
+        "Details":  ""
+    },
+    {
+        "Category":  "DirRelocation",
+        "TestName":  "UCEmployeeEdit.SetEmployeeData works while CurrentDirectory is \u0027C:\\\u0027",
+        "Passed":  true,
+        "Expected":  "True",
+        "Actual":  "True",
+        "Details":  ""
+    },
+    {
+        "Category":  "DirRelocation",
+        "TestName":  "Load relative image while CurrentDirectory is \u0027C:\\Windows\\System32\u0027",
+        "Passed":  true,
+        "Expected":  "Image loaded (100x100)",
+        "Actual":  "Loaded=True, Width=100",
+        "Details":  ""
+    },
+    {
+        "Category":  "DirRelocation",
+        "TestName":  "PictureBox.SizeMode is Zoom while at \u0027C:\\Windows\\System32\u0027",
+        "Passed":  true,
+        "Expected":  "Zoom",
+        "Actual":  "Zoom",
+        "Details":  ""
+    },
+    {
+        "Category":  "DirRelocation",
+        "TestName":  "UCEmployeeInform.BindData works while CurrentDirectory is \u0027C:\\Windows\\System32\u0027",
+        "Passed":  true,
+        "Expected":  "True",
+        "Actual":  "True",
+        "Details":  ""
+    },
+    {
+        "Category":  "DirRelocation",
+        "TestName":  "UCEmployeeEdit.SetEmployeeData works while CurrentDirectory is \u0027C:\\Windows\\System32\u0027",
+        "Passed":  true,
+        "Expected":  "True",
+        "Actual":  "True",
+        "Details":  ""
+    },
+    {
+        "Category":  "DirRelocation",
+        "TestName":  "Load relative image while CurrentDirectory is \u0027C:\\Users\\ACER\\AppData\\Local\\Temp\u0027",
+        "Passed":  true,
+        "Expected":  "Image loaded (100x100)",
+        "Actual":  "Loaded=True, Width=100",
+        "Details":  ""
+    },
+    {
+        "Category":  "DirRelocation",
+        "TestName":  "PictureBox.SizeMode is Zoom while at \u0027C:\\Users\\ACER\\AppData\\Local\\Temp\u0027",
+        "Passed":  true,
+        "Expected":  "Zoom",
+        "Actual":  "Zoom",
+        "Details":  ""
+    },
+    {
+        "Category":  "DirRelocation",
+        "TestName":  "UCEmployeeInform.BindData works while CurrentDirectory is \u0027C:\\Users\\ACER\\AppData\\Local\\Temp\u0027",
+        "Passed":  true,
+        "Expected":  "True",
+        "Actual":  "True",
+        "Details":  ""
+    },
+    {
+        "Category":  "DirRelocation",
+        "TestName":  "UCEmployeeEdit.SetEmployeeData works while CurrentDirectory is \u0027C:\\Users\\ACER\\AppData\\Local\\Temp\u0027",
+        "Passed":  true,
+        "Expected":  "True",
+        "Actual":  "True",
+        "Details":  ""
+    },
+    {
+        "Category":  "BoundaryStrings",
+        "TestName":  "UIHelper handles null PictureBox safely without throwing",
+        "Passed":  true,
+        "Expected":  "No exception",
+        "Actual":  "Threw=False",
+        "Details":  ""
+    },
+    {
+        "Category":  "BoundaryStrings",
+        "TestName":  "Input \u0027Null string\u0027 clears PictureBox.Image",
+        "Passed":  true,
+        "Expected":  "Cleared to null",
+        "Actual":  "Image=",
+        "Details":  ""
+    },
+    {
+        "Category":  "BoundaryStrings",
+        "TestName":  "Input \u0027Empty string\u0027 clears PictureBox.Image",
+        "Passed":  true,
+        "Expected":  "Cleared to null",
+        "Actual":  "Image=",
+        "Details":  ""
+    },
+    {
+        "Category":  "BoundaryStrings",
+        "TestName":  "Input \u0027Single space\u0027 clears PictureBox.Image",
+        "Passed":  true,
+        "Expected":  "Cleared to null",
+        "Actual":  "Image=",
+        "Details":  ""
+    },
+    {
+        "Category":  "BoundaryStrings",
+        "TestName":  "Input \u0027Tab string\u0027 clears PictureBox.Image",
+        "Passed":  true,
+        "Expected":  "Cleared to null",
+        "Actual":  "Image=",
+        "Details":  ""
+    },
+    {
+        "Category":  "BoundaryStrings",
+        "TestName":  "Input \u0027Newline string\u0027 clears PictureBox.Image",
+        "Passed":  true,
+        "Expected":  "Cleared to null",
+        "Actual":  "Image=",
+        "Details":  ""
+    },
+    {
+        "Category":  "BoundaryStrings",
+        "TestName":  "Input \u0027Mixed whitespace\u0027 clears PictureBox.Image",
+        "Passed":  true,
+        "Expected":  "Cleared to null",
+        "Actual":  "Image=",
+        "Details":  ""
+    },
+    {
+        "Category":  "BoundaryStrings",
+        "TestName":  "Input \u0027Non-breaking space\u0027 clears PictureBox.Image",
+        "Passed":  true,
+        "Expected":  "Cleared to null",
+        "Actual":  "Image=",
+        "Details":  ""
+    },
+    {
+        "Category":  "BoundaryStrings",
+        "TestName":  "Input \u0027Zero-width space\u0027 clears PictureBox.Image",
+        "Passed":  true,
+        "Expected":  "Cleared to null",
+        "Actual":  "Image=",
+        "Details":  ""
+    },
+    {
+        "Category":  "BoundaryStrings",
+        "TestName":  "Illegal input \u0027Null byte in path\u0027 handled without exception",
+        "Passed":  true,
+        "Expected":  "0 exceptions, Image=null",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "BoundaryStrings",
+        "TestName":  "Illegal input \u0027Asterisk wildcard in path\u0027 handled without exception",
+        "Passed":  true,
+        "Expected":  "0 exceptions, Image=null",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "BoundaryStrings",
+        "TestName":  "Illegal input \u0027Question mark wildcard in path\u0027 handled without exception",
+        "Passed":  true,
+        "Expected":  "0 exceptions, Image=null",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "BoundaryStrings",
+        "TestName":  "Illegal input \u0027Angle brackets in path\u0027 handled without exception",
+        "Passed":  true,
+        "Expected":  "0 exceptions, Image=null",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "BoundaryStrings",
+        "TestName":  "Illegal input \u0027Pipe character in path\u0027 handled without exception",
+        "Passed":  true,
+        "Expected":  "0 exceptions, Image=null",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "BoundaryStrings",
+        "TestName":  "Illegal input \u0027Double quote in path\u0027 handled without exception",
+        "Passed":  true,
+        "Expected":  "0 exceptions, Image=null",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "BoundaryStrings",
+        "TestName":  "Illegal input \u0027Colon in relative path\u0027 handled without exception",
+        "Passed":  true,
+        "Expected":  "0 exceptions, Image=null",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "BoundaryStrings",
+        "TestName":  "Illegal input \u0027Bell control character\u0027 handled without exception",
+        "Passed":  true,
+        "Expected":  "0 exceptions, Image=null",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "PathTraversal",
+        "TestName":  "Traverse to Notepad.exe (valid binary outside project) blocked/cleared safely",
+        "Passed":  true,
+        "Expected":  "Image=null, 0 exceptions",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "PathTraversal",
+        "TestName":  "Traverse to Win.ini (valid text file outside project) blocked/cleared safely",
+        "Passed":  true,
+        "Expected":  "Image=null, 0 exceptions",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "PathTraversal",
+        "TestName":  "Traverse to hosts file blocked/cleared safely",
+        "Passed":  true,
+        "Expected":  "Image=null, 0 exceptions",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "PathTraversal",
+        "TestName":  "Traverse to non-existent system file blocked/cleared safely",
+        "Passed":  true,
+        "Expected":  "Image=null, 0 exceptions",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "PathTraversal",
+        "TestName":  "Traverse to root drive blocked/cleared safely",
+        "Passed":  true,
+        "Expected":  "Image=null, 0 exceptions",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "PathTraversal",
+        "TestName":  "Valid internal traversal resolves correctly",
+        "Passed":  true,
+        "Expected":  "Image loaded",
+        "Actual":  "Threw=False, Image=System.Drawing.Bitmap",
+        "Details":  ""
+    },
+    {
+        "Category":  "CorruptFiles",
+        "TestName":  "Handle 0-byte empty file safely",
+        "Passed":  true,
+        "Expected":  "Image=null, 0 exceptions",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "CorruptFiles",
+        "TestName":  "Handle 1-byte partial file safely",
+        "Passed":  true,
+        "Expected":  "Image=null, 0 exceptions",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "CorruptFiles",
+        "TestName":  "Handle Truncated PNG magic bytes (8 bytes only) safely",
+        "Passed":  true,
+        "Expected":  "Image=null, 0 exceptions",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "CorruptFiles",
+        "TestName":  "Handle Truncated JPEG SOI marker (2 bytes only) safely",
+        "Passed":  true,
+        "Expected":  "Image=null, 0 exceptions",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "CorruptFiles",
+        "TestName":  "Handle Plain ASCII text renamed to .jpg safely",
+        "Passed":  true,
+        "Expected":  "Image=null, 0 exceptions",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "CorruptFiles",
+        "TestName":  "Handle C# Source Code renamed to .png safely",
+        "Passed":  true,
+        "Expected":  "Image=null, 0 exceptions",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "CorruptFiles",
+        "TestName":  "Handle Random pseudo-binary fuzz (4KB noise) renamed to .bmp safely",
+        "Passed":  true,
+        "Expected":  "Image=null, 0 exceptions",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "CorruptFiles",
+        "TestName":  "Handle MZ Executable Header renamed to .png safely",
+        "Passed":  true,
+        "Expected":  "Image=null, 0 exceptions",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "PathLengthStress",
+        "TestName":  "Path string of length 250 handled safely",
+        "Passed":  true,
+        "Expected":  "Image=null, 0 exceptions",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "PathLengthStress",
+        "TestName":  "Path string of length 260 handled safely",
+        "Passed":  true,
+        "Expected":  "Image=null, 0 exceptions",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "PathLengthStress",
+        "TestName":  "Path string of length 300 handled safely",
+        "Passed":  true,
+        "Expected":  "Image=null, 0 exceptions",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "PathLengthStress",
+        "TestName":  "Path string of length 1000 handled safely",
+        "Passed":  true,
+        "Expected":  "Image=null, 0 exceptions",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "PathLengthStress",
+        "TestName":  "Path string of length 10000 handled safely",
+        "Passed":  true,
+        "Expected":  "Image=null, 0 exceptions",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "PathLengthStress",
+        "TestName":  "Path string of length 32767 handled safely",
+        "Passed":  true,
+        "Expected":  "Image=null, 0 exceptions",
+        "Actual":  "Threw=False, Image=, Err=",
+        "Details":  ""
+    },
+    {
+        "Category":  "MemoryDisposal",
+        "TestName":  "Old image was actively disposed when PictureBox cleared with null",
+        "Passed":  true,
+        "Expected":  "Throws ArgumentException (Disposed) \u0026 Image=null",
+        "Actual":  "Disposed=True, Image=",
+        "Details":  ""
+    },
+    {
+        "Category":  "MemoryDisposal",
+        "TestName":  "Old image disposed when replaced by new valid image",
+        "Passed":  true,
+        "Expected":  "Old disposed \u0026 New loaded",
+        "Actual":  "OldDisposed=True, NewLoaded=True",
+        "Details":  ""
+    },
+    {
+        "Category":  "MemoryDisposal",
+        "TestName":  "Old image disposed when replaced by missing file",
+        "Passed":  true,
+        "Expected":  "Old disposed \u0026 Image=null",
+        "Actual":  "OldDisposed=True, Image=",
+        "Details":  ""
+    },
+    {
+        "Category":  "ConcurrencyLocks",
+        "TestName":  "File opened with exclusive ReadWrite/FileShare.None while displayed",
+        "Passed":  true,
+        "Expected":  "True",
+        "Actual":  "True",
+        "Details":  ""
+    },
+    {
+        "Category":  "ConcurrencyLocks",
+        "TestName":  "File deleted on disk while actively displayed in PictureBox (Zero lock)",
+        "Passed":  true,
+        "Expected":  "True",
+        "Actual":  "True",
+        "Details":  ""
+    },
+    {
+        "Category":  "ConcurrencyLocks",
+        "TestName":  "100-cycle rapid reload stress finished cleanly in 85ms",
+        "Passed":  true,
+        "Expected":  "100 cycles, 0 exceptions",
+        "Actual":  "Exceptions=0, Elapsed=85ms",
+        "Details":  ""
+    },
+    {
+        "Category":  "EmployeeService",
+        "TestName":  "SaveEmployee converts external image to relative path",
+        "Passed":  true,
+        "Expected":  "Images\\Employees\\emp_*",
+        "Actual":  "Images\\Employees\\emp_639299581541729733.png",
+        "Details":  ""
+    },
+    {
+        "Category":  "EmployeeService",
+        "TestName":  "Copied avatar file exists on disk",
+        "Passed":  true,
+        "Expected":  "True",
+        "Actual":  "True",
+        "Details":  ""
+    },
+    {
+        "Category":  "UserControls",
+        "TestName":  "UCEmployeeInform survives all adversarial BindData inputs",
+        "Passed":  true,
+        "Expected":  "0 exceptions",
+        "Actual":  "Safe=True",
+        "Details":  ""
+    },
+    {
+        "Category":  "UserControls",
+        "TestName":  "UCEmployeeEdit survives all adversarial SetEmployeeData inputs",
+        "Passed":  true,
+        "Expected":  "0 exceptions",
+        "Actual":  "Safe=True",
+        "Details":  ""
+    }
+]

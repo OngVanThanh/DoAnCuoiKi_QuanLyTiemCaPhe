@@ -54,5 +54,11 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DTO
 
         // Mã code khuyến mãi (ví dụ: CHAOMUNG, VIPCOFFEE)
         public string PromoCode { get; set; }
+
+        // Tiền khách đưa khi thanh toán
+        public decimal CashTendered { get; set; }
+
+        // Tiền thối lại cho khách
+        public decimal ChangeDue { get; set; }
     }
 }

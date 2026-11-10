@@ -62,6 +62,12 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.BLL
                 return false;
             }
 
+            if (customer.RewardPoints < 0)
+            {
+                error = "Điểm tích lũy không được nhỏ hơn 0!";
+                return false;
+            }
+
             if (_repository.PhoneExists(customer.Phone))
             {
                 error = "Số điện thoại này đã tồn tại trong hệ thống!";
@@ -84,6 +90,12 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.BLL
             if (string.IsNullOrWhiteSpace(customer.CustomerName))
             {
                 error = "Tên khách hàng không được để trống!";
+                return false;
+            }
+
+            if (customer.RewardPoints < 0)
+            {
+                error = "Điểm tích lũy không được nhỏ hơn 0!";
                 return false;
             }
 

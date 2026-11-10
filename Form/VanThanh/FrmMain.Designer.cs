@@ -113,11 +113,11 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.pnlNavButtons.Controls.Add(this.btnNavChart);
             this.pnlNavButtons.Controls.Add(this.lblGroupReport);
             this.pnlNavButtons.Controls.Add(this.btnNavPromotion);
+            this.pnlNavButtons.Controls.Add(this.btnNavRecipe);
             this.pnlNavButtons.Controls.Add(this.btnNavCategory);
             this.pnlNavButtons.Controls.Add(this.btnNavProduct);
             this.pnlNavButtons.Controls.Add(this.lblGroupCatalog);
             this.pnlNavButtons.Controls.Add(this.btnNavCustomer);
-            this.pnlNavButtons.Controls.Add(this.btnNavRecipe);
             this.pnlNavButtons.Controls.Add(this.btnNavOrder);
             this.pnlNavButtons.Controls.Add(this.lblGroupPos);
             this.pnlNavButtons.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -137,7 +137,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.lblGroupPos.Padding = new System.Windows.Forms.Padding(6, 6, 0, 2);
             this.lblGroupPos.Size = new System.Drawing.Size(226, 26);
             this.lblGroupPos.TabIndex = 0;
-            this.lblGroupPos.Text = "NGHIỆP VỤ QUẦY & BARISTA";
+            this.lblGroupPos.Text = "NGHIỆP VỤ QUẦY PHỤC VỤ";
             // 
             // btnNavOrder
             // 
@@ -158,25 +158,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.btnNavOrder.UseVisualStyleBackColor = false;
             this.btnNavOrder.Click += new System.EventHandler(this.btnNavOrder_Click);
             // 
-            // btnNavRecipe
-            // 
-            this.btnNavRecipe.BackColor = System.Drawing.Color.FromArgb(48, 29, 26);
-            this.btnNavRecipe.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnNavRecipe.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnNavRecipe.FlatAppearance.BorderSize = 0;
-            this.btnNavRecipe.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnNavRecipe.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular);
-            this.btnNavRecipe.ForeColor = System.Drawing.Color.FromArgb(240, 232, 225);
-            this.btnNavRecipe.Location = new System.Drawing.Point(8, 72);
-            this.btnNavRecipe.Name = "btnNavRecipe";
-            this.btnNavRecipe.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btnNavRecipe.Size = new System.Drawing.Size(226, 40);
-            this.btnNavRecipe.TabIndex = 2;
-            this.btnNavRecipe.Text = "📖  Công thức & Barista";
-            this.btnNavRecipe.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnNavRecipe.UseVisualStyleBackColor = false;
-            this.btnNavRecipe.Click += new System.EventHandler(this.btnNavRecipe_Click);
-            // 
             // btnNavCustomer
             // 
             this.btnNavCustomer.BackColor = System.Drawing.Color.FromArgb(48, 29, 26);
@@ -186,11 +167,11 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.btnNavCustomer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNavCustomer.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular);
             this.btnNavCustomer.ForeColor = System.Drawing.Color.FromArgb(240, 232, 225);
-            this.btnNavCustomer.Location = new System.Drawing.Point(8, 112);
+            this.btnNavCustomer.Location = new System.Drawing.Point(8, 72);
             this.btnNavCustomer.Name = "btnNavCustomer";
             this.btnNavCustomer.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.btnNavCustomer.Size = new System.Drawing.Size(226, 40);
-            this.btnNavCustomer.TabIndex = 3;
+            this.btnNavCustomer.TabIndex = 2;
             this.btnNavCustomer.Text = "👥  Khách hàng & Tích điểm";
             this.btnNavCustomer.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnNavCustomer.UseVisualStyleBackColor = false;
@@ -201,12 +182,12 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.lblGroupCatalog.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblGroupCatalog.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
             this.lblGroupCatalog.ForeColor = System.Drawing.Color.FromArgb(180, 150, 130);
-            this.lblGroupCatalog.Location = new System.Drawing.Point(8, 152);
+            this.lblGroupCatalog.Location = new System.Drawing.Point(8, 112);
             this.lblGroupCatalog.Name = "lblGroupCatalog";
             this.lblGroupCatalog.Padding = new System.Windows.Forms.Padding(6, 10, 0, 2);
             this.lblGroupCatalog.Size = new System.Drawing.Size(226, 30);
-            this.lblGroupCatalog.TabIndex = 4;
-            this.lblGroupCatalog.Text = "QUẢN LÝ THỰC ĐƠN & KM";
+            this.lblGroupCatalog.TabIndex = 3;
+            this.lblGroupCatalog.Text = "QUẢN LÝ THỰC ĐƠN & PHA CHẾ";
             // 
             // btnNavProduct
             // 
@@ -217,11 +198,11 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.btnNavProduct.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNavProduct.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular);
             this.btnNavProduct.ForeColor = System.Drawing.Color.FromArgb(240, 232, 225);
-            this.btnNavProduct.Location = new System.Drawing.Point(8, 182);
+            this.btnNavProduct.Location = new System.Drawing.Point(8, 142);
             this.btnNavProduct.Name = "btnNavProduct";
             this.btnNavProduct.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.btnNavProduct.Size = new System.Drawing.Size(226, 40);
-            this.btnNavProduct.TabIndex = 5;
+            this.btnNavProduct.TabIndex = 4;
             this.btnNavProduct.Text = "☕  Thực đơn Món ăn/Uống";
             this.btnNavProduct.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnNavProduct.UseVisualStyleBackColor = false;
@@ -236,15 +217,34 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.btnNavCategory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNavCategory.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular);
             this.btnNavCategory.ForeColor = System.Drawing.Color.FromArgb(240, 232, 225);
-            this.btnNavCategory.Location = new System.Drawing.Point(8, 222);
+            this.btnNavCategory.Location = new System.Drawing.Point(8, 182);
             this.btnNavCategory.Name = "btnNavCategory";
             this.btnNavCategory.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.btnNavCategory.Size = new System.Drawing.Size(226, 40);
-            this.btnNavCategory.TabIndex = 6;
+            this.btnNavCategory.TabIndex = 5;
             this.btnNavCategory.Text = "📂  Nhóm sản phẩm";
             this.btnNavCategory.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnNavCategory.UseVisualStyleBackColor = false;
             this.btnNavCategory.Click += new System.EventHandler(this.btnNavCategory_Click);
+            // 
+            // btnNavRecipe
+            // 
+            this.btnNavRecipe.BackColor = System.Drawing.Color.FromArgb(48, 29, 26);
+            this.btnNavRecipe.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnNavRecipe.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnNavRecipe.FlatAppearance.BorderSize = 0;
+            this.btnNavRecipe.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNavRecipe.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular);
+            this.btnNavRecipe.ForeColor = System.Drawing.Color.FromArgb(240, 232, 225);
+            this.btnNavRecipe.Location = new System.Drawing.Point(8, 222);
+            this.btnNavRecipe.Name = "btnNavRecipe";
+            this.btnNavRecipe.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btnNavRecipe.Size = new System.Drawing.Size(226, 40);
+            this.btnNavRecipe.TabIndex = 6;
+            this.btnNavRecipe.Text = "📖  Công thức Barista";
+            this.btnNavRecipe.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnNavRecipe.UseVisualStyleBackColor = false;
+            this.btnNavRecipe.Click += new System.EventHandler(this.btnNavRecipe_Click);
             // 
             // btnNavPromotion
             // 

@@ -39,11 +39,12 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 _isLoading = true;
                 dgvOrderDetails.AutoGenerateColumns = false;
 
+                lblHeaderTitle.Text = $"{ConfigHelper.GetShopName().ToUpper()} · POS BÁN HÀNG";
                 dtpStartTime.Value = DateTime.Now;
                 dtpEndTime.Value = DateTime.Now.AddHours(2);
-                txtReserveArea.Text = "Tầng 1 - Máy lạnh";
+                cboReserveArea.Text = "Tầng 1 - Máy lạnh";
 
-                LoadAreaAutoComplete();
+                LoadAreaComboBox();
                 LoadCustomerAndPromoCache();
                 LoadCategoriesToComboBox();
                 LoadProductsToMenu();
@@ -53,7 +54,13 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khởi tạo màn hình POS:\n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Tự động phục hồi sang chế độ an toàn để thu ngân không bị gián đoạn bán hàng
+                try
+                {
+                    SelectCounterMode();
+                }
+                catch { }
+                Console.WriteLine("Cảnh báo nạp POS: " + ex.Message);
             }
             finally
             {
@@ -61,19 +68,27 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
         }
 
-        // Gợi ý tên khu vực từng dùng nhưng vẫn cho phép gõ tự do bất kỳ khu vực nào của quán
-        private void LoadAreaAutoComplete()
+        // Nạp danh sách khu vực vào ComboBox (cho phép chọn hoặc gõ thêm khu vực mới linh hoạt)
+        private void LoadAreaComboBox()
         {
+            string currentText = cboReserveArea.Text.Trim();
             var areas = _tableService.GetAllAreaDTOs();
-            var collection = new AutoCompleteStringCollection();
+            cboReserveArea.Items.Clear();
             foreach (var area in areas)
             {
                 if (!string.IsNullOrWhiteSpace(area.AreaName))
                 {
-                    collection.Add(area.AreaName);
+                    cboReserveArea.Items.Add(area.AreaName);
                 }
             }
-            txtReserveArea.AutoCompleteCustomSource = collection;
+            if (!string.IsNullOrEmpty(currentText))
+            {
+                cboReserveArea.Text = currentText;
+            }
+            else if (cboReserveArea.Items.Count > 0)
+            {
+                cboReserveArea.SelectedIndex = 0;
+            }
         }
 
         // Nạp danh sách khách hàng và mã khuyến mãi để đề xuất tức thời khi gõ từng ký tự
@@ -152,19 +167,33 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         private void LoadReservedTableCards()
         {
-            var reservedTables = _tableService.GetActiveReservedOrOccupiedTables();
-            lblReservedListHeader.Text = $"DANH SÁCH BÀN ĐẶT TRƯỚC ({reservedTables.Count})";
+            LoadAllTableCards();
+        }
+
+        private void LoadAllTableCards()
+        {
+            _tableService.AutoCleanupExpiredReservations();
+            var activeReservedTables = _tableService.GetActiveReservedOrOccupiedTables() ?? new List<TableDTO>();
+
+            lblReservedListHeader.Text = $"DANH SÁCH BÀN ĐẶT TRƯỚC ({activeReservedTables.Count})";
 
             flpTableList.SuspendLayout();
             flpTableList.Controls.Clear();
 
-            foreach (var table in reservedTables)
+            if (activeReservedTables.Count == 0)
             {
-                UcReservedTableCard card = new UcReservedTableCard();
-                card.BindData(table, table.Id == _selectedTableId);
-                card.TableSelected += UcReservedTableCard_TableSelected;
-                card.TableCancelClicked += UcReservedTableCard_TableCancelClicked;
-                flpTableList.Controls.Add(card);
+                flpTableList.Controls.Add(lblEmptyReservedNotice);
+            }
+            else
+            {
+                foreach (var table in activeReservedTables)
+                {
+                    UcReservedTableCard card = new UcReservedTableCard();
+                    card.BindData(table, table.Id == _selectedTableId);
+                    card.TableSelected += UcReservedTableCard_TableSelected;
+                    card.TableCancelClicked += UcReservedTableCard_TableCancelClicked;
+                    flpTableList.Controls.Add(card);
+                }
             }
 
             flpTableList.ResumeLayout();
@@ -172,14 +201,15 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         private void SelectCounterMode()
         {
-            _selectedTableId = 1;
-            _selectedTableName = "Khách tại quầy / Mang đi";
+            var counter = _tableService.GetOrCreateCounterTable();
+            _selectedTableId = counter.Id;
+            _selectedTableName = counter.TableName;
             btnCounterOrder.BackColor = Color.FromArgb(39, 174, 96);
 
-            lblSelectedTableBanner.Text = "Đang chọn: Khách tại quầy / Mang đi";
+            lblSelectedTableBanner.Text = "Đang chọn: " + counter.TableName;
             lblOrderHeaderTitle.Text = "ĐƠN HÀNG · KHÁCH TẠI QUẦY";
 
-            LoadReservedTableCards();
+            LoadAllTableCards();
             LoadOrderDetailsForSelectedTable();
         }
 
@@ -196,14 +226,19 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             _selectedTableName = table.TableName;
             btnCounterOrder.BackColor = Color.FromArgb(127, 140, 141);
 
+            string statusText = string.IsNullOrEmpty(table.Status) ? "Trống" : table.Status;
             string timeNote = table.StartTime.HasValue && table.EndTime.HasValue
                 ? $" ({table.StartTime:HH:mm}-{table.EndTime:HH:mm})"
                 : "";
 
-            lblSelectedTableBanner.Text = $"Đang chọn: {table.TableName}{timeNote}";
-            lblOrderHeaderTitle.Text = $"ĐƠN HÀNG · {table.TableName.ToUpper()}";
+            string displayName = !string.IsNullOrWhiteSpace(table.TableName) && !table.TableName.StartsWith("KH: ", StringComparison.OrdinalIgnoreCase)
+                ? $"KH: {table.TableName}"
+                : table.TableName;
 
-            LoadReservedTableCards();
+            lblSelectedTableBanner.Text = $"Đang chọn: {displayName} · Khu vực: {table.AreaName} [{statusText}]{timeNote}";
+            lblOrderHeaderTitle.Text = $"ĐƠN HÀNG · {displayName.ToUpper()}";
+
+            LoadAllTableCards();
             LoadOrderDetailsForSelectedTable();
         }
 
@@ -211,8 +246,16 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         {
             if (table == null) return;
 
-            if (MessageBox.Show($"Bạn có chắc muốn hủy bàn đặt trước '{table.TableName}'?",
-                "Xác nhận hủy bàn", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            string actionText = string.Equals(table.Status, "Đã thanh toán", StringComparison.OrdinalIgnoreCase)
+                ? "đóng / dọn bàn"
+                : "hủy bàn đặt trước";
+
+            string displayName = !string.IsNullOrWhiteSpace(table.TableName) && !table.TableName.StartsWith("KH: ", StringComparison.OrdinalIgnoreCase)
+                ? $"KH: {table.TableName}"
+                : table.TableName;
+
+            if (MessageBox.Show($"Bạn có chắc muốn {actionText} '{displayName}' tại '{table.AreaName}'?",
+                "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 if (_tableService.DeleteTable(table.Id, out string msg))
                 {
@@ -222,7 +265,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                     }
                     else
                     {
-                        LoadReservedTableCards();
+                        LoadAllTableCards();
                     }
                 }
                 else
@@ -234,22 +277,33 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         private void btnAddReservedTable_Click(object sender, EventArgs e)
         {
+            string customerName = txtReserveCustomerName.Text.Trim();
+            string areaName = cboReserveArea.Text.Trim();
+
             if (_tableService.AddReservedTable(
-                txtReserveTableName.Text,
-                txtReserveArea.Text,
+                customerName,
+                areaName,
                 dtpStartTime.Value,
                 dtpEndTime.Value,
                 out string message))
             {
-                txtReserveTableName.Clear();
+                txtReserveCustomerName.Clear();
                 dtpStartTime.Value = DateTime.Now;
                 dtpEndTime.Value = DateTime.Now.AddHours(2);
-                LoadAreaAutoComplete();
-                LoadReservedTableCards();
+                LoadAreaComboBox();
+                LoadAllTableCards();
+
+                var newlyAdded = _tableService.GetActiveReservedOrOccupiedTables()
+                    .FirstOrDefault(t => string.Equals(t.TableName?.Trim(), customerName, StringComparison.OrdinalIgnoreCase) &&
+                                         string.Equals(t.AreaName?.Trim(), areaName, StringComparison.OrdinalIgnoreCase));
+                if (newlyAdded != null)
+                {
+                    UcReservedTableCard_TableSelected(this, newlyAdded);
+                }
             }
             else
             {
-                MessageBox.Show(message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(message, "Thông báo đặt bàn", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -259,13 +313,13 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             if (expiredCount > 0)
             {
                 var stillExists = _tableService.GetTableById(_selectedTableId);
-                if (_selectedTableId > 1 && (stillExists == null || stillExists.Status == "Trống"))
+                if (_selectedTableId > 1 && stillExists == null)
                 {
                     SelectCounterMode();
                 }
                 else
                 {
-                    LoadReservedTableCards();
+                    LoadAllTableCards();
                 }
             }
         }
@@ -360,6 +414,79 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
             lblTotalAmount.Text = $"Tạm tính: {totalAmount:N0} đ{discountText}{vatText}";
             lblFinalAmount.Text = $"Thanh toán: {finalAmount:N0} đ";
+
+            UpdateChangeDueCalculation();
+        }
+
+        private void txtCashTendered_TextChanged(object sender, EventArgs e)
+        {
+            if (_isLoading) return;
+            UpdateChangeDueCalculation();
+        }
+
+        private void btnCashExact_Click(object sender, EventArgs e)
+        {
+            _orderService.CalculateOrderSummary(
+                _selectedTableId,
+                txtDiscount.Text,
+                out _,
+                out _,
+                out _,
+                out _,
+                out decimal finalAmount,
+                out _,
+                out _);
+
+            txtCashTendered.Text = finalAmount > 0 ? $"{finalAmount:N0}" : "0";
+            txtCashTendered.SelectionStart = txtCashTendered.Text.Length;
+        }
+
+        private void btnCashQuick_Click(object sender, EventArgs e)
+        {
+            if (sender is Button btn)
+            {
+                string text = btn.Text.ToLower().Replace("k", "000").Replace(",", "").Trim();
+                if (decimal.TryParse(text, out decimal val))
+                {
+                    txtCashTendered.Text = $"{val:N0}";
+                    txtCashTendered.SelectionStart = txtCashTendered.Text.Length;
+                }
+            }
+        }
+
+        private void UpdateChangeDueCalculation()
+        {
+            _orderService.CalculateOrderSummary(
+                _selectedTableId,
+                txtDiscount.Text,
+                out _,
+                out _,
+                out _,
+                out _,
+                out decimal finalAmount,
+                out _,
+                out _);
+
+            string raw = txtCashTendered.Text.Trim().Replace(",", "").Replace(".", "").Replace("đ", "").Trim();
+            if (decimal.TryParse(raw, out decimal cashTendered) && cashTendered > 0)
+            {
+                decimal changeDue = cashTendered - finalAmount;
+                if (changeDue >= 0)
+                {
+                    lblChangeDue.ForeColor = Color.FromArgb(39, 174, 96);
+                    lblChangeDue.Text = $"{changeDue:N0} đ";
+                }
+                else
+                {
+                    lblChangeDue.ForeColor = Color.FromArgb(231, 76, 60);
+                    lblChangeDue.Text = $"Thiếu {Math.Abs(changeDue):N0} đ";
+                }
+            }
+            else
+            {
+                lblChangeDue.ForeColor = Color.DimGray;
+                lblChangeDue.Text = "0 đ";
+            }
         }
 
         private void cboCategoryFilter_SelectedIndexChanged(object sender, EventArgs e)
@@ -598,13 +725,26 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                     LoadCustomerAndPromoCache();
                 }
 
-                if (_selectedTableId > 1)
+                // Gán tiền khách đưa và tiền thối lại vào đối tượng hóa đơn để in ấn
+                if (paidOrder != null)
                 {
-                    _tableService.DeleteTable(_selectedTableId, out _);
+                    string rawCash = txtCashTendered.Text.Trim().Replace(",", "").Replace(".", "").Replace("đ", "").Trim();
+                    if (!decimal.TryParse(rawCash, out decimal cashTendered) || cashTendered <= 0)
+                    {
+                        cashTendered = paidOrder.FinalAmount;
+                    }
+                    paidOrder.CashTendered = cashTendered;
+                    paidOrder.ChangeDue = Math.Max(0m, cashTendered - paidOrder.FinalAmount);
                 }
+
+                // Lưu ý nghiệp vụ: Bàn đặt trước sau khi thanh toán sẽ chuyển trạng thái 'Đã thanh toán'
+                // và tiếp tục hiển thị cho đến khi hết khung giờ hoặc nhân viên bấm nút 'Đóng' trên thẻ bàn.
 
                 txtDiscount.Clear();
                 txtCustomerPhone.Clear();
+                txtCashTendered.Clear();
+                lblChangeDue.ForeColor = Color.DimGray;
+                lblChangeDue.Text = "0 đ";
                 lstCustomerSuggest.Visible = false;
                 lstPromoSuggest.Visible = false;
                 _selectedCustomer = null;

@@ -14,6 +14,14 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.AcceptButton = btnLogin;
         }
 
+        private void FrmLogin_Load(object sender, EventArgs e)
+        {
+            string shopName = ConfigHelper.GetShopName();
+            this.Text = $"Đăng nhập Hệ thống — {shopName}";
+            lblBrandTitle.Text = shopName.ToUpper();
+            lblBrandVersion.Text = $"© {DateTime.Now.Year} {shopName} Management System";
+        }
+
         private void chkShowPassword_CheckedChanged(object sender, EventArgs e)
         {
             txtPassword.PasswordChar = chkShowPassword.Checked ? '\0' : '●';

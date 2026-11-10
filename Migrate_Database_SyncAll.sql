@@ -141,6 +141,24 @@ BEGIN
 END
 GO
 
+-- 9. BẢNG TABLES: Đảm bảo có bàn 'Khách tại quầy / Mang đi' phục vụ POS
+IF EXISTS (SELECT * FROM sys.tables WHERE name = 'Tables')
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM [dbo].[Tables] WHERE [TableName] IN (N'Khách tại quầy / Mang đi', N'Khách tại quầy', N'Mang đi'))
+    BEGIN
+        DECLARE @DefaultAreaId INT = (SELECT TOP 1 [Id] FROM [dbo].[Areas]);
+        IF @DefaultAreaId IS NULL
+        BEGIN
+            INSERT INTO [dbo].[Areas] ([AreaName], [Description]) VALUES (N'Khu phục vụ', N'Khu vực quầy thu ngân');
+            SET @DefaultAreaId = SCOPE_IDENTITY();
+        END
+        INSERT INTO [dbo].[Tables] ([TableName], [AreaId], [Status]) 
+        VALUES (N'Khách tại quầy / Mang đi', @DefaultAreaId, N'Trống');
+        PRINT N'[OK] Đã khởi tạo bản ghi bàn Khách tại quầy / Mang đi.';
+    END
+END
+GO
+
 PRINT N'============================================================================';
 PRINT N'=== HOÀN TẤT ĐỒNG BỘ 100% TOÀN BỘ CẤU TRÚC DATABASE! ===';
 PRINT N'============================================================================';

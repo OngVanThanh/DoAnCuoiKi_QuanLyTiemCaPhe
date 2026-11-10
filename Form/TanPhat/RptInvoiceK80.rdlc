@@ -997,6 +997,140 @@
           <PaddingBottom>4pt</PaddingBottom>
         </Style>
       </Textbox>
+      <Textbox Name="txtCashTenderedCaption">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Tiền khách đưa:</Value>
+                <Style>
+                  <FontFamily>Segoe UI</FontFamily>
+                  <FontSize>8.5pt</FontSize>
+                  <Color>#333333</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Left</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <Top>3.06in</Top>
+        <Left>0.1in</Left>
+        <Height>0.22in</Height>
+        <Width>1.55in</Width>
+        <ZIndex>21</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingTop>3pt</PaddingTop>
+        </Style>
+      </Textbox>
+      <Textbox Name="txtCashTenderedBox">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Parameters!pCashTendered.Value</Value>
+                <Style>
+                  <FontFamily>Segoe UI</FontFamily>
+                  <FontSize>8.5pt</FontSize>
+                  <Color>#333333</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Right</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <Top>3.06in</Top>
+        <Left>1.65in</Left>
+        <Height>0.22in</Height>
+        <Width>1.4in</Width>
+        <ZIndex>22</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>3pt</PaddingTop>
+        </Style>
+      </Textbox>
+      <Textbox Name="txtChangeDueCaption">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Tiền thối lại:</Value>
+                <Style>
+                  <FontFamily>Segoe UI</FontFamily>
+                  <FontSize>8.5pt</FontSize>
+                  <FontWeight>Bold</FontWeight>
+                  <Color>#27AE60</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Left</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <Top>3.30in</Top>
+        <Left>0.1in</Left>
+        <Height>0.22in</Height>
+        <Width>1.55in</Width>
+        <ZIndex>23</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingTop>3pt</PaddingTop>
+        </Style>
+      </Textbox>
+      <Textbox Name="txtChangeDueBox">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Parameters!pChangeDue.Value</Value>
+                <Style>
+                  <FontFamily>Segoe UI</FontFamily>
+                  <FontSize>8.5pt</FontSize>
+                  <FontWeight>Bold</FontWeight>
+                  <Color>#27AE60</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Right</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <Top>3.30in</Top>
+        <Left>1.65in</Left>
+        <Height>0.22in</Height>
+        <Width>1.4in</Width>
+        <ZIndex>24</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>3pt</PaddingTop>
+        </Style>
+      </Textbox>
       <Textbox Name="txtWifiInfo">
         <CanGrow>true</CanGrow>
         <KeepTogether>true</KeepTogether>
@@ -1018,11 +1152,11 @@
             </Style>
           </Paragraph>
         </Paragraphs>
-        <Top>3.1in</Top>
+        <Top>3.56in</Top>
         <Left>0.1in</Left>
         <Height>0.2in</Height>
         <Width>2.95in</Width>
-        <ZIndex>21</ZIndex>
+        <ZIndex>25</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1050,11 +1184,11 @@
             </Style>
           </Paragraph>
         </Paragraphs>
-        <Top>3.32in</Top>
+        <Top>3.78in</Top>
         <Left>0.1in</Left>
         <Height>0.22in</Height>
         <Width>2.95in</Width>
-        <ZIndex>22</ZIndex>
+        <ZIndex>26</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1062,7 +1196,7 @@
         </Style>
       </Textbox>
     </ReportItems>
-    <Height>3.65in</Height>
+    <Height>4.10in</Height>
     <Style />
   </Body>
   <Width>3.15in</Width>
@@ -1204,6 +1338,18 @@
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
       <Prompt>pWifiInfo</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="pCashTendered">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>pCashTendered</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="pChangeDue">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>pChangeDue</Prompt>
     </ReportParameter>
   </ReportParameters>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>

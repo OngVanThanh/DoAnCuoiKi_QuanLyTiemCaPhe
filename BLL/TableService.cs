@@ -25,13 +25,45 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.BLL
             return _tableRepository.GetAllTablesWithArea();
         }
 
+        public TableDTO GetOrCreateCounterTable()
+        {
+            return _tableRepository.GetOrCreateCounterTable();
+        }
+
+        public List<TableDTO> GetAllTablesWithStatus()
+        {
+            var counter = GetOrCreateCounterTable();
+            var tables = _tableRepository.GetAllTablesWithArea()
+                .Where(t => t.Id != counter.Id &&
+                            !t.TableName.Contains("quầy") &&
+                            !t.TableName.Contains("Mang đi"))
+                .OrderBy(t => t.AreaId)
+                .ThenBy(t => t.Id)
+                .ToList();
+
+            foreach (var table in tables)
+            {
+                if (string.IsNullOrWhiteSpace(table.Status))
+                {
+                    table.Status = "Trống";
+                }
+            }
+
+            return tables;
+        }
+
         public List<TableDTO> GetActiveReservedOrOccupiedTables()
         {
+            var counter = GetOrCreateCounterTable();
+            DateTime now = DateTime.Now;
             return _tableRepository.GetAllTablesWithArea()
-                .Where(t => t.Id > 1 &&
-                           (string.Equals(t.Status, "Đặt trước", StringComparison.OrdinalIgnoreCase) ||
-                            string.Equals(t.Status, "Có khách", StringComparison.OrdinalIgnoreCase) ||
-                            t.StartTime.HasValue))
+                .Where(t => t.Id != counter.Id &&
+                            !t.TableName.Contains("quầy") &&
+                            !t.TableName.Contains("Mang đi") &&
+                            (string.Equals(t.Status, "Đặt trước", StringComparison.OrdinalIgnoreCase) ||
+                             string.Equals(t.Status, "Có khách", StringComparison.OrdinalIgnoreCase) ||
+                             string.Equals(t.Status, "Đã thanh toán", StringComparison.OrdinalIgnoreCase)) &&
+                            (!t.EndTime.HasValue || t.EndTime.Value > now || string.Equals(t.Status, "Có khách", StringComparison.OrdinalIgnoreCase)))
                 .OrderBy(t => t.StartTime ?? DateTime.MaxValue)
                 .ThenBy(t => t.Id)
                 .ToList();
@@ -55,18 +87,18 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.BLL
             return new List<string> { "Trống", "Có khách", "Đặt trước" };
         }
 
-        // Thêm bàn đặt trước với Khu vực nhập tự do bằng TextBox (areaName)
+        // Thêm bàn đặt trước 
         public bool AddReservedTable(string tableName, string areaName, DateTime startTime, DateTime endTime, out string message)
         {
             if (string.IsNullOrWhiteSpace(tableName))
             {
-                message = "Vui lòng nhập tên bàn hoặc tên khách đặt (VD: Bàn 02 - Chị Lan)!";
+                message = "Vui lòng nhập tên khách hàng đặt bàn!";
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(areaName))
             {
-                message = "Vui lòng nhập tên khu vực (VD: Tầng 1, Ban công, Sân vườn...)!";
+                message = "Vui lòng chọn hoặc nhập tên khu vực (VD: Khu máy lạnh, Sân vườn, Tầng 1...)!";
                 return false;
             }
 
@@ -84,13 +116,36 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.BLL
 
             int areaId = _tableRepository.GetOrCreateAreaIdByName(areaName.Trim());
 
+            // --- NGHIỆP VỤ KIỂM TRA TRÙNG LỊCH BÀN THEO KHU VỰC ---
+            // Kiểm tra trong cùng khu vực (areaId) xem có lịch đặt nào giao nhau trong khung giờ [startTime, endTime] không:
+            // Điều kiện giao nhau giữa 2 khoảng thời gian [S1, E1] và [S2, E2]: S_moi < E_cu VÀ E_moi > S_cu
+            var conflictingTable = this.GetActiveReservedOrOccupiedTables()
+                .FirstOrDefault(t => t.AreaId == areaId &&
+                                     t.StartTime.HasValue && t.EndTime.HasValue &&
+                                     startTime < t.EndTime.Value && endTime > t.StartTime.Value);
+
+            if (conflictingTable != null)
+            {
+                string bookedCust = !string.IsNullOrWhiteSpace(conflictingTable.TableName) ? conflictingTable.TableName.Trim() : "khách khác";
+                if (bookedCust.StartsWith("KH: ", StringComparison.OrdinalIgnoreCase))
+                {
+                    bookedCust = bookedCust.Substring(4).Trim();
+                }
+
+                message = $"Khu vực '{areaName.Trim()}' đã có lịch đặt trước của khách '{bookedCust}' " +
+                          $"trong khung giờ {conflictingTable.StartTime.Value:HH:mm dd/MM} - {conflictingTable.EndTime.Value:HH:mm dd/MM}!\n" +
+                          $"Vui lòng chọn khu vực khác hoặc điều chỉnh lại khung giờ đặt để tránh trùng khu vực.";
+                return false;
+            }
+
             var newTable = new Table
             {
                 TableName = tableName.Trim(),
                 AreaId = areaId,
                 Status = "Đặt trước",
                 StartTime = startTime,
-                EndTime = endTime
+                EndTime = endTime,
+                CustomerId = tableName.Trim()
             };
 
             bool result = _tableRepository.InsertTable(newTable);
@@ -127,6 +182,16 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.BLL
             bool result = _tableRepository.DeleteTable(tableId);
             message = result ? "Đã hủy/xóa bàn đặt trước!" : "Không tìm thấy bàn cần xóa.";
             return result;
+        }
+        public bool DeleteAreaByName(string areaName, out string message)
+        {
+            if (string.IsNullOrWhiteSpace(areaName))
+            {
+                message = "Tên khu vực không hợp lệ!";
+                return false;
+            }
+
+            return _tableRepository.DeleteAreaByName(areaName, out message);
         }
     }
 }

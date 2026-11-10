@@ -11,7 +11,7 @@
       </DataSource>
     </xs:appinfo>
   </xs:annotation>
-  <xs:element name="CoffeeShopDBDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="True" msprop:Generator_UserDSName="CoffeeShopDBDataSet" msprop:Generator_DataSetName="CoffeeShopDBDataSet">
+  <xs:element name="CoffeeShopDBDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="CoffeeShopDBDataSet" msprop:EnableTableAdapterManager="True" msprop:Generator_DataSetName="CoffeeShopDBDataSet">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded" />
     </xs:complexType>

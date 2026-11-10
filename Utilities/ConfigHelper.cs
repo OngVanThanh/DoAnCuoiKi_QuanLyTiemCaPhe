@@ -108,6 +108,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.Utilities
         }
 
         public static string GetShopName() => GetAppSetting("ShopName", "Mộc Cafe POS");
+        public static string GetShopSlogan() => GetAppSetting("ShopSlogan", "Hệ thống Quản lý Tiệm Cà phê");
         public static string GetShopAddress() => GetAppSetting("ShopAddress", "123 Nguyễn Huệ, Q.1, TP.HCM");
         public static string GetShopPhone() => GetAppSetting("ShopPhone", "0909 123 456");
         public static decimal GetVATRate()

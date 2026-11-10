@@ -183,25 +183,32 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
                 if (confirm == DialogResult.Yes)
                 {
-                    bool success = _employeeService.DeleteEmployee(selectedEmployee.Id);
-
-                    if (success)
+                    try
                     {
-                        MessageBox.Show("Xóa nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        bool success = _employeeService.DeleteEmployee(selectedEmployee.Id, out string message);
 
-                        // Nếu panel chi tiết đang hiển thị đúng nhân viên vừa bị xóa thì ẩn/dọn đi
-                        if (pnlEmployeeDetail != null)
+                        if (success)
                         {
-                            pnlEmployeeDetail.Controls.Clear();
-                            pnlEmployeeDetail.Visible = false;
-                        }
+                            MessageBox.Show("Xóa nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        // Tải lại dữ liệu cho DataGridView
-                        LoadEmployeeData();
+                            // Nếu panel chi tiết đang hiển thị đúng nhân viên vừa bị xóa thì ẩn/dọn đi
+                            if (pnlEmployeeDetail != null)
+                            {
+                                pnlEmployeeDetail.Controls.Clear();
+                                pnlEmployeeDetail.Visible = false;
+                            }
+
+                            // Tải lại dữ liệu cho DataGridView
+                            LoadEmployeeData();
+                        }
+                        else
+                        {
+                            MessageBox.Show(message ?? "Xóa nhân viên thất bại! Vui lòng thử lại.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        MessageBox.Show("Xóa nhân viên thất bại! Vui lòng thử lại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Lỗi khi xóa nhân viên:\n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }

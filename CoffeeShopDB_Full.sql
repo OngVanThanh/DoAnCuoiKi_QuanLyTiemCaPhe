@@ -180,34 +180,7 @@ CREATE TABLE [dbo].[Promotions] (
 );
 GO
 
--- 13. BẢNG NGUYÊN LIỆU KHO (Materials) - Tuấn Hưng
-CREATE TABLE [dbo].[Materials] (
-    [Id]              INT            IDENTITY (1, 1) NOT NULL PRIMARY KEY,
-    [MaterialName]    NVARCHAR (100) NOT NULL UNIQUE,
-    [Unit]            NVARCHAR (20)  NOT NULL,
-    [QuantityInStock] FLOAT (53)     DEFAULT (0) NOT NULL,
-    [MinThreshold]    FLOAT (53)     DEFAULT (0) NOT NULL,
-    CHECK ([QuantityInStock] >= 0),
-    CHECK ([MinThreshold] >= 0)
-);
-GO
-
--- 14. BẢNG LỊCH SỬ GIAO DỊCH KHO (InventoryTransactions) - Tuấn Hưng
-CREATE TABLE [dbo].[InventoryTransactions] (
-    [Id]              INT           IDENTITY (1, 1) NOT NULL PRIMARY KEY,
-    [MaterialId]      INT           NOT NULL,
-    [EmployeeId]      INT           NOT NULL,
-    [TransactionType] NVARCHAR (20) NOT NULL,
-    [Quantity]        FLOAT (53)    NOT NULL,
-    [TransactionDate] DATETIME      DEFAULT (getdate()) NULL,
-    FOREIGN KEY ([MaterialId]) REFERENCES [dbo].[Materials] ([Id]),
-    FOREIGN KEY ([EmployeeId]) REFERENCES [dbo].[Employees] ([Id]),
-    CHECK ([TransactionType] IN (N'Xuất', N'Nhập', N'Xuất kho', N'Nhập kho')),
-    CHECK ([Quantity] > 0)
-);
-GO
-
--- 15. BẢNG ĐƠN HÀNG (Orders) - Tấn Phát
+-- 13. BẢNG ĐƠN HÀNG (Orders) - Tấn Phát
 CREATE TABLE [dbo].[Orders] (
     [Id]             INT             IDENTITY (1, 1) NOT NULL PRIMARY KEY,
     [TableId]        INT             NOT NULL,
@@ -271,10 +244,10 @@ INSERT INTO Employees (FullName, Phone, Address, HireDate, BirthDate, RoleId, Sa
 (N'Trần Thị Thu Ngân', '0912345678', N'Quận 3, TP.HCM', '2024-02-15', '2000-08-20', 2, 8000000);
 GO
 
--- 4. Users (Mật khẩu admin123 & 123456)
+-- 4. Users (Mật khẩu PBKDF2: admin/admin123 & thungan/123456)
 INSERT INTO Users (EmployeeId, Username, PasswordHash, Salt, RoleId, IsActive) VALUES 
-(1, 'admin', 'admin123', '', 1, 1),
-(2, 'thungan', '123456', '', 2, 1);
+(1, 'admin', '4YUma6Q69CiQ97YVG17kFFFVD1HGqb2exAjnTpdQe0g=', 'MvzYIcst8H+HCiQecovlBA==', 1, 1),
+(2, 'thungan', 'ExGmL2DJ+2fEVbrgGAtbpkBl0c2eNsKncAH/rmQawuY=', 'RAq3VsoVEEY92GOgn+/wCA==', 2, 1);
 GO
 
 -- 5. Shifts
@@ -298,14 +271,9 @@ INSERT INTO Areas (AreaName, Description) VALUES
 (N'Phòng VIP (Tầng 2)', N'Phòng họp nhóm riêng tư');
 GO
 
--- 7. Tables
+-- 7. Tables - Khách tại quầy mặc định, các bàn khác do quán tự quản lý / thêm khi đặt trước
 INSERT INTO Tables (TableName, AreaId, Status) VALUES 
-(N'Bàn 01', 1, N'Trống'),
-(N'Bàn 02', 1, N'Trống'),
-(N'Bàn 03', 1, N'Trống'),
-(N'Bàn 04', 2, N'Trống'),
-(N'Bàn 05', 2, N'Trống'),
-(N'Bàn VIP 01', 3, N'Trống');
+(N'Khách tại quầy / Mang đi', 1, N'Trống');
 GO
 
 -- 8. Categories
@@ -348,16 +316,7 @@ INSERT INTO Promotions (PromoCode, DiscountPercent, StartDate, EndDate, IsActive
 ('VIPCOFFEE', 15, '2024-01-01', '2027-12-31', 1);
 GO
 
--- 11. Materials
-INSERT INTO Materials (MaterialName, Unit, QuantityInStock, MinThreshold) VALUES 
-(N'Hạt Cà Phê Robusta', N'Kg', 50.0, 10.0),
-(N'Sữa đặc Ngôi Sao', N'Lon', 100.0, 20.0),
-(N'Sữa tươi thanh trùng', N'Hộp', 60.0, 15.0),
-(N'Trà đen cao cấp', N'Kg', 20.0, 5.0),
-(N'Đường kính trắng', N'Kg', 40.0, 10.0);
-GO
-
--- 12. Customers
+-- 11. Customers
 INSERT INTO Customers (CustomerName, Phone, RewardPoints, MembershipTier, RegistrationDate) VALUES 
 (N'Lê Hoàng Anh', '0988776655', 120, N'Bạc', '2024-03-01'),
 (N'Phạm Thuỳ Dung', '0933221100', 50, N'Đồng', '2024-03-10');

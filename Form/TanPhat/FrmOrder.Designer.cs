@@ -30,6 +30,7 @@
             this.lblHeaderTitle = new System.Windows.Forms.Label();
             this.pnlLeftTables = new System.Windows.Forms.Panel();
             this.flpTableList = new System.Windows.Forms.FlowLayoutPanel();
+            this.lblEmptyReservedNotice = new System.Windows.Forms.Label();
             this.lblReservedListHeader = new System.Windows.Forms.Label();
             this.grpQuickReserve = new System.Windows.Forms.GroupBox();
             this.btnAddReservedTable = new System.Windows.Forms.Button();
@@ -37,9 +38,9 @@
             this.lblEndTime = new System.Windows.Forms.Label();
             this.dtpStartTime = new System.Windows.Forms.DateTimePicker();
             this.lblStartTime = new System.Windows.Forms.Label();
-            this.txtReserveArea = new System.Windows.Forms.TextBox();
+            this.cboReserveArea = new System.Windows.Forms.ComboBox();
             this.lblReserveArea = new System.Windows.Forms.Label();
-            this.txtReserveTableName = new System.Windows.Forms.TextBox();
+            this.txtReserveCustomerName = new System.Windows.Forms.TextBox();
             this.lblReserveName = new System.Windows.Forms.Label();
             this.btnCounterOrder = new System.Windows.Forms.Button();
             this.pnlRightOrder = new System.Windows.Forms.Panel();
@@ -51,6 +52,15 @@
             this.colDetailUnitPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDetailTotalPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlOrderFooter = new System.Windows.Forms.Panel();
+            this.lblChangeDue = new System.Windows.Forms.Label();
+            this.lblChangeDueTitle = new System.Windows.Forms.Label();
+            this.btnCash500k = new System.Windows.Forms.Button();
+            this.btnCash200k = new System.Windows.Forms.Button();
+            this.btnCash100k = new System.Windows.Forms.Button();
+            this.btnCash50k = new System.Windows.Forms.Button();
+            this.btnCashExact = new System.Windows.Forms.Button();
+            this.txtCashTendered = new System.Windows.Forms.TextBox();
+            this.lblCashTendered = new System.Windows.Forms.Label();
             this.lstCustomerSuggest = new System.Windows.Forms.ListBox();
             this.lstPromoSuggest = new System.Windows.Forms.ListBox();
             this.btnPayAndPrint = new System.Windows.Forms.Button();
@@ -155,6 +165,17 @@
             this.flpTableList.TabIndex = 3;
             this.flpTableList.WrapContents = false;
             // 
+            // lblEmptyReservedNotice
+            // 
+            this.lblEmptyReservedNotice.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic);
+            this.lblEmptyReservedNotice.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(140)))), ((int)(((byte)(141)))));
+            this.lblEmptyReservedNotice.Location = new System.Drawing.Point(5, 10);
+            this.lblEmptyReservedNotice.Name = "lblEmptyReservedNotice";
+            this.lblEmptyReservedNotice.Size = new System.Drawing.Size(265, 80);
+            this.lblEmptyReservedNotice.TabIndex = 0;
+            this.lblEmptyReservedNotice.Text = "Chưa có bàn đặt trước nào.\r\nNhập thông tin bên trên và bấm \"+ Thêm bàn đặt trước\" khi có yêu cầu.";
+            this.lblEmptyReservedNotice.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // lblReservedListHeader
             // 
             this.lblReservedListHeader.Dock = System.Windows.Forms.DockStyle.Top;
@@ -175,9 +196,9 @@
             this.grpQuickReserve.Controls.Add(this.lblEndTime);
             this.grpQuickReserve.Controls.Add(this.dtpStartTime);
             this.grpQuickReserve.Controls.Add(this.lblStartTime);
-            this.grpQuickReserve.Controls.Add(this.txtReserveArea);
+            this.grpQuickReserve.Controls.Add(this.cboReserveArea);
             this.grpQuickReserve.Controls.Add(this.lblReserveArea);
-            this.grpQuickReserve.Controls.Add(this.txtReserveTableName);
+            this.grpQuickReserve.Controls.Add(this.txtReserveCustomerName);
             this.grpQuickReserve.Controls.Add(this.lblReserveName);
             this.grpQuickReserve.Dock = System.Windows.Forms.DockStyle.Top;
             this.grpQuickReserve.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
@@ -197,9 +218,9 @@
             this.btnAddReservedTable.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAddReservedTable.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnAddReservedTable.ForeColor = System.Drawing.Color.White;
-            this.btnAddReservedTable.Location = new System.Drawing.Point(12, 164);
+            this.btnAddReservedTable.Location = new System.Drawing.Point(10, 164);
             this.btnAddReservedTable.Name = "btnAddReservedTable";
-            this.btnAddReservedTable.Size = new System.Drawing.Size(262, 36);
+            this.btnAddReservedTable.Size = new System.Drawing.Size(264, 36);
             this.btnAddReservedTable.TabIndex = 8;
             this.btnAddReservedTable.Text = "+ Thêm bàn đặt trước";
             this.btnAddReservedTable.UseVisualStyleBackColor = false;
@@ -210,17 +231,17 @@
             this.dtpEndTime.CustomFormat = "HH:mm dd/MM/yyyy";
             this.dtpEndTime.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.dtpEndTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpEndTime.Location = new System.Drawing.Point(94, 126);
+            this.dtpEndTime.Location = new System.Drawing.Point(112, 126);
             this.dtpEndTime.Name = "dtpEndTime";
             this.dtpEndTime.ShowUpDown = true;
-            this.dtpEndTime.Size = new System.Drawing.Size(180, 27);
+            this.dtpEndTime.Size = new System.Drawing.Size(162, 27);
             this.dtpEndTime.TabIndex = 7;
             // 
             // lblEndTime
             // 
             this.lblEndTime.AutoSize = true;
             this.lblEndTime.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lblEndTime.Location = new System.Drawing.Point(10, 130);
+            this.lblEndTime.Location = new System.Drawing.Point(8, 129);
             this.lblEndTime.Name = "lblEndTime";
             this.lblEndTime.Size = new System.Drawing.Size(65, 20);
             this.lblEndTime.TabIndex = 6;
@@ -231,59 +252,58 @@
             this.dtpStartTime.CustomFormat = "HH:mm dd/MM/yyyy";
             this.dtpStartTime.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.dtpStartTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpStartTime.Location = new System.Drawing.Point(94, 92);
+            this.dtpStartTime.Location = new System.Drawing.Point(112, 92);
             this.dtpStartTime.Name = "dtpStartTime";
             this.dtpStartTime.ShowUpDown = true;
-            this.dtpStartTime.Size = new System.Drawing.Size(180, 27);
+            this.dtpStartTime.Size = new System.Drawing.Size(162, 27);
             this.dtpStartTime.TabIndex = 5;
             // 
             // lblStartTime
             // 
             this.lblStartTime.AutoSize = true;
             this.lblStartTime.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lblStartTime.Location = new System.Drawing.Point(10, 96);
+            this.lblStartTime.Location = new System.Drawing.Point(8, 95);
             this.lblStartTime.Name = "lblStartTime";
             this.lblStartTime.Size = new System.Drawing.Size(73, 20);
             this.lblStartTime.TabIndex = 4;
             this.lblStartTime.Text = "Từ khung:";
             // 
-            // txtReserveArea
+            // cboReserveArea
             // 
-            this.txtReserveArea.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.txtReserveArea.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.txtReserveArea.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.txtReserveArea.Location = new System.Drawing.Point(94, 58);
-            this.txtReserveArea.Name = "txtReserveArea";
-            this.txtReserveArea.Size = new System.Drawing.Size(180, 27);
-            this.txtReserveArea.TabIndex = 3;
+            this.cboReserveArea.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cboReserveArea.FormattingEnabled = true;
+            this.cboReserveArea.Location = new System.Drawing.Point(112, 58);
+            this.cboReserveArea.Name = "cboReserveArea";
+            this.cboReserveArea.Size = new System.Drawing.Size(162, 28);
+            this.cboReserveArea.TabIndex = 3;
             // 
             // lblReserveArea
             // 
             this.lblReserveArea.AutoSize = true;
             this.lblReserveArea.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lblReserveArea.Location = new System.Drawing.Point(10, 62);
+            this.lblReserveArea.Location = new System.Drawing.Point(8, 61);
             this.lblReserveArea.Name = "lblReserveArea";
             this.lblReserveArea.Size = new System.Drawing.Size(64, 20);
             this.lblReserveArea.TabIndex = 2;
             this.lblReserveArea.Text = "Khu vực:";
             // 
-            // txtReserveTableName
+            // txtReserveCustomerName
             // 
-            this.txtReserveTableName.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.txtReserveTableName.Location = new System.Drawing.Point(94, 24);
-            this.txtReserveTableName.Name = "txtReserveTableName";
-            this.txtReserveTableName.Size = new System.Drawing.Size(180, 27);
-            this.txtReserveTableName.TabIndex = 1;
+            this.txtReserveCustomerName.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.txtReserveCustomerName.Location = new System.Drawing.Point(112, 24);
+            this.txtReserveCustomerName.Name = "txtReserveCustomerName";
+            this.txtReserveCustomerName.Size = new System.Drawing.Size(162, 27);
+            this.txtReserveCustomerName.TabIndex = 1;
             // 
             // lblReserveName
             // 
             this.lblReserveName.AutoSize = true;
             this.lblReserveName.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lblReserveName.Location = new System.Drawing.Point(10, 28);
+            this.lblReserveName.Location = new System.Drawing.Point(8, 27);
             this.lblReserveName.Name = "lblReserveName";
-            this.lblReserveName.Size = new System.Drawing.Size(90, 20);
+            this.lblReserveName.Size = new System.Drawing.Size(114, 20);
             this.lblReserveName.TabIndex = 0;
-            this.lblReserveName.Text = "Tên bàn/KH:";
+            this.lblReserveName.Text = "Tên khách hàng:";
             // 
             // btnCounterOrder
             // 
@@ -432,6 +452,15 @@
             // pnlOrderFooter
             // 
             this.pnlOrderFooter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(247)))), ((int)(((byte)(242)))));
+            this.pnlOrderFooter.Controls.Add(this.lblChangeDue);
+            this.pnlOrderFooter.Controls.Add(this.lblChangeDueTitle);
+            this.pnlOrderFooter.Controls.Add(this.btnCash500k);
+            this.pnlOrderFooter.Controls.Add(this.btnCash200k);
+            this.pnlOrderFooter.Controls.Add(this.btnCash100k);
+            this.pnlOrderFooter.Controls.Add(this.btnCash50k);
+            this.pnlOrderFooter.Controls.Add(this.btnCashExact);
+            this.pnlOrderFooter.Controls.Add(this.txtCashTendered);
+            this.pnlOrderFooter.Controls.Add(this.lblCashTendered);
             this.pnlOrderFooter.Controls.Add(this.lstCustomerSuggest);
             this.pnlOrderFooter.Controls.Add(this.lstPromoSuggest);
             this.pnlOrderFooter.Controls.Add(this.btnPayAndPrint);
@@ -443,10 +472,10 @@
             this.pnlOrderFooter.Controls.Add(this.txtCustomerPhone);
             this.pnlOrderFooter.Controls.Add(this.lblCustomerPhone);
             this.pnlOrderFooter.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlOrderFooter.Location = new System.Drawing.Point(10, 430);
+            this.pnlOrderFooter.Location = new System.Drawing.Point(10, 360);
             this.pnlOrderFooter.Name = "pnlOrderFooter";
             this.pnlOrderFooter.Padding = new System.Windows.Forms.Padding(8);
-            this.pnlOrderFooter.Size = new System.Drawing.Size(395, 230);
+            this.pnlOrderFooter.Size = new System.Drawing.Size(395, 300);
             this.pnlOrderFooter.TabIndex = 2;
             // 
             // lstCustomerSuggest
@@ -479,6 +508,141 @@
             this.lstPromoSuggest.Visible = false;
             this.lstPromoSuggest.Click += new System.EventHandler(this.lstPromoSuggest_Click);
             // 
+            // 
+            // pnlSummaryBox
+            // 
+            this.pnlSummaryBox.BackColor = System.Drawing.Color.White;
+            this.pnlSummaryBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlSummaryBox.Controls.Add(this.lblFinalAmount);
+            this.pnlSummaryBox.Controls.Add(this.lblTotalAmount);
+            this.pnlSummaryBox.Location = new System.Drawing.Point(8, 93);
+            this.pnlSummaryBox.Name = "pnlSummaryBox";
+            this.pnlSummaryBox.Padding = new System.Windows.Forms.Padding(8, 4, 8, 4);
+            this.pnlSummaryBox.Size = new System.Drawing.Size(378, 60);
+            this.pnlSummaryBox.TabIndex = 7;
+            // 
+            // lblCashTendered
+            // 
+            this.lblCashTendered.AutoSize = true;
+            this.lblCashTendered.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
+            this.lblCashTendered.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(44)))), ((int)(((byte)(42)))));
+            this.lblCashTendered.Location = new System.Drawing.Point(8, 161);
+            this.lblCashTendered.Name = "lblCashTendered";
+            this.lblCashTendered.Size = new System.Drawing.Size(117, 20);
+            this.lblCashTendered.TabIndex = 11;
+            this.lblCashTendered.Text = "Tiền khách đưa:";
+            // 
+            // txtCashTendered
+            // 
+            this.txtCashTendered.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
+            this.txtCashTendered.Location = new System.Drawing.Point(125, 157);
+            this.txtCashTendered.Name = "txtCashTendered";
+            this.txtCashTendered.Size = new System.Drawing.Size(155, 29);
+            this.txtCashTendered.TabIndex = 12;
+            this.txtCashTendered.TextChanged += new System.EventHandler(this.txtCashTendered_TextChanged);
+            // 
+            // btnCashExact
+            // 
+            this.btnCashExact.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(152)))), ((int)(((byte)(219)))));
+            this.btnCashExact.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCashExact.FlatAppearance.BorderSize = 0;
+            this.btnCashExact.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCashExact.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.btnCashExact.ForeColor = System.Drawing.Color.White;
+            this.btnCashExact.Location = new System.Drawing.Point(286, 157);
+            this.btnCashExact.Name = "btnCashExact";
+            this.btnCashExact.Size = new System.Drawing.Size(46, 29);
+            this.btnCashExact.TabIndex = 13;
+            this.btnCashExact.Text = "Đủ";
+            this.btnCashExact.UseVisualStyleBackColor = false;
+            this.btnCashExact.Click += new System.EventHandler(this.btnCashExact_Click);
+            // 
+            // btnCash50k
+            // 
+            this.btnCash50k.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(224)))), ((int)(((byte)(230)))));
+            this.btnCash50k.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCash50k.FlatAppearance.BorderSize = 0;
+            this.btnCash50k.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCash50k.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.btnCash50k.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.btnCash50k.Location = new System.Drawing.Point(336, 157);
+            this.btnCash50k.Name = "btnCash50k";
+            this.btnCash50k.Size = new System.Drawing.Size(50, 29);
+            this.btnCash50k.TabIndex = 14;
+            this.btnCash50k.Text = "50k";
+            this.btnCash50k.UseVisualStyleBackColor = false;
+            this.btnCash50k.Click += new System.EventHandler(this.btnCashQuick_Click);
+            // 
+            // btnCash100k
+            // 
+            this.btnCash100k.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(224)))), ((int)(((byte)(230)))));
+            this.btnCash100k.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCash100k.FlatAppearance.BorderSize = 0;
+            this.btnCash100k.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCash100k.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.btnCash100k.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.btnCash100k.Location = new System.Drawing.Point(125, 190);
+            this.btnCash100k.Name = "btnCash100k";
+            this.btnCash100k.Size = new System.Drawing.Size(60, 26);
+            this.btnCash100k.TabIndex = 15;
+            this.btnCash100k.Text = "100k";
+            this.btnCash100k.UseVisualStyleBackColor = false;
+            this.btnCash100k.Click += new System.EventHandler(this.btnCashQuick_Click);
+            // 
+            // btnCash200k
+            // 
+            this.btnCash200k.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(224)))), ((int)(((byte)(230)))));
+            this.btnCash200k.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCash200k.FlatAppearance.BorderSize = 0;
+            this.btnCash200k.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCash200k.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.btnCash200k.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.btnCash200k.Location = new System.Drawing.Point(191, 190);
+            this.btnCash200k.Name = "btnCash200k";
+            this.btnCash200k.Size = new System.Drawing.Size(60, 26);
+            this.btnCash200k.TabIndex = 16;
+            this.btnCash200k.Text = "200k";
+            this.btnCash200k.UseVisualStyleBackColor = false;
+            this.btnCash200k.Click += new System.EventHandler(this.btnCashQuick_Click);
+            // 
+            // btnCash500k
+            // 
+            this.btnCash500k.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(224)))), ((int)(((byte)(230)))));
+            this.btnCash500k.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCash500k.FlatAppearance.BorderSize = 0;
+            this.btnCash500k.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCash500k.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.btnCash500k.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.btnCash500k.Location = new System.Drawing.Point(257, 190);
+            this.btnCash500k.Name = "btnCash500k";
+            this.btnCash500k.Size = new System.Drawing.Size(60, 26);
+            this.btnCash500k.TabIndex = 17;
+            this.btnCash500k.Text = "500k";
+            this.btnCash500k.UseVisualStyleBackColor = false;
+            this.btnCash500k.Click += new System.EventHandler(this.btnCashQuick_Click);
+            // 
+            // lblChangeDueTitle
+            // 
+            this.lblChangeDueTitle.AutoSize = true;
+            this.lblChangeDueTitle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.lblChangeDueTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(44)))), ((int)(((byte)(42)))));
+            this.lblChangeDueTitle.Location = new System.Drawing.Point(8, 222);
+            this.lblChangeDueTitle.Name = "lblChangeDueTitle";
+            this.lblChangeDueTitle.Size = new System.Drawing.Size(95, 20);
+            this.lblChangeDueTitle.TabIndex = 18;
+            this.lblChangeDueTitle.Text = "Tiền thối lại:";
+            // 
+            // lblChangeDue
+            // 
+            this.lblChangeDue.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.lblChangeDue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(174)))), ((int)(((byte)(96)))));
+            this.lblChangeDue.Location = new System.Drawing.Point(125, 219);
+            this.lblChangeDue.Name = "lblChangeDue";
+            this.lblChangeDue.Size = new System.Drawing.Size(261, 25);
+            this.lblChangeDue.TabIndex = 19;
+            this.lblChangeDue.Text = "0 đ";
+            this.lblChangeDue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // btnPayAndPrint
             // 
             this.btnPayAndPrint.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(174)))), ((int)(((byte)(96)))));
@@ -487,26 +651,14 @@
             this.btnPayAndPrint.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPayAndPrint.Font = new System.Drawing.Font("Segoe UI", 10.5F, System.Drawing.FontStyle.Bold);
             this.btnPayAndPrint.ForeColor = System.Drawing.Color.White;
-            this.btnPayAndPrint.Location = new System.Drawing.Point(8, 170);
+            this.btnPayAndPrint.Location = new System.Drawing.Point(8, 248);
             this.btnPayAndPrint.Name = "btnPayAndPrint";
-            this.btnPayAndPrint.Size = new System.Drawing.Size(378, 48);
+            this.btnPayAndPrint.Size = new System.Drawing.Size(378, 44);
             this.btnPayAndPrint.TabIndex = 8;
             this.btnPayAndPrint.Text = "THANH TOÁN & IN HÓA ĐƠN (K80)";
             this.btnPayAndPrint.UseMnemonic = false;
             this.btnPayAndPrint.UseVisualStyleBackColor = false;
             this.btnPayAndPrint.Click += new System.EventHandler(this.btnPayAndPrint_Click);
-            // 
-            // pnlSummaryBox
-            // 
-            this.pnlSummaryBox.BackColor = System.Drawing.Color.White;
-            this.pnlSummaryBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlSummaryBox.Controls.Add(this.lblFinalAmount);
-            this.pnlSummaryBox.Controls.Add(this.lblTotalAmount);
-            this.pnlSummaryBox.Location = new System.Drawing.Point(8, 95);
-            this.pnlSummaryBox.Name = "pnlSummaryBox";
-            this.pnlSummaryBox.Padding = new System.Windows.Forms.Padding(8, 4, 8, 4);
-            this.pnlSummaryBox.Size = new System.Drawing.Size(378, 68);
-            this.pnlSummaryBox.TabIndex = 7;
             // 
             // lblFinalAmount
             // 
@@ -820,9 +972,9 @@
         private System.Windows.Forms.Label lblEndTime;
         private System.Windows.Forms.DateTimePicker dtpStartTime;
         private System.Windows.Forms.Label lblStartTime;
-        private System.Windows.Forms.TextBox txtReserveArea;
+        private System.Windows.Forms.ComboBox cboReserveArea;
         private System.Windows.Forms.Label lblReserveArea;
-        private System.Windows.Forms.TextBox txtReserveTableName;
+        private System.Windows.Forms.TextBox txtReserveCustomerName;
         private System.Windows.Forms.Label lblReserveName;
         private System.Windows.Forms.Button btnCounterOrder;
         private System.Windows.Forms.Panel pnlRightOrder;
@@ -846,6 +998,15 @@
         private System.Windows.Forms.Label lblCustomerInfo;
         private System.Windows.Forms.TextBox txtCustomerPhone;
         private System.Windows.Forms.Label lblCustomerPhone;
+        private System.Windows.Forms.Label lblCashTendered;
+        private System.Windows.Forms.TextBox txtCashTendered;
+        private System.Windows.Forms.Button btnCashExact;
+        private System.Windows.Forms.Button btnCash50k;
+        private System.Windows.Forms.Button btnCash100k;
+        private System.Windows.Forms.Button btnCash200k;
+        private System.Windows.Forms.Button btnCash500k;
+        private System.Windows.Forms.Label lblChangeDueTitle;
+        private System.Windows.Forms.Label lblChangeDue;
         private System.Windows.Forms.Panel pnlOrderHeader;
         private System.Windows.Forms.Label lblOrderStatusBadge;
         private System.Windows.Forms.Label lblOrderHeaderTitle;
@@ -860,5 +1021,6 @@
         private System.Windows.Forms.ComboBox cboCategoryFilter;
         private System.Windows.Forms.Label lblCategory;
         private System.Windows.Forms.Timer tmrAutoExpire;
+        private System.Windows.Forms.Label lblEmptyReservedNotice;
     }
 }

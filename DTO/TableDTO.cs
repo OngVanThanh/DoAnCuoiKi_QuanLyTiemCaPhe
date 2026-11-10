@@ -14,5 +14,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DTO
         public string Status { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
+        public string CustomerId { get; set; }
+        public string CustomerName { get; set; }
+        public string CustomerPhone { get; set; }
     }
 }

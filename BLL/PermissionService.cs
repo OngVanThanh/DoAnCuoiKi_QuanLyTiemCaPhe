@@ -4,6 +4,7 @@ using DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
 using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DoAnCuoiKi_QuanLyTiemCaPhe
 {
@@ -125,13 +126,108 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             return _userRepository.UpdateUser(user);
         }
 
-        // 9. Xóa tài khoản
+        // 9. Xóa tài khoản (có kiểm tra tự xóa và quản lý duy nhất)
+        public bool DeleteUser(string username, out string message)
+        {
+            message = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                message = "Tên đăng nhập không hợp lệ!";
+                return false;
+            }
+
+            username = username.Trim();
+
+            var targetUser = _userRepository.GetByUserName(username);
+            if (targetUser == null)
+            {
+                message = $"Không tìm thấy tài khoản [{username}] để xóa!";
+                return false;
+            }
+
+            // 1. Chặn người dùng tự xóa chính mình nếu đang đăng nhập
+            if (UserSession.CurrentUser != null &&
+                string.Equals(UserSession.CurrentUser.Username, username, StringComparison.OrdinalIgnoreCase))
+            {
+                message = "Không thể tự xóa tài khoản đang đăng nhập trong phiên làm việc hiện tại!";
+                return false;
+            }
+
+            // 2. Chặn xóa tài khoản Quản lý (RoleId = 1) nếu là Quản lý duy nhất đang hoạt động
+            if (targetUser.RoleId == 1)
+            {
+                var allUsers = _userRepository.GetAllUsersWithRoles();
+                int activeManagerCount = allUsers.Count(u => u.RoleId == 1 && (u.IsActive ?? true));
+                if (activeManagerCount <= 1)
+                {
+                    message = "Không thể xóa tài khoản Quản lý này vì đây là Quản lý đang hoạt động duy nhất trong hệ thống!";
+                    return false;
+                }
+            }
+
+            bool result = _userRepository.DeleteUser(username);
+            if (result)
+            {
+                message = $"Đã xóa tài khoản [{username}] thành công!";
+                return true;
+            }
+            else
+            {
+                message = "Không thể xóa tài khoản do lỗi cơ sở dữ liệu hoặc ràng buộc dữ liệu.";
+                return false;
+            }
+        }
+
         public bool DeleteUser(string username)
         {
-            if (string.IsNullOrWhiteSpace(username))
-                return false;
+            return DeleteUser(username, out _);
+        }
 
-            return _userRepository.DeleteUser(username.Trim());
+        // 9b. Quản lý đặt lại mật khẩu cho nhân viên không cần mật khẩu cũ
+        public bool AdminResetPassword(string username, string newPassword, out string message)
+        {
+            message = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                message = "Tên đăng nhập không được để trống!";
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(newPassword))
+            {
+                message = "Mật khẩu mới không được để trống!";
+                return false;
+            }
+
+            if (newPassword.Length < 6)
+            {
+                message = "Mật khẩu mới phải có độ dài tối thiểu 6 ký tự!";
+                return false;
+            }
+
+            var user = _userRepository.GetByUserName(username.Trim());
+            if (user == null)
+            {
+                message = $"Không tìm thấy tài khoản [{username}] trong hệ thống!";
+                return false;
+            }
+
+            string newSalt = SecurityHelper.GenerateSalt();
+            string newHash = SecurityHelper.HashPassword(newPassword, newSalt);
+
+            bool result = _userRepository.UpdatePassword(username.Trim(), newHash, newSalt);
+            if (result)
+            {
+                message = $"Đặt lại mật khẩu cho tài khoản [{username}] thành công!";
+                return true;
+            }
+            else
+            {
+                message = "Đã xảy ra lỗi khi cập nhật mật khẩu trong cơ sở dữ liệu.";
+                return false;
+            }
         }
 
         // 10. Vô hiệu hóa tài khoản

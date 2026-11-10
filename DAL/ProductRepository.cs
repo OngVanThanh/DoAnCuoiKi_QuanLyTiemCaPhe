@@ -92,20 +92,19 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
         {
             using (var db = GetContext())
             {
-                var query = from p in db.Products
-                            join c in db.Categories on p.CategoryId equals c.Id
-                            select new ProductDTO
-                            {
-                                Id = p.Id,
-                                ProductName = p.ProductName,
-                                CategoryId = p.CategoryId,
-                                CategoryName = c.CategoryName,
-                                Price = p.Price,
-                                Unit = p.Unit,
-                                ImagePath = p.ImagePath,
-                                IsActive = p.IsActive
-                            };
-                return query.ToList();
+                return db.Products
+                    .Select(p => new ProductDTO
+                    {
+                        Id = p.Id,
+                        ProductName = p.ProductName,
+                        CategoryId = p.CategoryId,
+                        CategoryName = p.Category != null ? p.Category.CategoryName : string.Empty,
+                        Price = p.Price,
+                        Unit = p.Unit,
+                        ImagePath = p.ImagePath,
+                        IsActive = p.IsActive
+                    })
+                    .ToList();
             }
         }
 
@@ -114,21 +113,20 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
         {
             using (var db = GetContext())
             {
-                var query = from p in db.Products
-                            join c in db.Categories on p.CategoryId equals c.Id
-                            where p.CategoryId == categoryId
-                            select new ProductDTO
-                            {
-                                Id = p.Id,
-                                ProductName = p.ProductName,
-                                CategoryId = p.CategoryId,
-                                CategoryName = c.CategoryName,
-                                Price = p.Price,
-                                Unit = p.Unit,
-                                ImagePath = p.ImagePath,
-                                IsActive = p.IsActive
-                            };
-                return query.ToList();
+                return db.Products
+                    .Where(p => p.CategoryId == categoryId)
+                    .Select(p => new ProductDTO
+                    {
+                        Id = p.Id,
+                        ProductName = p.ProductName,
+                        CategoryId = p.CategoryId,
+                        CategoryName = p.Category != null ? p.Category.CategoryName : string.Empty,
+                        Price = p.Price,
+                        Unit = p.Unit,
+                        ImagePath = p.ImagePath,
+                        IsActive = p.IsActive
+                    })
+                    .ToList();
             }
         }
 
@@ -137,21 +135,20 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
         {
             using (var db = GetContext())
             {
-                var query = from p in db.Products
-                            join c in db.Categories on p.CategoryId equals c.Id
-                            where p.ProductName.Contains(keyword)
-                            select new ProductDTO
-                            {
-                                Id = p.Id,
-                                ProductName = p.ProductName,
-                                CategoryId = p.CategoryId,
-                                CategoryName = c.CategoryName,
-                                Price = p.Price,
-                                Unit = p.Unit,
-                                ImagePath = p.ImagePath,
-                                IsActive = p.IsActive
-                            };
-                return query.ToList();
+                return db.Products
+                    .Where(p => p.ProductName.Contains(keyword))
+                    .Select(p => new ProductDTO
+                    {
+                        Id = p.Id,
+                        ProductName = p.ProductName,
+                        CategoryId = p.CategoryId,
+                        CategoryName = p.Category != null ? p.Category.CategoryName : string.Empty,
+                        Price = p.Price,
+                        Unit = p.Unit,
+                        ImagePath = p.ImagePath,
+                        IsActive = p.IsActive
+                    })
+                    .ToList();
             }
         }
 

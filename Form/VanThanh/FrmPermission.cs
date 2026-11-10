@@ -2,6 +2,7 @@
 using DoAnCuoiKi_QuanLyTiemCaPhe.BLL;
 using DoAnCuoiKi_QuanLyTiemCaPhe.DAL;
 using DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
+using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -28,17 +29,12 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         {
             try
             {
-                _isLoading = true;
                 LoadUsersToGrid();
                 InitActionPopup();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Đã xảy ra lỗi khi tải dữ liệu:\n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                _isLoading = false;
             }
         }
 
@@ -80,6 +76,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         // 10. Chọn tài khoản trên DataGridView
         private void dgvUsers_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (_isLoading) return;
             if (e.RowIndex >= 0 && dgvUsers.Columns[e.ColumnIndex].Name == "Control")
             {
                 // Nếu popup đang mở VÀ người dùng bấm lại chính đúng dòng đó -> Ẩn đi
@@ -117,12 +114,19 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             DataGridViewRow row = dgvUsers.Rows[rowIndex];
 
             // Lấy tên đăng nhập (Username) từ cột "Username" trên lưới
-            // (Hãy đảm bảo tên cột trong giao diện thiết kế của bạn chính xác là "Username")
             string username = row.Cells["Username"].Value?.ToString();
 
             if (string.IsNullOrEmpty(username))
             {
                 MessageBox.Show("Không tìm thấy tên tài khoản để xóa!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Chặn người dùng tự xóa tài khoản đang đăng nhập
+            if (UserSession.CurrentUser != null &&
+                string.Equals(username, UserSession.CurrentUser.Username, StringComparison.OrdinalIgnoreCase))
+            {
+                MessageBox.Show("Bạn không thể tự xóa tài khoản đang đăng nhập của chính mình!", "Cảnh báo phân quyền", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -139,11 +143,11 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             try
             {
                 // Gọi Service thực hiện xóa bằng Username
-                bool success = _permissionService.DeleteUser(username);
+                bool success = _permissionService.DeleteUser(username, out string message);
 
                 if (success)
                 {
-                    MessageBox.Show("Xóa tài khoản thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     _isLoading = true;
                     LoadUsersToGrid(); // Tải lại danh sách trên lưới
@@ -151,7 +155,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 }
                 else
                 {
-                    MessageBox.Show("Không thể xóa tài khoản. Vui lòng thử lại.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(message, "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
@@ -160,6 +164,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 MessageBox.Show("Có lỗi khi xóa tài khoản:\n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void ExecuteChangePasswordAction(int rowIndex)
         {
             if (rowIndex < 0 || rowIndex >= dgvUsers.Rows.Count) return;
@@ -173,9 +178,81 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 return;
             }
 
-            // Mở form đổi mật khẩu và truyền username vào
-            FrmChangePassword frmChange = new FrmChangePassword(username);
-            frmChange.ShowDialog();
+            ShowAdminResetPasswordDialog(username);
+        }
+
+        private void ShowAdminResetPasswordDialog(string username)
+        {
+            using (Form prompt = new Form())
+            {
+                prompt.Width = 420;
+                prompt.Height = 260;
+                prompt.FormBorderStyle = FormBorderStyle.FixedDialog;
+                prompt.Text = "Đặt lại mật khẩu nhân viên";
+                prompt.StartPosition = FormStartPosition.CenterParent;
+                prompt.MaximizeBox = false;
+                prompt.MinimizeBox = false;
+
+                Label lblTitle = new Label() { Left = 25, Top = 15, Width = 350, Text = $"Đặt lại mật khẩu cho tài khoản: [{username}]", Font = new Font("Segoe UI", 9.5f, FontStyle.Bold) };
+                Label lblNew = new Label() { Left = 25, Top = 48, Width = 350, Text = "Mật khẩu mới (tối thiểu 6 ký tự):" };
+                TextBox txtNew = new TextBox() { Left = 25, Top = 70, Width = 350, PasswordChar = '*', UseSystemPasswordChar = true };
+                Label lblConfirm = new Label() { Left = 25, Top = 103, Width = 350, Text = "Xác nhận mật khẩu mới:" };
+                TextBox txtConfirm = new TextBox() { Left = 25, Top = 125, Width = 350, PasswordChar = '*', UseSystemPasswordChar = true };
+
+                Button btnSave = new Button() { Text = "Xác nhận", Left = 175, Top = 168, Width = 95, Height = 32, DialogResult = DialogResult.None };
+                Button btnCancel = new Button() { Text = "Hủy bỏ", Left = 280, Top = 168, Width = 95, Height = 32, DialogResult = DialogResult.Cancel };
+
+                btnSave.Click += (sender, e) =>
+                {
+                    string newPass = txtNew.Text;
+                    string confirmPass = txtConfirm.Text;
+
+                    if (string.IsNullOrWhiteSpace(newPass))
+                    {
+                        MessageBox.Show("Vui lòng nhập mật khẩu mới!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        txtNew.Focus();
+                        return;
+                    }
+
+                    if (newPass.Length < 6)
+                    {
+                        MessageBox.Show("Mật khẩu mới phải có tối thiểu 6 ký tự!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        txtNew.Focus();
+                        return;
+                    }
+
+                    if (newPass != confirmPass)
+                    {
+                        MessageBox.Show("Mật khẩu xác nhận không khớp!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        txtConfirm.Focus();
+                        return;
+                    }
+
+                    bool success = _permissionService.AdminResetPassword(username, newPass, out string message);
+                    if (success)
+                    {
+                        MessageBox.Show(message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        prompt.DialogResult = DialogResult.OK;
+                        prompt.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show(message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                };
+
+                prompt.Controls.Add(lblTitle);
+                prompt.Controls.Add(lblNew);
+                prompt.Controls.Add(txtNew);
+                prompt.Controls.Add(lblConfirm);
+                prompt.Controls.Add(txtConfirm);
+                prompt.Controls.Add(btnSave);
+                prompt.Controls.Add(btnCancel);
+                prompt.AcceptButton = btnSave;
+                prompt.CancelButton = btnCancel;
+
+                prompt.ShowDialog(this);
+            }
         }
         private void btnCreateUser_Click_1(object sender, EventArgs e)
         {

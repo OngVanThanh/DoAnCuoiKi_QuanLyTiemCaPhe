@@ -20,9 +20,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
 
         internal static readonly List<Table> FallbackTables = new List<Table>
         {
-            new Table { Id = 1, TableName = "Khách tại quầy / Mang đi", AreaId = 1, Status = "Trống" },
-            new Table { Id = 2, TableName = "Bàn 01 - Khu máy lạnh", AreaId = 1, Status = "Đặt trước", StartTime = DateTime.Now.AddMinutes(-15), EndTime = DateTime.Now.AddHours(2) },
-            new Table { Id = 3, TableName = "Bàn VIP 01", AreaId = 3, Status = "Đặt trước", StartTime = DateTime.Now, EndTime = DateTime.Now.AddHours(3) }
+            new Table { Id = 1, TableName = "Khách tại quầy / Mang đi", AreaId = 1, Status = "Trống" }
         };
 
         public CoffeeShopDataContextDataContext GetContext()
@@ -61,9 +59,16 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             if (!IsDatabaseOnline())
                 return _fallbackAreas.OrderBy(a => a.Id).ToList();
 
-            using (var db = GetContext())
+            try
             {
-                return db.Areas.OrderBy(a => a.Id).ToList();
+                using (var db = GetContext())
+                {
+                    return db.Areas.OrderBy(a => a.Id).ToList();
+                }
+            }
+            catch
+            {
+                return _fallbackAreas.OrderBy(a => a.Id).ToList();
             }
         }
 
@@ -96,20 +101,34 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                 return nextId;
             }
 
-            using (var db = GetContext())
+            try
             {
-                var existing = db.Areas.FirstOrDefault(a => a.AreaName.ToLower() == cleanName.ToLower());
-                if (existing != null)
-                    return existing.Id;
-
-                var newArea = new Area
+                using (var db = GetContext())
                 {
-                    AreaName = cleanName,
-                    Description = "Khu vực tạo từ màn hình đặt bàn"
-                };
-                db.Areas.InsertOnSubmit(newArea);
-                db.SubmitChanges();
-                return newArea.Id;
+                    var existing = db.Areas.FirstOrDefault(a => a.AreaName.ToLower() == cleanName.ToLower());
+                    if (existing != null)
+                        return existing.Id;
+
+                    var newArea = new Area
+                    {
+                        AreaName = cleanName,
+                        Description = "Khu vực tạo từ màn hình đặt bàn"
+                    };
+                    db.Areas.InsertOnSubmit(newArea);
+                    db.SubmitChanges();
+                    return newArea.Id;
+                }
+            }
+            catch
+            {
+                var existingFallback = _fallbackAreas.FirstOrDefault(a =>
+                    string.Equals(a.AreaName, cleanName, StringComparison.OrdinalIgnoreCase));
+                if (existingFallback != null)
+                    return existingFallback.Id;
+
+                int nextId = _fallbackAreas.Count > 0 ? _fallbackAreas.Max(a => a.Id) + 1 : 1;
+                _fallbackAreas.Add(new Area { Id = nextId, AreaName = cleanName, Description = "Khu vực đặt bàn" });
+                return nextId;
             }
         }
 
@@ -118,9 +137,16 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             if (!IsDatabaseOnline())
                 return _fallbackAreas.FirstOrDefault(a => a.Id == areaId);
 
-            using (var db = GetContext())
+            try
             {
-                return db.Areas.FirstOrDefault(a => a.Id == areaId);
+                using (var db = GetContext())
+                {
+                    return db.Areas.FirstOrDefault(a => a.Id == areaId);
+                }
+            }
+            catch
+            {
+                return _fallbackAreas.FirstOrDefault(a => a.Id == areaId);
             }
         }
 
@@ -129,9 +155,71 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             if (!IsDatabaseOnline())
                 return _fallbackAreas.Any(a => a.Id == areaId);
 
+            try
+            {
+                using (var db = GetContext())
+                {
+                    return db.Areas.Any(a => a.Id == areaId);
+                }
+            }
+            catch
+            {
+                return _fallbackAreas.Any(a => a.Id == areaId);
+            }
+        }
+
+        public bool DeleteAreaByName(string areaName, out string message)
+        {
+            if (string.IsNullOrWhiteSpace(areaName))
+            {
+                message = "Tên khu vực không hợp lệ!";
+                return false;
+            }
+
+            string cleanName = areaName.Trim();
+
+            if (!IsDatabaseOnline())
+            {
+                var area = _fallbackAreas.FirstOrDefault(a => string.Equals(a.AreaName, cleanName, StringComparison.OrdinalIgnoreCase));
+                if (area == null)
+                {
+                    message = "Khu vực không tồn tại trong hệ thống!";
+                    return false;
+                }
+
+                bool hasTables = FallbackTables.Any(t => t.AreaId == area.Id);
+                if (hasTables)
+                {
+                    message = $"Khu vực '{cleanName}' đang có bàn hoạt động, không thể xóa!";
+                    return false;
+                }
+
+                _fallbackAreas.Remove(area);
+                message = $"Đã xóa khu vực '{cleanName}' khỏi danh sách gợi ý!";
+                return true;
+            }
+
             using (var db = GetContext())
             {
-                return db.Areas.Any(a => a.Id == areaId);
+                var area = db.Areas.FirstOrDefault(a => a.AreaName == cleanName);
+                if (area == null)
+                {
+                    message = "Khu vực không tồn tại trong hệ thống!";
+                    return false;
+                }
+
+                // Kiểm tra xem khu vực này có bàn đang hoạt động không
+                bool hasTables = db.Tables.Any(t => t.AreaId == area.Id);
+                if (hasTables)
+                {
+                    message = $"Khu vực '{cleanName}' đang có bàn hoạt động, không thể xóa!";
+                    return false;
+                }
+
+                db.Areas.DeleteOnSubmit(area);
+                db.SubmitChanges();
+                message = $"Đã xóa khu vực '{cleanName}' khỏi danh sách gợi ý!";
+                return true;
             }
         }
 
@@ -150,39 +238,91 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
         {
             if (!IsDatabaseOnline())
             {
-                return (from table in FallbackTables
-                        join area in _fallbackAreas on table.AreaId equals area.Id
-                        orderby table.Id
-                        select new TableDTO
-                        {
-                            Id = table.Id,
-                            TableName = table.TableName,
-                            AreaId = table.AreaId,
-                            AreaName = area.AreaName,
-                            Status = table.Status,
-                            StartTime = table.StartTime,
-                            EndTime = table.EndTime
-                        }).ToList();
+                return FallbackTables
+                    .Join(_fallbackAreas,
+                          table => table.AreaId,
+                          area => area.Id,
+                          (table, area) => new TableDTO
+                          {
+                              Id = table.Id,
+                              TableName = table.TableName,
+                              AreaId = table.AreaId,
+                              AreaName = area.AreaName,
+                              Status = table.Status,
+                              StartTime = table.StartTime,
+                              EndTime = table.EndTime,
+                              CustomerId = table.CustomerId,
+                              CustomerName = !string.IsNullOrEmpty(table.CustomerId) ? "Khách mẫu" : null,
+                              CustomerPhone = table.CustomerId
+                          })
+                    .OrderBy(t => t.Id)
+                    .ToList();
             }
 
-            using (var db = GetContext())
+            try
             {
-                var query =
-                    from table in db.Tables
-                    join area in db.Areas on table.AreaId equals area.Id
-                    orderby table.Id
-                    select new TableDTO
-                    {
-                        Id = table.Id,
-                        TableName = table.TableName,
-                        AreaId = table.AreaId,
-                        AreaName = area.AreaName,
-                        Status = table.Status,
-                        StartTime = table.StartTime,
-                        EndTime = table.EndTime
-                    };
+                using (var db = GetContext())
+                {
+                    var tables = db.Tables
+                        .OrderBy(t => t.Id)
+                        .Select(t => new
+                        {
+                            t.Id,
+                            t.TableName,
+                            t.AreaId,
+                            AreaName = t.Area != null ? t.Area.AreaName : string.Empty,
+                            t.Status,
+                            t.StartTime,
+                            t.EndTime,
+                            t.CustomerId
+                        })
+                        .ToList();
 
-                return query.ToList();
+                    var customerList = db.Customers.ToList();
+
+                    return tables.Select(t =>
+                    {
+                        var cust = !string.IsNullOrEmpty(t.CustomerId)
+                            ? customerList.FirstOrDefault(c => c.Phone == t.CustomerId || c.Id.ToString() == t.CustomerId)
+                            : null;
+
+                        return new TableDTO
+                        {
+                            Id = t.Id,
+                            TableName = t.TableName,
+                            AreaId = t.AreaId,
+                            AreaName = t.AreaName,
+                            Status = t.Status,
+                            StartTime = t.StartTime,
+                            EndTime = t.EndTime,
+                            CustomerId = t.CustomerId,
+                            CustomerName = cust != null ? cust.CustomerName : (!string.IsNullOrEmpty(t.CustomerId) ? t.CustomerId : null),
+                            CustomerPhone = cust?.Phone
+                        };
+                    }).ToList();
+                }
+            }
+            catch
+            {
+                return FallbackTables
+                    .Join(_fallbackAreas,
+                          table => table.AreaId,
+                          area => area.Id,
+                          (table, area) => new TableDTO
+                          {
+                              Id = table.Id,
+                              TableName = table.TableName,
+                              AreaId = table.AreaId,
+                              AreaName = area.AreaName,
+                              Status = table.Status,
+                              StartTime = table.StartTime,
+                              EndTime = table.EndTime,
+                              CustomerId = table.CustomerId,
+                              CustomerName = !string.IsNullOrEmpty(table.CustomerId) ? "Khách mẫu" : null,
+                              CustomerPhone = table.CustomerId
+                          })
+                    .OrderBy(t => t.Id)
+                    .ToList();
             }
         }
 
@@ -205,6 +345,60 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             using (var db = GetContext())
             {
                 return db.Tables.FirstOrDefault(t => t.Id == tableId);
+            }
+        }
+
+        public TableDTO GetOrCreateCounterTable()
+        {
+            if (!IsDatabaseOnline())
+            {
+                return new TableDTO
+                {
+                    Id = 1,
+                    TableName = "Khách tại quầy / Mang đi",
+                    AreaId = 1,
+                    AreaName = "Khu máy lạnh (Tầng 1)",
+                    Status = "Trống"
+                };
+            }
+
+            using (var db = GetContext())
+            {
+                var counter = db.Tables.FirstOrDefault(t =>
+                    t.TableName == "Khách tại quầy / Mang đi" ||
+                    t.TableName == "Khách tại quầy" ||
+                    t.TableName == "Mang đi");
+
+                if (counter == null)
+                {
+                    int defaultAreaId = db.Areas.Select(a => a.Id).FirstOrDefault();
+                    if (defaultAreaId <= 0)
+                    {
+                        var newArea = new Area { AreaName = "Khu phục vụ", Description = "Khu vực quầy thu ngân" };
+                        db.Areas.InsertOnSubmit(newArea);
+                        db.SubmitChanges();
+                        defaultAreaId = newArea.Id;
+                    }
+
+                    counter = new Table
+                    {
+                        TableName = "Khách tại quầy / Mang đi",
+                        AreaId = defaultAreaId,
+                        Status = "Trống"
+                    };
+                    db.Tables.InsertOnSubmit(counter);
+                    db.SubmitChanges();
+                }
+
+                string areaName = db.Areas.Where(a => a.Id == counter.AreaId).Select(a => a.AreaName).FirstOrDefault() ?? "";
+                return new TableDTO
+                {
+                    Id = counter.Id,
+                    TableName = counter.TableName,
+                    AreaId = counter.AreaId,
+                    AreaName = areaName,
+                    Status = counter.Status
+                };
             }
         }
 

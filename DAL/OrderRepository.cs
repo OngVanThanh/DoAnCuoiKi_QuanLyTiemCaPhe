@@ -313,44 +313,43 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
         {
             if (!_tableRepo.IsDatabaseOnline())
             {
-                return (from detail in FallbackOrderDetails
-                        join product in _fallbackProducts on detail.ProductId equals product.Id
-                        where detail.OrderId == orderId
-                        orderby detail.Id
-                        select new OrderDetailDTO
-                        {
-                            Id = detail.Id,
-                            OrderId = detail.OrderId,
-                            ProductId = detail.ProductId,
-                            ProductName = product.ProductName,
-                            Unit = product.Unit,
-                            Quantity = detail.Quantity,
-                            UnitPrice = detail.UnitPrice,
-                            TotalPrice = detail.TotalPrice
-                        }).ToList();
+                return FallbackOrderDetails
+                    .Where(detail => detail.OrderId == orderId)
+                    .Join(_fallbackProducts,
+                          detail => detail.ProductId,
+                          product => product.Id,
+                          (detail, product) => new OrderDetailDTO
+                          {
+                              Id = detail.Id,
+                              OrderId = detail.OrderId,
+                              ProductId = detail.ProductId,
+                              ProductName = product.ProductName,
+                              Unit = product.Unit,
+                              Quantity = detail.Quantity,
+                              UnitPrice = detail.UnitPrice,
+                              TotalPrice = detail.TotalPrice
+                          })
+                    .OrderBy(d => d.Id)
+                    .ToList();
             }
 
             using (var db = GetContext())
             {
-                var query =
-                    from detail in db.OrderDetails
-                    join product in db.Products
-                        on detail.ProductId equals product.Id
-                    where detail.OrderId == orderId
-                    orderby detail.Id
-                    select new OrderDetailDTO
+                return db.OrderDetails
+                    .Where(d => d.OrderId == orderId)
+                    .OrderBy(d => d.Id)
+                    .Select(d => new OrderDetailDTO
                     {
-                        Id = detail.Id,
-                        OrderId = detail.OrderId,
-                        ProductId = detail.ProductId,
-                        ProductName = product.ProductName,
-                        Unit = product.Unit,
-                        Quantity = detail.Quantity,
-                        UnitPrice = detail.UnitPrice,
-                        TotalPrice = detail.TotalPrice
-                    };
-
-                return query.ToList();
+                        Id = d.Id,
+                        OrderId = d.OrderId,
+                        ProductId = d.ProductId,
+                        ProductName = d.Product != null ? d.Product.ProductName : string.Empty,
+                        Unit = d.Product != null ? d.Product.Unit : string.Empty,
+                        Quantity = d.Quantity,
+                        UnitPrice = d.UnitPrice,
+                        TotalPrice = d.TotalPrice
+                    })
+                    .ToList();
             }
         }
 
@@ -545,7 +544,16 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
 
                 var table = TableRepository.FallbackTables.FirstOrDefault(t => t.Id == order.TableId);
                 if (table != null)
-                    table.Status = "Trống";
+                {
+                    if (table.Id > 1 && table.EndTime.HasValue && table.EndTime.Value > DateTime.Now)
+                    {
+                        table.Status = "Đã thanh toán";
+                    }
+                    else
+                    {
+                        table.Status = "Trống";
+                    }
+                }
 
                 return true;
             }
@@ -568,7 +576,14 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                     var table = db.Tables.FirstOrDefault(t => t.Id == order.TableId);
                     if (table != null)
                     {
-                        table.Status = "Trống";
+                        if (table.Id > 1 && table.EndTime.HasValue && table.EndTime.Value > DateTime.Now)
+                        {
+                            table.Status = "Đã thanh toán";
+                        }
+                        else
+                        {
+                            table.Status = "Trống";
+                        }
                     }
 
                     db.SubmitChanges();

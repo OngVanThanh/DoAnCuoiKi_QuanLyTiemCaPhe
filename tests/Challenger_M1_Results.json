@@ -1,0 +1,674 @@
+﻿[
+    {
+        "Category":  "SQL_Seed",
+        "TestName":  "CoffeeShopDB_Full.sql contains seed user \u0027admin\u0027",
+        "Passed":  true,
+        "Expected":  "True",
+        "Actual":  "True",
+        "Details":  ""
+    },
+    {
+        "Category":  "SQL_Seed",
+        "TestName":  "CoffeeShopDB_Full.sql contains seed user \u0027thungan\u0027",
+        "Passed":  true,
+        "Expected":  "True",
+        "Actual":  "True",
+        "Details":  ""
+    },
+    {
+        "Category":  "SQL_Seed",
+        "TestName":  "CoffeeShopDB.sql contains seed user \u0027admin\u0027",
+        "Passed":  true,
+        "Expected":  "True",
+        "Actual":  "True",
+        "Details":  ""
+    },
+    {
+        "Category":  "SQL_Seed",
+        "TestName":  "CoffeeShopDB.sql contains seed user \u0027thungan\u0027",
+        "Passed":  true,
+        "Expected":  "True",
+        "Actual":  "True",
+        "Details":  ""
+    },
+    {
+        "Category":  "SQL_Seed",
+        "TestName":  "Admin seed Hash identical in Full and DB sql scripts",
+        "Passed":  true,
+        "Expected":  "True",
+        "Actual":  "True",
+        "Details":  ""
+    },
+    {
+        "Category":  "SQL_Seed",
+        "TestName":  "Admin seed Salt identical in Full and DB sql scripts",
+        "Passed":  true,
+        "Expected":  "True",
+        "Actual":  "True",
+        "Details":  ""
+    },
+    {
+        "Category":  "SQL_Seed",
+        "TestName":  "Thungan seed Hash identical in Full and DB sql scripts",
+        "Passed":  true,
+        "Expected":  "True",
+        "Actual":  "True",
+        "Details":  ""
+    },
+    {
+        "Category":  "SQL_Seed",
+        "TestName":  "Thungan seed Salt identical in Full and DB sql scripts",
+        "Passed":  true,
+        "Expected":  "True",
+        "Actual":  "True",
+        "Details":  ""
+    },
+    {
+        "Category":  "PBKDF2_Seed",
+        "TestName":  "VerifyPassword(\u0027admin123\u0027, adminHash, adminSalt) returns True",
+        "Passed":  true,
+        "Expected":  "True",
+        "Actual":  "True",
+        "Details":  ""
+    },
+    {
+        "Category":  "PBKDF2_Seed",
+        "TestName":  "VerifyPassword(\u0027wrongpass\u0027, adminHash, adminSalt) returns False",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "PBKDF2_Seed",
+        "TestName":  "VerifyPassword(\u0027Admin123\u0027 [case diff], adminHash, adminSalt) returns False",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "PBKDF2_Seed",
+        "TestName":  "VerifyPassword(\u0027123456\u0027, tnHash, tnSalt) returns True",
+        "Passed":  true,
+        "Expected":  "True",
+        "Actual":  "True",
+        "Details":  ""
+    },
+    {
+        "Category":  "PBKDF2_Seed",
+        "TestName":  "VerifyPassword(\u0027wrongpass\u0027, tnHash, tnSalt) returns False",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "PBKDF2_Edge",
+        "TestName":  "VerifyPassword with empty password returns False",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "PBKDF2_Edge",
+        "TestName":  "VerifyPassword with null password returns False",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "PBKDF2_Edge",
+        "TestName":  "VerifyPassword with null hash returns False",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "PBKDF2_Edge",
+        "TestName":  "VerifyPassword with null salt returns False",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "PBKDF2_Edge",
+        "TestName":  "VerifyPassword with altered salt returns False",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "PBKDF2_Edge",
+        "TestName":  "VerifyPassword with altered hash returns False",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Password",
+        "TestName":  "VerifyPassword handles input: \u0027\u0027 without crash",
+        "Passed":  true,
+        "Expected":  "No Exception",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Password",
+        "TestName":  "VerifyPassword handles input: \u0027 \u0027 without crash",
+        "Passed":  true,
+        "Expected":  "No Exception",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Password",
+        "TestName":  "VerifyPassword handles input: \u0027   \u0027 without crash",
+        "Passed":  true,
+        "Expected":  "No Exception",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Password",
+        "TestName":  "VerifyPassword handles input: \u0027\\t\\r\\n\u0027 without crash",
+        "Passed":  true,
+        "Expected":  "No Exception",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Password",
+        "TestName":  "VerifyPassword handles input: \u0027a\u0027 without crash",
+        "Passed":  true,
+        "Expected":  "No Exception",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Password",
+        "TestName":  "VerifyPassword handles input: \u00271234567890\u0027 without crash",
+        "Passed":  true,
+        "Expected":  "No Exception",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Password",
+        "TestName":  "VerifyPassword handles input: \u0027xxxxxxxxxxxxxxxxxxxxxx...\u0027 without crash",
+        "Passed":  true,
+        "Expected":  "No Exception",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Password",
+        "TestName":  "VerifyPassword handles input: \u0027yyyyyyyyyyyyyyyyyyyyyy...\u0027 without crash",
+        "Passed":  true,
+        "Expected":  "No Exception",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Password",
+        "TestName":  "VerifyPassword handles input: \u0027Cà phê phin Sài Gòn - ...\u0027 without crash",
+        "Passed":  true,
+        "Expected":  "No Exception",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Password",
+        "TestName":  "VerifyPassword handles input: \u0027Tài khoản quản lý \u0026 ph...\u0027 without crash",
+        "Passed":  true,
+        "Expected":  "No Exception",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Password",
+        "TestName":  "VerifyPassword handles input: \u0027admin\u0027 OR \u00271\u0027=\u00271\u0027 --\u0027 without crash",
+        "Passed":  true,
+        "Expected":  "No Exception",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Password",
+        "TestName":  "VerifyPassword handles input: \u0027\u0027; DROP TABLE Users; --\u0027 without crash",
+        "Passed":  true,
+        "Expected":  "No Exception",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Password",
+        "TestName":  "VerifyPassword handles input: \u0027password\\0with_null_byte\u0027 without crash",
+        "Passed":  true,
+        "Expected":  "No Exception",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Password",
+        "TestName":  "VerifyPassword handles input: \u0027パスワード日本語\u0027 without crash",
+        "Passed":  true,
+        "Expected":  "No Exception",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Password",
+        "TestName":  "VerifyPassword handles input: \u0027ПАСПОРТ_РОССИЯ\u0027 without crash",
+        "Passed":  true,
+        "Expected":  "No Exception",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Salt",
+        "TestName":  "VerifyPassword safely handles malformed salt \u0027not_base64!@#$%\u0027",
+        "Passed":  true,
+        "Expected":  "No Exception (returns false)",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Salt",
+        "TestName":  "VerifyPassword safely handles malformed salt \u0027====\u0027",
+        "Passed":  true,
+        "Expected":  "No Exception (returns false)",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Salt",
+        "TestName":  "VerifyPassword safely handles malformed salt \u0027A\u0027",
+        "Passed":  true,
+        "Expected":  "No Exception (returns false)",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Salt",
+        "TestName":  "VerifyPassword safely handles malformed salt \u0027AA==\u0027",
+        "Passed":  true,
+        "Expected":  "No Exception (returns false)",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Salt",
+        "TestName":  "VerifyPassword safely handles malformed salt \u0027AAAA\u0027",
+        "Passed":  true,
+        "Expected":  "No Exception (returns false)",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Salt",
+        "TestName":  "VerifyPassword safely handles malformed salt \u0027AAAAAA==\u0027",
+        "Passed":  true,
+        "Expected":  "No Exception (returns false)",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Salt",
+        "TestName":  "VerifyPassword safely handles malformed salt \u0027AAAAAAAAAAAAAAAAAAAAAA==\u0027",
+        "Passed":  true,
+        "Expected":  "No Exception (returns false)",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Salt",
+        "TestName":  "VerifyPassword safely handles malformed salt \u0027AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=\u0027",
+        "Passed":  true,
+        "Expected":  "No Exception (returns false)",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Hash",
+        "TestName":  "VerifyPassword safely handles malformed hash \u0027not_base64!@#$%\u0027",
+        "Passed":  true,
+        "Expected":  "No Exception (returns false)",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Hash",
+        "TestName":  "VerifyPassword safely handles malformed hash \u0027====\u0027",
+        "Passed":  true,
+        "Expected":  "No Exception (returns false)",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Hash",
+        "TestName":  "VerifyPassword safely handles malformed hash \u0027A\u0027",
+        "Passed":  true,
+        "Expected":  "No Exception (returns false)",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Hash",
+        "TestName":  "VerifyPassword safely handles malformed hash \u0027AA==\u0027",
+        "Passed":  true,
+        "Expected":  "No Exception (returns false)",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Hash",
+        "TestName":  "VerifyPassword safely handles malformed hash \u0027AAAA\u0027",
+        "Passed":  true,
+        "Expected":  "No Exception (returns false)",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Hash",
+        "TestName":  "VerifyPassword safely handles malformed hash \u0027AAAAAA==\u0027",
+        "Passed":  true,
+        "Expected":  "No Exception (returns false)",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Hash",
+        "TestName":  "VerifyPassword safely handles malformed hash \u0027AAAAAAAAAAAAAAAAAAAAAA==\u0027",
+        "Passed":  true,
+        "Expected":  "No Exception (returns false)",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Fuzz_Hash",
+        "TestName":  "VerifyPassword safely handles malformed hash \u0027AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=\u0027",
+        "Passed":  true,
+        "Expected":  "No Exception (returns false)",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Permission_Guard",
+        "TestName":  "DeleteUser(string, out string) method exists",
+        "Passed":  true,
+        "Expected":  "NotNull",
+        "Actual":  "Boolean DeleteUser(System.String, System.String ByRef)",
+        "Details":  ""
+    },
+    {
+        "Category":  "Permission_Guard",
+        "TestName":  "Self-deletion blocked for exact username \u0027admin\u0027",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "",
+        "Details":  ""
+    },
+    {
+        "Category":  "Permission_Guard",
+        "TestName":  "Self-deletion error message mentions session/self-deletion",
+        "Passed":  false,
+        "Expected":  "Contains \u0027tự xóa\u0027",
+        "Actual":  "",
+        "Details":  ""
+    },
+    {
+        "Category":  "Permission_Guard",
+        "TestName":  "Self-deletion blocked for case-variant \u0027ADMIN\u0027",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "",
+        "Details":  ""
+    },
+    {
+        "Category":  "Permission_Guard",
+        "TestName":  "Self-deletion error message for case-variant mentions self-deletion",
+        "Passed":  false,
+        "Expected":  "Contains \u0027tự xóa\u0027",
+        "Actual":  "",
+        "Details":  ""
+    },
+    {
+        "Category":  "Permission_Guard",
+        "TestName":  "Self-deletion blocked for whitespace-padded \u0027  admin  \u0027",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "",
+        "Details":  ""
+    },
+    {
+        "Category":  "Permission_Guard",
+        "TestName":  "Self-deletion error message for whitespace padded mentions self-deletion",
+        "Passed":  false,
+        "Expected":  "Contains \u0027tự xóa\u0027",
+        "Actual":  "",
+        "Details":  ""
+    },
+    {
+        "Category":  "Permission_Guard",
+        "TestName":  "DeleteUser safely handles null UserSession.CurrentUser without NullReferenceException",
+        "Passed":  false,
+        "Expected":  "No Exception",
+        "Actual":  "Handled: System.Management.Automation.MethodInvocationException: Exception calling \"Invoke\" with \"2\" argument(s): \"The type initializer for \u0027System.Data.SqlClient.SqlConnection\u0027 threw an exception.\" ---\u003e System.TypeInitializationException: The type initializer for \u0027System.Data.SqlClient.SqlConnection\u0027 threw an exception. ---\u003e System.TypeInitializationException: The type initializer for \u0027System.Data.SqlClient.SqlConnectionFactory\u0027 threw an exception. ---\u003e System.TypeInitializationException: The type initializer for \u0027System.Data.SqlClient.SqlPerformanceCounters\u0027 threw an exception. ---\u003e System.NotSupportedException: Writeable performance counters are not allowed when running in AppContainer.\r\n   at System.Diagnostics.PerformanceCounter.VerifyWriteableCounterAllowed()\r\n   at System.Diagnostics.PerformanceCounter.set_ReadOnly(Boolean value)\r\n   at System.Data.ProviderBase.DbConnectionPoolCounters.Counter..ctor(String categoryName, String instanceName, String counterName, PerformanceCounterType counterType)\r\n   at System.Data.ProviderBase.DbConnectionPoolCounters..ctor(String categoryName, String categoryHelp)\r\n   at System.Data.SqlClient.SqlPerformanceCounters..ctor()\r\n   at System.Data.SqlClient.SqlPerformanceCounters..cctor()\r\n   --- End of inner exception stack trace ---\r\n   at System.Data.SqlClient.SqlConnectionFactory..cctor()\r\n   --- End of inner exception stack trace ---\r\n   at System.Data.SqlClient.SqlConnection..cctor()\r\n   --- End of inner exception stack trace ---\r\n   at System.Data.SqlClient.SqlConnection..ctor()\r\n   at System.Data.Linq.SqlClient.SqlProvider.System.Data.Linq.Provider.IProvider.Initialize(IDataServices dataServices, Object connection)\r\n   at System.Data.Linq.DataContext.Init(Object connection, MappingSource mapping)\r\n   at DoAnCuoiKi_QuanLyTiemCaPhe.CoffeeShopDataContextDataContext..ctor(String connection) in d:\\DoAnCuoiKi_QuanLyTiemCaPhe\\CoffeeShopDataContext.designer.cs:line 96\r\n   at DoAnCuoiKi_QuanLyTiemCaPhe.DAL.UserRepository.GetContext() in d:\\DoAnCuoiKi_QuanLyTiemCaPhe\\DAL\\UserRepository.cs:line 17\r\n   at DoAnCuoiKi_QuanLyTiemCaPhe.DAL.UserRepository.GetByUserName(String username) in d:\\DoAnCuoiKi_QuanLyTiemCaPhe\\DAL\\UserRepository.cs:line 27\r\n   at DoAnCuoiKi_QuanLyTiemCaPhe.PermissionService.DeleteUser(String username, String\u0026 message) in d:\\DoAnCuoiKi_QuanLyTiemCaPhe\\BLL\\PermissionService.cs:line 142\r\n   --- End of inner exception stack trace ---\r\n   at System.Management.Automation.ExceptionHandlingOps.CheckActionPreference(FunctionContext funcContext, Exception exception)\r\n   at System.Management.Automation.Interpreter.ActionCallInstruction`2.Run(InterpretedFrame frame)\r\n   at System.Management.Automation.Interpreter.EnterTryCatchFinallyInstruction.Run(InterpretedFrame frame)\r\n   at System.Management.Automation.Interpreter.EnterTryCatchFinallyInstruction.Run(InterpretedFrame frame)",
+        "Details":  ""
+    },
+    {
+        "Category":  "Permission_Guard",
+        "TestName":  "DeleteUser rejects non-existent user",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "",
+        "Details":  ""
+    },
+    {
+        "Category":  "Permission_Guard",
+        "TestName":  "DeleteUser message states user not found",
+        "Passed":  false,
+        "Expected":  "Contains \u0027Không tìm thấy\u0027",
+        "Actual":  "",
+        "Details":  ""
+    },
+    {
+        "Category":  "Permission_Guard",
+        "TestName":  "DeleteUser rejects empty username",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Permission_Guard",
+        "TestName":  "DeleteUser empty username message indicates invalid username",
+        "Passed":  true,
+        "Expected":  "Contains \u0027không hợp lệ\u0027",
+        "Actual":  "Tên đăng nhập không hợp lệ!",
+        "Details":  ""
+    },
+    {
+        "Category":  "Permission_Guard",
+        "TestName":  "DeleteUser rejects null username",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Permission_Guard",
+        "TestName":  "DeleteUser null username message indicates invalid username",
+        "Passed":  true,
+        "Expected":  "Contains \u0027không hợp lệ\u0027",
+        "Actual":  "Tên đăng nhập không hợp lệ!",
+        "Details":  ""
+    },
+    {
+        "Category":  "Permission_Reset",
+        "TestName":  "AdminResetPassword method exists on PermissionService",
+        "Passed":  true,
+        "Expected":  "NotNull",
+        "Actual":  "Boolean AdminResetPassword(System.String, System.String, System.String ByRef)",
+        "Details":  ""
+    },
+    {
+        "Category":  "Permission_Reset",
+        "TestName":  "AdminResetPassword rejects null username",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "False (Tên đăng nhập không được để trống!)",
+        "Details":  ""
+    },
+    {
+        "Category":  "Permission_Reset",
+        "TestName":  "AdminResetPassword rejects empty username",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "False (Tên đăng nhập không được để trống!)",
+        "Details":  ""
+    },
+    {
+        "Category":  "Permission_Reset",
+        "TestName":  "AdminResetPassword rejects null password",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "False (Mật khẩu mới không được để trống!)",
+        "Details":  ""
+    },
+    {
+        "Category":  "Permission_Reset",
+        "TestName":  "AdminResetPassword rejects empty password",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "False (Mật khẩu mới không được để trống!)",
+        "Details":  ""
+    },
+    {
+        "Category":  "Permission_Reset",
+        "TestName":  "AdminResetPassword rejects whitespace password",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "False (Mật khẩu mới không được để trống!)",
+        "Details":  ""
+    },
+    {
+        "Category":  "Permission_Reset",
+        "TestName":  "AdminResetPassword rejects password shorter than 6 chars",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "False (Mật khẩu mới phải có độ dài tối thiểu 6 ký tự!)",
+        "Details":  ""
+    },
+    {
+        "Category":  "Permission_Reset",
+        "TestName":  "AdminResetPassword message specifies minimum 6 chars",
+        "Passed":  true,
+        "Expected":  "Contains \u0027tối thiểu 6\u0027",
+        "Actual":  "Mật khẩu mới phải có độ dài tối thiểu 6 ký tự!",
+        "Details":  ""
+    },
+    {
+        "Category":  "Permission_Reset",
+        "TestName":  "AdminResetPassword rejects non-existent user",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "False ()",
+        "Details":  ""
+    },
+    {
+        "Category":  "Permission_Reset",
+        "TestName":  "AdminResetPassword message indicates user not found",
+        "Passed":  false,
+        "Expected":  "Contains \u0027Không tìm thấy\u0027",
+        "Actual":  "",
+        "Details":  ""
+    },
+    {
+        "Category":  "Employee_Guard",
+        "TestName":  "DeleteEmployee(int, out string) method exists on EmployeeService",
+        "Passed":  true,
+        "Expected":  "NotNull",
+        "Actual":  "Boolean DeleteEmployee(Int32, System.String ByRef)",
+        "Details":  ""
+    },
+    {
+        "Category":  "Employee_Guard",
+        "TestName":  "DeleteEmployee rejects ID = 0",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "False (Mã nhân viên không hợp lệ!)",
+        "Details":  ""
+    },
+    {
+        "Category":  "Employee_Guard",
+        "TestName":  "DeleteEmployee rejects negative ID (-99)",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "False (Mã nhân viên không hợp lệ!)",
+        "Details":  ""
+    },
+    {
+        "Category":  "Employee_Guard",
+        "TestName":  "DeleteEmployee handles missing entity without unhandled crash",
+        "Passed":  true,
+        "Expected":  "No Crash",
+        "Actual":  "Handled gracefully: Lỗi khi xóa nhân viên: The type initializer for \u0027System.Data.SqlClient.SqlConnection\u0027 threw an exception.",
+        "Details":  ""
+    },
+    {
+        "Category":  "Customer_Validation",
+        "TestName":  "CustomerService.Add(CustomerDTO, out string) exists",
+        "Passed":  true,
+        "Expected":  "NotNull",
+        "Actual":  "Boolean Add(DoAnCuoiKi_QuanLyTiemCaPhe.DTO.CustomerDTO, System.String ByRef)",
+        "Details":  ""
+    },
+    {
+        "Category":  "Customer_Validation",
+        "TestName":  "CustomerService.Add rejects negative RewardPoints (-50)",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Customer_Validation",
+        "TestName":  "CustomerService.Add error message mentions points cannot be negative",
+        "Passed":  true,
+        "Expected":  "Contains \u0027không được nhỏ hơn 0\u0027",
+        "Actual":  "Điểm tích lũy không được nhỏ hơn 0!",
+        "Details":  ""
+    },
+    {
+        "Category":  "Customer_Validation",
+        "TestName":  "CustomerService.Update(CustomerDTO, out string) exists",
+        "Passed":  true,
+        "Expected":  "NotNull",
+        "Actual":  "Boolean Update(DoAnCuoiKi_QuanLyTiemCaPhe.DTO.CustomerDTO, System.String ByRef)",
+        "Details":  ""
+    },
+    {
+        "Category":  "Customer_Validation",
+        "TestName":  "CustomerService.Update rejects negative RewardPoints (-1)",
+        "Passed":  true,
+        "Expected":  "False",
+        "Actual":  "False",
+        "Details":  ""
+    },
+    {
+        "Category":  "Customer_Validation",
+        "TestName":  "CustomerService.Update error message mentions points cannot be negative",
+        "Passed":  true,
+        "Expected":  "Contains \u0027không được nhỏ hơn 0\u0027",
+        "Actual":  "Điểm tích lũy không được nhỏ hơn 0!",
+        "Details":  ""
+    }
+]

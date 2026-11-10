@@ -57,7 +57,16 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 return;
             }
 
-            int points = int.TryParse(txtRewardPoints.Text.Trim(), out int pts) ? pts : 0;
+            int points = 0;
+            if (!string.IsNullOrWhiteSpace(txtRewardPoints.Text))
+            {
+                if (!int.TryParse(txtRewardPoints.Text.Trim(), out points) || points < 0)
+                {
+                    MessageBox.Show("Điểm tích lũy không hợp lệ (phải là số nguyên không âm >= 0)!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtRewardPoints.Focus();
+                    return;
+                }
+            }
 
             CustomerDTO newCustomer = new CustomerDTO
             {
@@ -98,7 +107,16 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 return;
             }
 
-            int points = int.TryParse(txtRewardPoints.Text.Trim(), out int pts) ? pts : 0;
+            int points = 0;
+            if (!string.IsNullOrWhiteSpace(txtRewardPoints.Text))
+            {
+                if (!int.TryParse(txtRewardPoints.Text.Trim(), out points) || points < 0)
+                {
+                    MessageBox.Show("Điểm tích lũy không hợp lệ (phải là số nguyên không âm >= 0)!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtRewardPoints.Focus();
+                    return;
+                }
+            }
 
             CustomerDTO customer = new CustomerDTO
             {

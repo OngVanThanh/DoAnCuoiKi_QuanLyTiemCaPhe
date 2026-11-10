@@ -62,6 +62,9 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Guna.UI2, Version=2.0.4.6, Culture=neutral, PublicKeyToken=8b9d14aa5142e261, processorArchitecture=MSIL">
+      <HintPath>packages\Guna.UI2.WinForms.2.0.4.6\lib\net48\Guna.UI2.dll</HintPath>
+    </Reference>
     <Reference Include="ClosedXML, Version=0.105.1.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
       <HintPath>packages\ClosedXML.0.105.1\lib\netstandard2.0\ClosedXML.dll</HintPath>
     </Reference>
@@ -161,7 +164,6 @@
     <Compile Include="BLL\CustomerService.cs" />
     <Compile Include="BLL\AuthService.cs" />
     <Compile Include="BLL\EmployeeService.cs" />
-    <Compile Include="BLL\InventoryService.cs" />
     <Compile Include="BLL\OrderService.cs" />
     <Compile Include="BLL\ProductService.cs" />
     <Compile Include="BLL\PromotionService.cs" />
@@ -200,7 +202,7 @@
     <Compile Include="DTO\TableDTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />
     <Compile Include="DAL\EmployeeRepository.cs" />
-    <Compile Include="DAL\InventoryRepository.cs" />
+    <Compile Include="DAL\CategoryRepository.cs" />
     <Compile Include="DAL\OrderRepository.cs" />
     <Compile Include="DAL\ProductRepository.cs" />
     <Compile Include="DAL\PromotionRepository.cs" />
@@ -214,8 +216,6 @@
     <Compile Include="DTO\TopProductDTO.cs" />
     <Compile Include="DTO\Category.cs" />
     <Compile Include="DTO\EmployeeDTO.cs" />
-    <Compile Include="DTO\InventoryDTO.cs" />
-    <Compile Include="DTO\InventoryTransactionDTO.cs" />
     <Compile Include="DTO\OrderDetailDTO.cs" />
     <Compile Include="DTO\OrderDTO.cs" />
     <Compile Include="DTO\PermissionDTO.cs" />
@@ -336,6 +336,12 @@
     <Compile Include="Form\VanThanh\FrmForgotPassword.Designer.cs">
       <DependentUpon>FrmForgotPassword.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form\VanThanh\FrmAdminAuth.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\VanThanh\FrmAdminAuth.Designer.cs">
+      <DependentUpon>FrmAdminAuth.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form\VanThanh\FrmShiftSchedule.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -378,6 +384,7 @@
       <DependentUpon>UCEmployeeEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Utilities\ConfigHelper.cs" />
+    <Compile Include="Utilities\DatabaseMigrationHelper.cs" />
     <Compile Include="Utilities\PrintHelper.cs" />
     <Compile Include="Utilities\SecurityHelper.cs" />
     <Compile Include="Utilities\UIHelper.cs" />
