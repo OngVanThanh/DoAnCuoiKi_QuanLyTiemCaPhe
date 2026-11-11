@@ -77,27 +77,64 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             }
         }
 
-        // 2. Tìm kiếm nhân viên theo Họ tên hoặc SĐT
-        public List<EmployeeDTO> SearchEmployees(string keyword)
+        // 2. Tìm kiếm nhân viên theo Họ tên, SĐT hoặc ID, kèm lọc theo Vai trò
+        public List<EmployeeDTO> SearchEmployees(string keyword, int? roleId = null)
         {
             using (var db = GetContext())
             {
-                return db.Employees
-                    .Where(e => e.FullName.Contains(keyword) || e.Phone.Contains(keyword))
-                    .Select(e => new EmployeeDTO
+                var query = db.Employees.AsQueryable();
+
+                if (roleId.HasValue && roleId.Value > 0)
+                {
+                    query = query.Where(e => e.RoleId == roleId.Value);
+                }
+
+                if (!string.IsNullOrWhiteSpace(keyword))
+                {
+                    string kw = keyword.Trim();
+                    bool isNum = int.TryParse(kw, out int empId);
+
+                    if (isNum)
                     {
-                        Id = e.Id,
-                        FullName = e.FullName,
-                        BirthDate = e.BirthDate,
-                        Phone = e.Phone,
-                        Address = e.Address,
-                        Position = e.Role != null ? e.Role.RoleName : string.Empty,
-                        RoleId = e.RoleId,
-                        HireDate = e.HireDate,
-                        Salary = db.Salaries.Where(s => s.RoleId == e.RoleId).Select(s => (decimal?)s.Amount).FirstOrDefault(),
-                        Image = e.Image
-                    })
-                    .ToList();
+                        query = query.Where(e => e.Id == empId || (e.Phone != null && e.Phone.Contains(kw)) || e.FullName.Contains(kw));
+                    }
+                    else
+                    {
+                        query = query.Where(e => e.FullName.Contains(kw) || (e.Phone != null && e.Phone.Contains(kw)));
+                    }
+                }
+
+                return query.Select(e => new EmployeeDTO
+                {
+                    Id = e.Id,
+                    FullName = e.FullName,
+                    BirthDate = e.BirthDate,
+                    Phone = e.Phone,
+                    Address = e.Address,
+                    Position = e.Role != null ? e.Role.RoleName : string.Empty,
+                    RoleId = e.RoleId,
+                    HireDate = e.HireDate,
+                    Salary = db.Salaries.Where(s => s.RoleId == e.RoleId).Select(s => (decimal?)s.Amount).FirstOrDefault(),
+                    Image = e.Image
+                }).ToList();
+            }
+        }
+
+        public List<EmployeeDTO> SearchEmployees(string keyword)
+        {
+            return SearchEmployees(keyword, null);
+        }
+
+        // Lấy danh sách tất cả vai trò
+        public List<RoleDTO> GetAllRoles()
+        {
+            using (var db = GetContext())
+            {
+                return db.Roles.Select(r => new RoleDTO
+                {
+                    Id = r.Id,
+                    RoleName = r.RoleName
+                }).ToList();
             }
         }
 

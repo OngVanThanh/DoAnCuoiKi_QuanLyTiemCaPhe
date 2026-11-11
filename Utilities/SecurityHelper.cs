@@ -2,6 +2,7 @@
 using System;
 using System.Configuration;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace DoAnCuoiKi_QuanLyTiemCaPhe
 {
@@ -30,7 +31,17 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             if (string.IsNullOrEmpty(password))
                 throw new ArgumentException("Mật khẩu không được để trống.");
 
-            byte[] saltBytes = Convert.FromBase64String(salt);
+            byte[] saltBytes;
+            try
+            {
+                // Cố gắng giải mã nếu salt chuẩn Base-64
+                saltBytes = Convert.FromBase64String(salt);
+            }
+            catch (FormatException)
+            {
+                // Nếu không phải Base-64, coi như salt là chuỗi text thuần túy (Plain text)
+                saltBytes = Encoding.UTF8.GetBytes(salt);
+            }
 
             using (var pbkdf2 = new Rfc2898DeriveBytes(password, saltBytes, Iterations))
             {

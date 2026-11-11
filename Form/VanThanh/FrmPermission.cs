@@ -6,13 +6,14 @@ using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace DoAnCuoiKi_QuanLyTiemCaPhe
 {
     public partial class FrmPermission : Form
     {
-        private readonly PermissionService _permissionService =new PermissionService();
+        private readonly PermissionService _permissionService = new PermissionService();
         private UCPermissionControl _ucPermissionControl;
 
         private int _selectedRowIndex = -1;
@@ -29,13 +30,97 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         {
             try
             {
-                LoadUsersToGrid();
+                _isLoading = true;
+                LoadRolesToFilter();
+                FilterUsers();
                 InitActionPopup();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Đã xảy ra lỗi khi tải dữ liệu:\n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            finally
+            {
+                _isLoading = false;
+            }
+        }
+        private void LoadRolesToFilter()
+        {
+            var filterList = new List<RoleDTO>
+            {
+                new RoleDTO(0, "Tất cả vai trò")
+            };
+
+            var roles = _permissionService.GetAllRoles();
+            if (roles != null && roles.Count > 0)
+            {
+                foreach (var r in roles)
+                {
+                    filterList.Add(new RoleDTO(r.Id, r.RoleName));
+                }
+            }
+
+            cboFilter.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboFilter.DisplayMember = "RoleName";
+            cboFilter.ValueMember = "Id";
+            cboFilter.DataSource = filterList;
+
+            if (cboFilter.Items.Count > 0)
+            {
+                cboFilter.SelectedIndex = 0;
+            }
+        }
+
+
+        // Lọc người dùng theo Username / Họ và tên và Vai trò
+        private void FilterUsers()
+        {
+            if (_isLoading) return;
+
+            string keyword = txtSearch.Text.Trim();
+            int selectedRoleId = 0;
+            if (cboFilter.SelectedValue is int rId)
+            {
+                selectedRoleId = rId;
+            }
+            else if (cboFilter.SelectedItem is RoleDTO rDto)
+            {
+                selectedRoleId = rDto.Id;
+            }
+
+            List<UserDTO> allUsers = null;
+            try
+            {
+                allUsers = _permissionService.GetAllUsers();
+            }
+            catch
+            {
+                allUsers = new List<UserDTO>();
+            }
+
+            if (allUsers == null) allUsers = new List<UserDTO>();
+
+            var filtered = allUsers.Where(u =>
+            {
+                // 1. Lọc theo vai trò nếu được chọn (RoleId > 0)
+                if (selectedRoleId > 0 && u.RoleId != selectedRoleId)
+                    return false;
+
+                // 2. Tìm kiếm theo Username hoặc Họ và tên
+                if (!string.IsNullOrEmpty(keyword))
+                {
+                    bool matchUsername = !string.IsNullOrEmpty(u.Username)
+                                      && u.Username.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0;
+                    bool matchFullName = !string.IsNullOrEmpty(u.FullName)
+                                      && u.FullName.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0;
+                    return matchUsername || matchFullName;
+                }
+
+                return true;
+            }).ToList();
+
+            dgvUsers.AutoGenerateColumns = false;
+            dgvUsers.DataSource = filtered;
         }
 
         // Khởi tạo popup menu thao tác (dùng Label thay vì UserControl)
@@ -69,8 +154,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         // Tải danh sách tài khoản
         private void LoadUsersToGrid()
         {
-            dgvUsers.AutoGenerateColumns = false;
-            dgvUsers.DataSource = _permissionService.GetAllUsers();
+            FilterUsers();
         }
 
         // 10. Chọn tài khoản trên DataGridView
@@ -265,6 +349,29 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 // Tiến hành load lại danh sách tài khoản trên DataGridView
                 LoadUsersToGrid();
             }
+        }
+        private void TxtSearch_TextChanged(object sender, EventArgs e)
+        {
+            FilterUsers();
+        }
+
+        private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                FilterUsers();
+                e.SuppressKeyPress = true; // Chặn tiếng kêu "beep" khi nhấn Enter
+            }
+        }
+
+        private void CboFilter_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FilterUsers();
+        }
+
+        private void BtnSearch_Click(object sender, EventArgs e)
+        {
+            FilterUsers();
         }
     }
 }

@@ -154,6 +154,7 @@
             this.Controls.Add(this.btnSaveNewPassword);
             this.Controls.Add(this.txtNewPassword);
             this.Controls.Add(this.lblNewPassword);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "FrmChangePassword";
             this.Text = "FrmChangePassword";
             this.ResumeLayout(false);

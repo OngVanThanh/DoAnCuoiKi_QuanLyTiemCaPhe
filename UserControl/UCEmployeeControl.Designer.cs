@@ -30,8 +30,6 @@
         {
             this.btnShowDetail = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
-            this.employeesTableAdapter1 = new DoAnCuoiKi_QuanLyTiemCaPhe.CoffeeShopDBDataSet1TableAdapters.EmployeesTableAdapter();
-            this.employeesTableAdapter2 = new DoAnCuoiKi_QuanLyTiemCaPhe.CoffeeShopDBDataSet1TableAdapters.EmployeesTableAdapter();
             this.SuspendLayout();
             // 
             // btnShowDetail
@@ -53,15 +51,7 @@
             this.btnDelete.Text = "Xóa";
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
-            // 
-            // employeesTableAdapter1
-            // 
-            this.employeesTableAdapter1.ClearBeforeFill = true;
-            // 
-            // employeesTableAdapter2
-            // 
-            this.employeesTableAdapter2.ClearBeforeFill = true;
-            // 
+            //
             // UCEmployeeControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);

@@ -41,10 +41,8 @@
             this.lblTitle = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.txtRole = new System.Windows.Forms.TextBox();
-            this.coffeeShopDBDataSet1 = new DoAnCuoiKi_QuanLyTiemCaPhe.CoffeeShopDBDataSet();
             this.btnTogglePassword = new System.Windows.Forms.Button();
             this.btnTogglePasswordChange = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.coffeeShopDBDataSet1)).BeginInit();
             this.SuspendLayout();
             // 
             // btnExit
@@ -164,11 +162,6 @@
             this.txtRole.Size = new System.Drawing.Size(335, 22);
             this.txtRole.TabIndex = 4;
             // 
-            // coffeeShopDBDataSet1
-            // 
-            this.coffeeShopDBDataSet1.DataSetName = "CoffeeShopDBDataSet";
-            this.coffeeShopDBDataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
             // btnTogglePassword
             // 
             this.btnTogglePassword.Location = new System.Drawing.Point(513, 180);
@@ -191,6 +184,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CausesValidation = false;
             this.ClientSize = new System.Drawing.Size(606, 361);
             this.Controls.Add(this.btnTogglePasswordChange);
             this.Controls.Add(this.btnTogglePassword);
@@ -207,12 +201,14 @@
             this.Controls.Add(this.lblPassword);
             this.Controls.Add(this.lblUserName);
             this.Controls.Add(this.txtUsername);
+            this.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "FrmAddUser";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FrmAddUser";
             this.Load += new System.EventHandler(this.FrmAddUser_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.coffeeShopDBDataSet1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

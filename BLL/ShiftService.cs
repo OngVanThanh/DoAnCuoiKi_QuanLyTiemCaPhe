@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using DoAnCuoiKi_QuanLyTiemCaPhe.DAL;
+using DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
 
 namespace DoAnCuoiKi_QuanLyTiemCaPhe.BLL
 {
@@ -66,6 +67,16 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.BLL
             return true;
         }
 
-        // 4. Lưu lượt đăng ký ca xuống Database thông qua ShiftRepository
+        // 4. Lấy danh sách nhiệm vụ từ ShiftRepository
+        public List<Mision> GetAllMisions()
+        {
+            return _shiftRepo.GetAllMisions();
+        }
+
+        // 5. Lấy danh sách ca làm trong ngày, lọc theo nhiệm vụ và từ khóa
+        public List<DailyShiftDTO> GetDailyShifts(DateTime date, int? missionId = null, string keyword = null)
+        {
+            return _shiftRepo.GetDailyShifts(date, missionId, keyword);
+        }
     }
 }

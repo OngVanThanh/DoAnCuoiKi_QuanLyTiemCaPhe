@@ -84,10 +84,6 @@
             this.pnlOrderMeta.SuspendLayout();
             this.SuspendLayout();
             // 
-            // orderDetailDTOBindingSource
-            // 
-            // (Đã dời việc gán DataSource vào FrmPrintReview.cs để tránh lỗi Designer màn hình vàng)
-            // 
             // pnlHeader
             // 
             this.pnlHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(44)))), ((int)(((byte)(42)))));

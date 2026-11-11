@@ -1,4 +1,4 @@
-﻿
+﻿    
 using DoAnCuoiKi_QuanLyTiemCaPhe.DAL;
 using DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
 using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
@@ -51,7 +51,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             // 4. Tạo Salt và băm mật khẩu
             string salt = SecurityHelper.GenerateSalt();
             string passwordHash = SecurityHelper.HashPassword(password, salt);
-            
+
+            // 5. Gán giá trị băm và salt vào DTO
             dto.PasswordHash = passwordHash;
             dto.Salt = salt;
 

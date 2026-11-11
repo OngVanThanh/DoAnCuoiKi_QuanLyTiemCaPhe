@@ -1,8 +1,9 @@
+using DoAnCuoiKi_QuanLyTiemCaPhe.DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
+using DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
+using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
-using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
 
 namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
 {
@@ -12,6 +13,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
         {
             return new CoffeeShopDataContextDataContext(ConfigHelper.GetConnectionString("CoffeeShopDB"));
         }
+
         // 1. Thống kê doanh thu theo khoảng thời gian
         public List<RevenueStatisticDTO> GetRevenueReport(DateTime fromDate, DateTime toDate)
         {
@@ -21,8 +23,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
 
                 return db.Orders
                     .Where(o => o.OrderDate >= fromDate.Date
-                             && o.OrderDate <= endDate
-                             && o.Status == "Đã thanh toán")
+                           && o.OrderDate <= endDate
+                           && o.Status == "Đã thanh toán")
                     .GroupBy(o => o.OrderDate.Value.Date)
                     .Select(g => new RevenueStatisticDTO
                     {
@@ -37,7 +39,57 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             }
         }
 
-        // 2. Thống kê Top món bán chạy nhất (Best Sellers)
+        // 2. Lấy danh sách ca làm việc của tuần sau để in báo cáo
+        public List<ShiftReportDTO> GetNextWeekScheduleForReport()
+        {
+            using (var db = GetContext())
+            {
+                // 1. Tự động tính khoảng thời gian từ Thứ Hai đến Chủ Nhật của tuần sau
+                DateTime today = DateTime.Today;
+                int daysUntilNextMonday = ((int)DayOfWeek.Monday - (int)today.DayOfWeek + 7) % 7;
+                if (daysUntilNextMonday == 0) daysUntilNextMonday = 7;
+
+                DateTime nextMonday = today.AddDays(daysUntilNextMonday).Date;
+                DateTime nextSunday = nextMonday.AddDays(6).Date;
+
+                // 2. Truy vấn LINQ Lambda thuần túy (Pure LINQ Lambda)
+                return db.EmployeeShifts
+                    .Where(s => s.WorkDate >= nextMonday && s.WorkDate <= nextSunday)
+                    .OrderBy(s => s.WorkDate)
+                    .ThenBy(s => s.ShiftId)
+                    .ThenBy(s => s.MisionId)
+                    .Select(s => new ShiftReportDTO
+                    {
+                        WorkDate = s.WorkDate,
+                        ShiftId = s.ShiftId ?? 0,
+                        MissionName = s.Mision != null ? s.Mision.MissisonName : string.Empty,
+                        EmployeeName = s.Employee != null ? s.Employee.FullName : "Chưa phân công",
+                        Status = s.Status
+                    })
+                    .ToList();
+            }
+        }
+
+        // 3. Top khách hàng có điểm tích lũy cao nhất
+        public List<CustomerDTO> GetTopCustomersByPoints(int topCount = 10)
+        {
+            using (var db = GetContext())
+            {
+                return db.Customers
+                    .OrderByDescending(c => c.RewardPoints)
+                    .Take(topCount)
+                    .Select(c => new CustomerDTO
+                    {
+                        CustomerName = c.CustomerName,
+                        Phone = c.Phone,
+                        RewardPoints = c.RewardPoints ?? 0,
+                        MembershipTier = c.MembershipTier,
+                        RegistrationDate = (c.RegistrationDate ?? DateTime.Now).Date
+                    })
+                    .ToList();
+            }
+        }
+        // 4. Thống kê Top món bán chạy nhất (Best Sellers)
         public List<TopProductDTO> GetBestSellingProducts(int topCount = 10)
         {
             using (var db = GetContext())
@@ -60,26 +112,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                     })
                     .OrderByDescending(x => x.QuantitySold)
                     .Take(topCount)
-                    .ToList();
-            }
-        }
-
-        // 3. Top khách hàng có điểm tích lũy cao nhất
-        public List<CustomerDTO> GetTopCustomersByPoints(int topCount = 10)
-        {
-            using (var db = GetContext())
-            {
-                return db.Customers
-                    .OrderByDescending(c => c.RewardPoints)
-                    .Take(topCount)
-                    .Select(c => new CustomerDTO
-                    {
-                        CustomerName = c.CustomerName,
-                        Phone = c.Phone,
-                        RewardPoints = c.RewardPoints ?? 0,
-                        MembershipTier = c.MembershipTier,
-                        RegistrationDate = (c.RegistrationDate ?? DateTime.Now).Date
-                    })
                     .ToList();
             }
         }

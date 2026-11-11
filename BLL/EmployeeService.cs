@@ -16,10 +16,21 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.BLL
             return _employeeRepo.GetAllEmployees();
         }
 
+        public List<EmployeeDTO> SearchEmployees(string keyword, int? roleId = null)
+        {
+            if (string.IsNullOrWhiteSpace(keyword) && (!roleId.HasValue || roleId.Value <= 0))
+                return GetAllEmployees();
+            return _employeeRepo.SearchEmployees(keyword, roleId);
+        }
+
         public List<EmployeeDTO> SearchEmployees(string keyword)
         {
-            if (string.IsNullOrWhiteSpace(keyword)) return GetAllEmployees();
-            return _employeeRepo.SearchEmployees(keyword.Trim());
+            return SearchEmployees(keyword, null);
+        }
+
+        public List<RoleDTO> GetAllRoles()
+        {
+            return _employeeRepo.GetAllRoles();
         }
 
         // Lưu thông tin nhân viên chung (đã bao gồm phân nhánh Thêm/Sửa)

@@ -106,34 +106,24 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         private void ApplyPermissionsToSidebar()
         {
-            int roleId = _currentUser != null ? _currentUser.RoleId : 1;
+            if (_currentUser == null) return;
 
-            if (roleId == 1) // Quản lý / Admin: toàn quyền
+            // Kiểm tra dựa trên tên vai trò (_currentRole đã được lấy ở FrmMain_Load)
+            string roleName = _currentRole != null ? _currentRole.RoleName.ToLower() : "";
+
+            // Nếu là Quản lý hoặc Admin thì giữ nguyên toàn quyền
+            if (roleName.Contains("Quản lý") || roleName.Contains("admin") || _currentUser.RoleId == 1)
             {
                 return;
             }
-            else if (roleId == 2) // Thu ngân: Bán hàng, Công thức, Khách hàng, Khuyến mãi, Thống kê & Báo cáo
+            else // Nếu là nhân viên, thu ngân, phục vụ,... ẩn các tính năng quản trị hệ thống
             {
-                btnNavProduct.Visible = false;
-                btnNavCategory.Visible = false;
-                lblGroupAdmin.Visible = false;
-                btnNavEmployee.Visible = false;
-                btnNavPermission.Visible = false;
-                btnNavAppConfig.Visible = false;
-            }
-            else // Pha chế / Phục vụ: POS Bán hàng, Công thức Barista, Khách hàng
-            {
-                lblGroupCatalog.Visible = false;
-                btnNavProduct.Visible = false;
-                btnNavCategory.Visible = false;
-                btnNavPromotion.Visible = false;
-                lblGroupReport.Visible = false;
-                btnNavChart.Visible = false;
-                btnNavReport.Visible = false;
-                lblGroupAdmin.Visible = false;
-                btnNavEmployee.Visible = false;
-                btnNavPermission.Visible = false;
-                btnNavAppConfig.Visible = false;
+                if (btnNavProduct != null) btnNavProduct.Visible = false;
+                if (btnNavCategory != null) btnNavCategory.Visible = false;
+                if (lblGroupAdmin != null) lblGroupAdmin.Visible = false;
+                if (btnNavEmployee != null) btnNavEmployee.Visible = false;
+                if (btnNavPermission != null) btnNavPermission.Visible = false;
+                if (btnNavAppConfig != null) btnNavAppConfig.Visible = false;
             }
         }
 

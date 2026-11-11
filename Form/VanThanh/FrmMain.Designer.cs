@@ -1,4 +1,4 @@
-namespace DoAnCuoiKi_QuanLyTiemCaPhe
+﻿namespace DoAnCuoiKi_QuanLyTiemCaPhe
 {
     partial class FrmMain
     {
@@ -18,6 +18,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.menuItemChangePassWord = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlSidebar = new System.Windows.Forms.Panel();
             this.pnlNavButtons = new System.Windows.Forms.Panel();
@@ -55,9 +56,16 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.statusStripMain.SuspendLayout();
             this.SuspendLayout();
             // 
+            // menuItemChangePassWord
+            // 
+            this.menuItemChangePassWord.Name = "menuItemChangePassWord";
+            this.menuItemChangePassWord.Size = new System.Drawing.Size(255, 26);
+            this.menuItemChangePassWord.Text = "Đổi mật khẩu";
+            this.menuItemChangePassWord.Click += new System.EventHandler(this.menuItemChangePassWord_Click);
+            // 
             // pnlSidebar
             // 
-            this.pnlSidebar.BackColor = System.Drawing.Color.FromArgb(48, 29, 26);
+            this.pnlSidebar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(29)))), ((int)(((byte)(26)))));
             this.pnlSidebar.Controls.Add(this.pnlNavButtons);
             this.pnlSidebar.Controls.Add(this.pnlSidebarBottom);
             this.pnlSidebar.Controls.Add(this.pnlBrand);
@@ -66,41 +74,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.pnlSidebar.Name = "pnlSidebar";
             this.pnlSidebar.Size = new System.Drawing.Size(242, 734);
             this.pnlSidebar.TabIndex = 0;
-            // 
-            // pnlBrand
-            // 
-            this.pnlBrand.BackColor = System.Drawing.Color.FromArgb(36, 20, 18);
-            this.pnlBrand.Controls.Add(this.lblBrandSub);
-            this.pnlBrand.Controls.Add(this.lblBrandName);
-            this.pnlBrand.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlBrand.Location = new System.Drawing.Point(0, 0);
-            this.pnlBrand.Name = "pnlBrand";
-            this.pnlBrand.Padding = new System.Windows.Forms.Padding(12, 10, 12, 8);
-            this.pnlBrand.Size = new System.Drawing.Size(242, 68);
-            this.pnlBrand.TabIndex = 0;
-            // 
-            // lblBrandName
-            // 
-            this.lblBrandName.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblBrandName.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-            this.lblBrandName.ForeColor = System.Drawing.Color.FromArgb(255, 213, 128);
-            this.lblBrandName.Location = new System.Drawing.Point(12, 10);
-            this.lblBrandName.Name = "lblBrandName";
-            this.lblBrandName.Size = new System.Drawing.Size(218, 28);
-            this.lblBrandName.TabIndex = 0;
-            this.lblBrandName.Text = "☕ MỘC CAFE POS";
-            this.lblBrandName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblBrandSub
-            // 
-            this.lblBrandSub.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lblBrandSub.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Italic);
-            this.lblBrandSub.ForeColor = System.Drawing.Color.FromArgb(200, 185, 175);
-            this.lblBrandSub.Location = new System.Drawing.Point(12, 38);
-            this.lblBrandSub.Name = "lblBrandSub";
-            this.lblBrandSub.Size = new System.Drawing.Size(218, 22);
-            this.lblBrandSub.TabIndex = 1;
-            this.lblBrandSub.Text = "Hệ thống Quản lý Tiệm Cà phê";
             // 
             // pnlNavButtons
             // 
@@ -141,7 +114,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             // 
             // btnNavOrder
             // 
-            this.btnNavOrder.BackColor = System.Drawing.Color.FromArgb(111, 78, 55);
+            this.btnNavOrder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(78)))), ((int)(((byte)(55)))));
             this.btnNavOrder.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnNavOrder.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnNavOrder.FlatAppearance.BorderSize = 0;
@@ -386,7 +359,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             // 
             // pnlSidebarBottom
             // 
-            this.pnlSidebarBottom.BackColor = System.Drawing.Color.FromArgb(36, 20, 18);
+            this.pnlSidebarBottom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(20)))), ((int)(((byte)(18)))));
             this.pnlSidebarBottom.Controls.Add(this.btnExit);
             this.pnlSidebarBottom.Controls.Add(this.btnLogout);
             this.pnlSidebarBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -396,26 +369,9 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.pnlSidebarBottom.Size = new System.Drawing.Size(242, 92);
             this.pnlSidebarBottom.TabIndex = 2;
             // 
-            // btnLogout
-            // 
-            this.btnLogout.BackColor = System.Drawing.Color.FromArgb(211, 84, 0);
-            this.btnLogout.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnLogout.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnLogout.FlatAppearance.BorderSize = 0;
-            this.btnLogout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLogout.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnLogout.ForeColor = System.Drawing.Color.White;
-            this.btnLogout.Location = new System.Drawing.Point(10, 8);
-            this.btnLogout.Name = "btnLogout";
-            this.btnLogout.Size = new System.Drawing.Size(222, 34);
-            this.btnLogout.TabIndex = 0;
-            this.btnLogout.Text = "Đăng xuất tài khoản";
-            this.btnLogout.UseVisualStyleBackColor = false;
-            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
-            // 
             // btnExit
             // 
-            this.btnExit.BackColor = System.Drawing.Color.FromArgb(192, 57, 43);
+            this.btnExit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(57)))), ((int)(((byte)(43)))));
             this.btnExit.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnExit.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.btnExit.FlatAppearance.BorderSize = 0;
@@ -430,9 +386,61 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.btnExit.UseVisualStyleBackColor = false;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
+            // btnLogout
+            // 
+            this.btnLogout.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(211)))), ((int)(((byte)(84)))), ((int)(((byte)(0)))));
+            this.btnLogout.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnLogout.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnLogout.FlatAppearance.BorderSize = 0;
+            this.btnLogout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLogout.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnLogout.ForeColor = System.Drawing.Color.White;
+            this.btnLogout.Location = new System.Drawing.Point(10, 8);
+            this.btnLogout.Name = "btnLogout";
+            this.btnLogout.Size = new System.Drawing.Size(222, 34);
+            this.btnLogout.TabIndex = 0;
+            this.btnLogout.Text = "Đăng xuất tài khoản";
+            this.btnLogout.UseVisualStyleBackColor = false;
+            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
+            // 
+            // pnlBrand
+            // 
+            this.pnlBrand.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(20)))), ((int)(((byte)(18)))));
+            this.pnlBrand.Controls.Add(this.lblBrandSub);
+            this.pnlBrand.Controls.Add(this.lblBrandName);
+            this.pnlBrand.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlBrand.Location = new System.Drawing.Point(0, 0);
+            this.pnlBrand.Name = "pnlBrand";
+            this.pnlBrand.Padding = new System.Windows.Forms.Padding(12, 10, 12, 8);
+            this.pnlBrand.Size = new System.Drawing.Size(242, 68);
+            this.pnlBrand.TabIndex = 0;
+            // 
+            // lblBrandSub
+            // 
+            this.lblBrandSub.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lblBrandSub.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Italic);
+            this.lblBrandSub.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(185)))), ((int)(((byte)(175)))));
+            this.lblBrandSub.Location = new System.Drawing.Point(12, 38);
+            this.lblBrandSub.Name = "lblBrandSub";
+            this.lblBrandSub.Size = new System.Drawing.Size(218, 22);
+            this.lblBrandSub.TabIndex = 1;
+            this.lblBrandSub.Text = "Hệ thống Quản lý Tiệm Cà phê";
+            // 
+            // lblBrandName
+            // 
+            this.lblBrandName.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblBrandName.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
+            this.lblBrandName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(213)))), ((int)(((byte)(128)))));
+            this.lblBrandName.Location = new System.Drawing.Point(12, 10);
+            this.lblBrandName.Name = "lblBrandName";
+            this.lblBrandName.Size = new System.Drawing.Size(218, 28);
+            this.lblBrandName.TabIndex = 0;
+            this.lblBrandName.Text = "☕ MỘC CAFE POS";
+            this.lblBrandName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // statusStripMain
             // 
-            this.statusStripMain.BackColor = System.Drawing.Color.FromArgb(245, 240, 235);
+            this.statusStripMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(240)))), ((int)(((byte)(235)))));
             this.statusStripMain.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lblCurrentUser,
@@ -446,34 +454,34 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             // lblCurrentUser
             // 
             this.lblCurrentUser.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblCurrentUser.ForeColor = System.Drawing.Color.FromArgb(74, 44, 42);
+            this.lblCurrentUser.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(44)))), ((int)(((byte)(42)))));
             this.lblCurrentUser.Name = "lblCurrentUser";
             this.lblCurrentUser.Padding = new System.Windows.Forms.Padding(8, 0, 16, 0);
-            this.lblCurrentUser.Size = new System.Drawing.Size(185, 21);
+            this.lblCurrentUser.Size = new System.Drawing.Size(169, 20);
             this.lblCurrentUser.Text = "Người dùng: admin";
             // 
             // lblCurrentRole
             // 
-            this.lblCurrentRole.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular);
-            this.lblCurrentRole.ForeColor = System.Drawing.Color.FromArgb(111, 78, 55);
+            this.lblCurrentRole.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.lblCurrentRole.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(78)))), ((int)(((byte)(55)))));
             this.lblCurrentRole.Name = "lblCurrentRole";
             this.lblCurrentRole.Padding = new System.Windows.Forms.Padding(8, 0, 16, 0);
-            this.lblCurrentRole.Size = new System.Drawing.Size(150, 21);
+            this.lblCurrentRole.Size = new System.Drawing.Size(133, 20);
             this.lblCurrentRole.Text = "Vai trò: Quản lý";
             // 
             // lblSystemTime
             // 
-            this.lblSystemTime.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular);
+            this.lblSystemTime.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblSystemTime.ForeColor = System.Drawing.Color.DimGray;
             this.lblSystemTime.Name = "lblSystemTime";
+            this.lblSystemTime.Size = new System.Drawing.Size(801, 20);
             this.lblSystemTime.Spring = true;
-            this.lblSystemTime.Size = new System.Drawing.Size(768, 21);
             this.lblSystemTime.Text = "Thời gian: 00/00/0000 00:00:00";
             this.lblSystemTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // pnlContent
             // 
-            this.pnlContent.BackColor = System.Drawing.Color.FromArgb(250, 248, 245);
+            this.pnlContent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(248)))), ((int)(((byte)(245)))));
             this.pnlContent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlContent.Location = new System.Drawing.Point(242, 0);
             this.pnlContent.Name = "pnlContent";
@@ -486,23 +494,17 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.tmrClock.Interval = 1000;
             this.tmrClock.Tick += new System.EventHandler(this.tmrClock_Tick);
             // 
-            // menuItemChangePassWord
-            // 
-            this.menuItemChangePassWord.Name = "menuItemChangePassWord";
-            this.menuItemChangePassWord.Size = new System.Drawing.Size(255, 26);
-            this.menuItemChangePassWord.Text = "Đổi mật khẩu";
-            this.menuItemChangePassWord.Click += new System.EventHandler(this.menuItemChangePassWord_Click);
-            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(250, 248, 245);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(248)))), ((int)(((byte)(245)))));
             this.ClientSize = new System.Drawing.Size(1360, 734);
             this.Controls.Add(this.pnlContent);
             this.Controls.Add(this.statusStripMain);
             this.Controls.Add(this.pnlSidebar);
-            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Hệ thống Quản lý Tiệm Cà phê — Mộc Cafe POS";
@@ -516,6 +518,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             this.statusStripMain.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion
