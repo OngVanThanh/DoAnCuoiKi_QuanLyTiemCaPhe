@@ -10,7 +10,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.BLL
     /// <summary>
     /// Lớp xử lý nghiệp vụ (BLL) cho màn hình Gọi món (Order), Thanh toán và Chuyển/Gộp bàn.
     /// </summary>
-    internal class OrderService
+    public class OrderService
     {
         private readonly OrderRepository _orderRepository = new OrderRepository();
         private readonly TableRepository _tableRepository = new TableRepository();
@@ -263,6 +263,144 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.BLL
                 paidOrderDto.VATPercent = vatPercent;
                 paidOrderDto.VATAmount = vatAmount;
                 if (!string.IsNullOrEmpty(discountInfo) && string.IsNullOrEmpty(paidOrderDto.PromoCode))
+                {
+                    paidOrderDto.PromoCode = discountInfo;
+                }
+            }
+
+            message = "Thanh toán hóa đơn thành công!";
+            return true;
+        }
+
+        // 10a. Tính toán chi tiết từ tổng tiền hàng, phần trăm giảm giá và giảm cố định
+        public void CalculateSummaryFromAmount(
+            decimal inputTotalAmount,
+            decimal discountPercent,
+            decimal fixedDiscount,
+            out decimal discountAmount,
+            out decimal vatPercent,
+            out decimal vatAmount,
+            out decimal finalAmount)
+        {
+            vatPercent = GetVatPercent();
+            discountAmount = 0m;
+            vatAmount = 0m;
+            finalAmount = 0m;
+
+            if (inputTotalAmount <= 0)
+                return;
+
+            discountAmount = Math.Round(inputTotalAmount * (discountPercent / 100m) + fixedDiscount, 0);
+            if (discountAmount > inputTotalAmount) discountAmount = inputTotalAmount;
+
+            decimal amountAfterDiscount = Math.Max(0m, inputTotalAmount - discountAmount);
+            vatAmount = Math.Round(amountAfterDiscount * (vatPercent / 100m), 0);
+            finalAmount = amountAfterDiscount + vatAmount;
+        }
+
+        // 10b. Tính toán tổng hợp tiền hàng khi đã chọn Promotion (hỗ trợ combo point & hạng VIP)
+        public void CalculateOrderSummaryWithPromo(
+            int tableId,
+            decimal discountPercent,
+            decimal fixedDiscount,
+            int? promotionId,
+            string discountDescription,
+            out decimal totalAmount,
+            out decimal discountAmount,
+            out decimal vatPercent,
+            out decimal vatAmount,
+            out decimal finalAmount,
+            out string discountInfo)
+        {
+            totalAmount = 0m;
+            discountInfo = discountDescription ?? string.Empty;
+
+            var details = GetOrderDetailsByTable(tableId);
+            foreach (var item in details)
+            {
+                totalAmount += item.TotalPrice;
+            }
+
+            CalculateSummaryFromAmount(
+                totalAmount,
+                discountPercent,
+                fixedDiscount,
+                out discountAmount,
+                out vatPercent,
+                out vatAmount,
+                out finalAmount);
+        }
+
+        // 10c. Thanh toán với thông tin Khách hàng và Khuyến mãi đã chọn
+        public bool CheckoutTableOrder(
+            int tableId,
+            decimal discountPercent,
+            decimal fixedDiscount,
+            int? promotionId,
+            string discountDescription,
+            int? customerId,
+            out OrderDTO paidOrderDto,
+            out List<OrderDetailDTO> orderDetails,
+            out string message)
+        {
+            paidOrderDto = null;
+            orderDetails = new List<OrderDetailDTO>();
+
+            if (tableId <= 0)
+            {
+                message = "Vui lòng chọn bàn cần thanh toán!";
+                return false;
+            }
+
+            var unpaidOrder = _orderRepository.GetUnpaidOrderByTableId(tableId);
+            if (unpaidOrder == null)
+            {
+                message = "Bàn hiện tại chưa có hóa đơn cần thanh toán!";
+                return false;
+            }
+
+            orderDetails = _orderRepository.GetOrderDetailsByOrderId(unpaidOrder.Id);
+            if (orderDetails == null || orderDetails.Count == 0)
+            {
+                message = "Hóa đơn chưa có món nào, không thể thanh toán!";
+                return false;
+            }
+
+            CalculateOrderSummaryWithPromo(
+                tableId,
+                discountPercent,
+                fixedDiscount,
+                promotionId,
+                discountDescription,
+                out decimal totalAmount,
+                out decimal discountAmount,
+                out decimal vatPercent,
+                out decimal vatAmount,
+                out decimal finalAmount,
+                out string discountInfo);
+
+            bool completed = _orderRepository.CompleteOrderPayment(
+                unpaidOrder.Id,
+                totalAmount,
+                discountAmount,
+                finalAmount,
+                promotionId,
+                customerId);
+
+            if (!completed)
+            {
+                message = "Đã xảy ra lỗi khi lưu thanh toán hóa đơn!";
+                return false;
+            }
+
+            paidOrderDto = _orderRepository.GetOrderDTOById(unpaidOrder.Id);
+            if (paidOrderDto != null)
+            {
+                paidOrderDto.VATPercent = vatPercent;
+                paidOrderDto.VATAmount = vatAmount;
+                paidOrderDto.DiscountAmount = discountAmount;
+                paidOrderDto.FinalAmount = finalAmount;
+                if (!string.IsNullOrEmpty(discountInfo))
                 {
                     paidOrderDto.PromoCode = discountInfo;
                 }

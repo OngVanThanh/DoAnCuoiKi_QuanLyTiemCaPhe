@@ -274,6 +274,12 @@
     <Compile Include="Form\TanPhat\FrmOrder.Designer.cs">
       <DependentUpon>FrmOrder.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form\TanPhat\FrmQuickAddCustomer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\TanPhat\FrmQuickAddCustomer.Designer.cs">
+      <DependentUpon>FrmQuickAddCustomer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form\TanPhat\FrmPrintReview.cs">
       <SubType>Form</SubType>
     </Compile>

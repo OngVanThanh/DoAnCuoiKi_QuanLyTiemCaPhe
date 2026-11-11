@@ -46,6 +46,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
                 LoadAreaComboBox();
                 LoadCustomerAndPromoCache();
+                LoadPromotionComboBox();
                 LoadCategoriesToComboBox();
                 LoadProductsToMenu();
 
@@ -393,15 +394,23 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         private void UpdateOrderSummaryDisplay()
         {
-            _orderService.CalculateOrderSummary(
+            var promoItem = cboPromotion.SelectedItem as PromotionItem;
+            decimal discountPercent = promoItem != null ? promoItem.DiscountPercent : 0m;
+            decimal fixedDiscount = promoItem != null ? promoItem.FixedDiscountAmount : 0m;
+            int? promoId = promoItem != null ? promoItem.PromotionId : null;
+            string discountDesc = promoItem != null ? (promoItem.PromoCode ?? promoItem.DisplayText) : string.Empty;
+
+            _orderService.CalculateOrderSummaryWithPromo(
                 _selectedTableId,
-                txtDiscount.Text,
+                discountPercent,
+                fixedDiscount,
+                promoId,
+                discountDesc,
                 out decimal totalAmount,
                 out decimal discountAmount,
                 out decimal vatPercent,
                 out decimal vatAmount,
                 out decimal finalAmount,
-                out _,
                 out string discountInfo);
 
             string discountText = discountAmount > 0
@@ -426,15 +435,23 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         private void btnCashExact_Click(object sender, EventArgs e)
         {
-            _orderService.CalculateOrderSummary(
+            var promoItem = cboPromotion.SelectedItem as PromotionItem;
+            decimal discountPercent = promoItem != null ? promoItem.DiscountPercent : 0m;
+            decimal fixedDiscount = promoItem != null ? promoItem.FixedDiscountAmount : 0m;
+            int? promoId = promoItem != null ? promoItem.PromotionId : null;
+            string discountDesc = promoItem != null ? (promoItem.PromoCode ?? promoItem.DisplayText) : string.Empty;
+
+            _orderService.CalculateOrderSummaryWithPromo(
                 _selectedTableId,
-                txtDiscount.Text,
+                discountPercent,
+                fixedDiscount,
+                promoId,
+                discountDesc,
                 out _,
                 out _,
                 out _,
                 out _,
                 out decimal finalAmount,
-                out _,
                 out _);
 
             txtCashTendered.Text = finalAmount > 0 ? $"{finalAmount:N0}" : "0";
@@ -456,15 +473,23 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
         private void UpdateChangeDueCalculation()
         {
-            _orderService.CalculateOrderSummary(
+            var promoItem = cboPromotion.SelectedItem as PromotionItem;
+            decimal discountPercent = promoItem != null ? promoItem.DiscountPercent : 0m;
+            decimal fixedDiscount = promoItem != null ? promoItem.FixedDiscountAmount : 0m;
+            int? promoId = promoItem != null ? promoItem.PromotionId : null;
+            string discountDesc = promoItem != null ? (promoItem.PromoCode ?? promoItem.DisplayText) : string.Empty;
+
+            _orderService.CalculateOrderSummaryWithPromo(
                 _selectedTableId,
-                txtDiscount.Text,
+                discountPercent,
+                fixedDiscount,
+                promoId,
+                discountDesc,
                 out _,
                 out _,
                 out _,
                 out _,
                 out decimal finalAmount,
-                out _,
                 out _);
 
             string raw = txtCashTendered.Text.Trim().Replace(",", "").Replace(".", "").Replace("đ", "").Trim();
@@ -515,6 +540,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 lstCustomerSuggest.Visible = false;
                 lblCustomerInfo.ForeColor = Color.DimGray;
                 lblCustomerInfo.Text = "Khách lẻ (Gõ SĐT hoặc tên khách để gợi ý)";
+                LoadPromotionComboBox();
+                UpdateOrderSummaryDisplay();
                 return;
             }
 
@@ -535,6 +562,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 _selectedCustomer = exact;
                 lblCustomerInfo.ForeColor = Color.FromArgb(39, 174, 96);
                 lblCustomerInfo.Text = $"✔ {exact.CustomerName} · Hạng {exact.MembershipTier} ({exact.RewardPoints} điểm)";
+                LoadPromotionComboBox();
+                UpdateOrderSummaryDisplay();
             }
             else if (matches.Count > 0)
             {
@@ -545,8 +574,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             else
             {
                 _selectedCustomer = null;
-                lblCustomerInfo.ForeColor = Color.FromArgb(192, 57, 43);
-                lblCustomerInfo.Text = "✖ Không có khách hàng khớp từ khóa";
+                lblCustomerInfo.ForeColor = Color.FromArgb(211, 84, 0);
+                lblCustomerInfo.Text = "✖ Chưa là thành viên (Bấm '➕ Thêm' để đăng ký)";
+                LoadPromotionComboBox();
+                UpdateOrderSummaryDisplay();
             }
 
             if (matches.Count > 0 && exact == null)
@@ -578,6 +609,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 lblCustomerInfo.Text = $"✔ {chosen.CustomerName} · Hạng {chosen.MembershipTier} ({chosen.RewardPoints} điểm)";
                 lstCustomerSuggest.Visible = false;
                 _isSelectingSuggestion = false;
+                LoadPromotionComboBox();
+                UpdateOrderSummaryDisplay();
             }
         }
 
@@ -590,76 +623,49 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         }
 
         // =====================================================================
-        // TÌM KIẾM & ĐỀ XUẤT TRỰC TIẾP MÃ GIẢM GIÁ (NHẬP ĐẾN ĐÂU ĐỀ XUẤT ĐẾN ĐÓ)
+        // SỰ KIỆN NÚT THÊM KHÁCH HÀNG MỚI (TRỰC TIẾP TRÊN CONTROL btnAddCustomer)
         // =====================================================================
-        private void txtDiscount_Enter(object sender, EventArgs e)
+        private void btnAddCustomer_Click(object sender, EventArgs e)
         {
-            ShowPromoSuggestions(txtDiscount.Text.Trim());
+            string phoneHint = txtCustomerPhone.Text.Trim();
+            using (var frm = new FrmQuickAddCustomer(phoneHint))
+            {
+                if (frm.ShowDialog(this) == DialogResult.OK && frm.CreatedCustomer != null)
+                {
+                    LoadCustomerAndPromoCache();
+                    var created = _cachedCustomers.FirstOrDefault(c => c.Phone == frm.CreatedCustomer.Phone) ?? frm.CreatedCustomer;
+                    _selectedCustomer = created;
+
+                    _isSelectingSuggestion = true;
+                    txtCustomerPhone.Text = created.Phone;
+                    _isSelectingSuggestion = false;
+
+                    lblCustomerInfo.ForeColor = Color.FromArgb(39, 174, 96);
+                    lblCustomerInfo.Text = $"✔ {created.CustomerName} · Hạng {created.MembershipTier} ({created.RewardPoints} điểm)";
+                    lstCustomerSuggest.Visible = false;
+
+                    LoadPromotionComboBox();
+                    UpdateOrderSummaryDisplay();
+                }
+            }
         }
 
-        private void txtDiscount_TextChanged(object sender, EventArgs e)
+        // =====================================================================
+        // SỰ KIỆN ĐỔI KHUYẾN MÃI / QUY ĐỔI ĐIỂM (TRỰC TIẾP TRÊN cboPromotion)
+        // =====================================================================
+        private void cboPromotion_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (_isLoading) return;
-
-            if (!_isSelectingSuggestion)
-            {
-                ShowPromoSuggestions(txtDiscount.Text.Trim());
-            }
-
             UpdateOrderSummaryDisplay();
         }
 
-        private void ShowPromoSuggestions(string keyword)
+        // =====================================================================
+        // NẠP DANH SÁCH PROMOTION VÀ QUY ĐỔI ĐIỂM VÀO COMBOBOX
+        // (Ủy quyền xử lý nghiệp vụ cho PromotionService)
+        // =====================================================================
+        private void LoadPromotionComboBox()
         {
-            if (_cachedPromotions.Count == 0)
-            {
-                LoadCustomerAndPromoCache();
-            }
-
-            var matches = _cachedPromotions
-                .Where(p => string.IsNullOrEmpty(keyword) ||
-                            (p.PromoCode != null && p.PromoCode.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0))
-                .Take(5)
-                .ToList();
-
-            bool isExactMatch = matches.Any(p => string.Equals(p.PromoCode, keyword, StringComparison.OrdinalIgnoreCase));
-
-            if (matches.Count > 0 && !isExactMatch)
-            {
-                lstPromoSuggest.Items.Clear();
-                foreach (var p in matches)
-                {
-                    lstPromoSuggest.Items.Add($"{p.PromoCode} — Giảm {p.DiscountPercent}%");
-                }
-                lstPromoSuggest.Tag = matches;
-                lstPromoSuggest.BringToFront();
-                lstPromoSuggest.Visible = true;
-            }
-            else
-            {
-                lstPromoSuggest.Visible = false;
-            }
-        }
-
-        private void lstPromoSuggest_Click(object sender, EventArgs e)
-        {
-            if (lstPromoSuggest.SelectedIndex >= 0 && lstPromoSuggest.Tag is List<PromotionDTO> matches)
-            {
-                var chosen = matches[lstPromoSuggest.SelectedIndex];
-                _isSelectingSuggestion = true;
-                txtDiscount.Text = chosen.PromoCode;
-                lstPromoSuggest.Visible = false;
-                _isSelectingSuggestion = false;
-                UpdateOrderSummaryDisplay();
-            }
-        }
-
-        private void txtDiscount_Leave(object sender, EventArgs e)
-        {
-            if (!lstPromoSuggest.Focused)
-            {
-                lstPromoSuggest.Visible = false;
-            }
+            _promotionService.LoadPromotionComboBox(cboPromotion, _selectedCustomer, _cachedPromotions);
         }
 
         private void btnRemoveProduct_Click(object sender, EventArgs e)
@@ -704,9 +710,21 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
             try
             {
+                var promoItem = cboPromotion.SelectedItem as PromotionItem;
+                decimal discountPercent = promoItem != null ? promoItem.DiscountPercent : 0m;
+                decimal fixedDiscount = promoItem != null ? promoItem.FixedDiscountAmount : 0m;
+                int? promoId = promoItem != null ? promoItem.PromotionId : null;
+                string discountDesc = promoItem != null ? promoItem.DisplayText : string.Empty;
+                int pointsToRedeem = promoItem != null ? promoItem.PointsToRedeem : 0;
+                int? customerDbId = _selectedCustomer != null ? (int?)_selectedCustomer.CustomerId : null;
+
                 bool success = _orderService.CheckoutTableOrder(
                     _selectedTableId,
-                    txtDiscount.Text,
+                    discountPercent,
+                    fixedDiscount,
+                    promoId,
+                    discountDesc,
+                    customerDbId,
                     out OrderDTO paidOrder,
                     out List<OrderDetailDTO> orderDetails,
                     out string message);
@@ -717,12 +735,23 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                     return;
                 }
 
-                if (_selectedCustomer != null && paidOrder != null && paidOrder.FinalAmount >= 10000)
+                // CỘNG ĐIỂM THEO TỔNG TIỀN THANH TOÁN (100.000 VNĐ = 100 điểm => 1.000 VNĐ = 1 điểm)
+                // VÀ TRỪ ĐIỂM NẾU CÓ DÙNG KHUYẾN MÃI ĐỔI ĐIỂM
+                if (_selectedCustomer != null && paidOrder != null)
                 {
-                    int addedPoints = (int)(paidOrder.FinalAmount / 10000m);
-                    _selectedCustomer.RewardPoints += addedPoints;
-                    _customerService.Update(_selectedCustomer, out _);
-                    LoadCustomerAndPromoCache();
+                    int earnedPoints = (int)Math.Floor(paidOrder.FinalAmount / 1000m);
+                    if (_customerService.AddRewardPoints(
+                        _selectedCustomer.Phone,
+                        earnedPoints,
+                        pointsToRedeem,
+                        out int updatedPoints,
+                        out string updatedTier,
+                        out string _))
+                    {
+                        _selectedCustomer.RewardPoints = updatedPoints;
+                        _selectedCustomer.MembershipTier = updatedTier;
+                        LoadCustomerAndPromoCache();
+                    }
                 }
 
                 // Gán tiền khách đưa và tiền thối lại vào đối tượng hóa đơn để in ấn
@@ -735,20 +764,21 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                     }
                     paidOrder.CashTendered = cashTendered;
                     paidOrder.ChangeDue = Math.Max(0m, cashTendered - paidOrder.FinalAmount);
+                    if (_selectedCustomer != null)
+                    {
+                        paidOrder.CustomerName = _selectedCustomer.CustomerName;
+                    }
                 }
 
-                // Lưu ý nghiệp vụ: Bàn đặt trước sau khi thanh toán sẽ chuyển trạng thái 'Đã thanh toán'
-                // và tiếp tục hiển thị cho đến khi hết khung giờ hoặc nhân viên bấm nút 'Đóng' trên thẻ bàn.
-
-                txtDiscount.Clear();
+                // Reset trạng thái sau thanh toán
                 txtCustomerPhone.Clear();
                 txtCashTendered.Clear();
                 lblChangeDue.ForeColor = Color.DimGray;
                 lblChangeDue.Text = "0 đ";
                 lstCustomerSuggest.Visible = false;
-                lstPromoSuggest.Visible = false;
                 _selectedCustomer = null;
                 lblCustomerInfo.Text = "Khách lẻ (Gõ SĐT hoặc tên khách để gợi ý)";
+                LoadPromotionComboBox();
 
                 SelectCounterMode();
 

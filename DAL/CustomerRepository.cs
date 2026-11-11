@@ -21,6 +21,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                          .OrderByDescending(c => c.RewardPoints ?? 0)
                          .Select(c => new CustomerDTO
                          {
+                             CustomerId = c.Id,
                              CustomerName = c.CustomerName,
                              Phone = c.Phone,
                              RewardPoints = c.RewardPoints ?? 0,
@@ -43,6 +44,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
 
                 return new CustomerDTO
                 {
+                    CustomerId = customer.Id,
                     CustomerName = customer.CustomerName,
                     Phone = customer.Phone,
                     RewardPoints = customer.RewardPoints ?? 0,
@@ -88,6 +90,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
 
                     db.Customers.InsertOnSubmit(newCustomer);
                     db.SubmitChanges();
+                    dto.CustomerId = newCustomer.Id;
                     return true;
                 }
             }
@@ -165,6 +168,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                          .OrderByDescending(c => c.RewardPoints ?? 0)
                          .Select(c => new CustomerDTO
                          {
+                             CustomerId = c.Id,
                              CustomerName = c.CustomerName,
                              Phone = c.Phone,
                              RewardPoints = c.RewardPoints ?? 0,
@@ -185,6 +189,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                          .Take(topCount)
                          .Select(c => new CustomerDTO
                          {
+                             CustomerId = c.Id,
                              CustomerName = c.CustomerName,
                              Phone = c.Phone,
                              RewardPoints = c.RewardPoints ?? 0,
@@ -205,12 +210,61 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
 
                 return new CustomerDTO
                 {
+                    CustomerId = customer.Id,
                     CustomerName = customer.CustomerName,
                     Phone = customer.Phone,
                     RewardPoints = customer.RewardPoints ?? 0,
                     MembershipTier = customer.MembershipTier ?? "Thường",
                     RegistrationDate = (customer.RegistrationDate ?? DateTime.Now).Date
                 };
+            }
+        }
+
+        // 10. Cộng/trừ điểm tích lũy và cập nhật hạng thành viên trực tiếp vào CSDL khi thanh toán / in hóa đơn
+        public bool AddRewardPoints(string phone, int pointsToAdd, int pointsToDeduct, out int updatedPoints, out string updatedTier, out string error)
+        {
+            error = string.Empty;
+            updatedPoints = 0;
+            updatedTier = "Thường";
+
+            if (string.IsNullOrWhiteSpace(phone))
+            {
+                error = "Số điện thoại không hợp lệ!";
+                return false;
+            }
+
+            try
+            {
+                using (var db = GetContext())
+                {
+                    var customer = db.Customers.FirstOrDefault(c => c.Phone == phone.Trim());
+                    if (customer == null)
+                    {
+                        error = "Không tìm thấy khách hàng có số điện thoại này!";
+                        return false;
+                    }
+
+                    int current = customer.RewardPoints ?? 0;
+                    int netPoints = Math.Max(0, current - pointsToDeduct + pointsToAdd);
+                    customer.RewardPoints = netPoints;
+
+                    // Tính lại hạng thành viên theo thang điểm
+                    if (netPoints >= 1000) customer.MembershipTier = "Kim Cương";
+                    else if (netPoints >= 500) customer.MembershipTier = "Vàng";
+                    else if (netPoints >= 200) customer.MembershipTier = "Bạc";
+                    else customer.MembershipTier = "Thường";
+
+                    db.SubmitChanges();
+
+                    updatedPoints = customer.RewardPoints ?? 0;
+                    updatedTier = customer.MembershipTier;
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                error = "Lỗi cập nhật điểm: " + ex.Message;
+                return false;
             }
         }
     }

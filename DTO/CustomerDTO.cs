@@ -11,6 +11,9 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DTO
         public string MembershipTier { get; set; }
         public DateTime RegistrationDate { get; set; }
 
+        // Khóa số trong cơ sở dữ liệu (Customers.Id)
+        public int CustomerId { get; set; }
+
         // Tương thích nếu có nơi gọi Id thì trả về Phone
         public string Id
         {

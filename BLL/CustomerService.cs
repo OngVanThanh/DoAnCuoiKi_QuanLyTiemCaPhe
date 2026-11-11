@@ -126,5 +126,11 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.BLL
         {
             return _repository.GetCustomerById(id);
         }
+
+        // 10. Cộng điểm theo tổng tiền thanh toán và trừ điểm nếu có quy đổi khuyến mãi
+        public bool AddRewardPoints(string phone, int pointsToAdd, int pointsToDeduct, out int updatedPoints, out string updatedTier, out string error)
+        {
+            return _repository.AddRewardPoints(phone, pointsToAdd, pointsToDeduct, out updatedPoints, out updatedTier, out error);
+        }
     }
 }

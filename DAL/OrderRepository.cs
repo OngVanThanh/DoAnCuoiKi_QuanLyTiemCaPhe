@@ -527,7 +527,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
         }
 
         // 14. Hoàn tất thanh toán hóa đơn và giải phóng bàn về trạng thái "Trống" (bọc TransactionScope)
-        public bool CompleteOrderPayment(int orderId, decimal totalAmount, decimal discountAmount, decimal finalAmount, int? promotionId)
+        public bool CompleteOrderPayment(int orderId, decimal totalAmount, decimal discountAmount, decimal finalAmount, int? promotionId, int? customerId = null)
         {
             if (!_tableRepo.IsDatabaseOnline())
             {
@@ -539,6 +539,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                 order.DiscountAmount = discountAmount;
                 order.FinalAmount = finalAmount;
                 order.PromotionId = promotionId;
+                if (customerId.HasValue && customerId.Value > 0)
+                {
+                    order.CustomerId = customerId.Value;
+                }
                 order.OrderDate = DateTime.Now;
                 order.Status = "Đã thanh toán";
 
@@ -570,6 +574,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                     order.DiscountAmount = discountAmount;
                     order.FinalAmount = finalAmount;
                     order.PromotionId = promotionId;
+                    if (customerId.HasValue && customerId.Value > 0)
+                    {
+                        order.CustomerId = customerId.Value;
+                    }
                     order.OrderDate = DateTime.Now;
                     order.Status = "Đã thanh toán";
 
