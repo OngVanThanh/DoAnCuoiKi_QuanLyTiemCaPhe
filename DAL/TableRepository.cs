@@ -177,6 +177,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
             }
 
             string cleanName = areaName.Trim();
+            DateTime now = DateTime.Now;
 
             if (!IsDatabaseOnline())
             {
@@ -187,15 +188,37 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                     return false;
                 }
 
-                bool hasTables = FallbackTables.Any(t => t.AreaId == area.Id);
-                if (hasTables)
+                // Loại trừ bàn quầy/mang đi và các bàn đặt trước đã hết hạn
+                var activeCustomerTable = FallbackTables.FirstOrDefault(t =>
+                    t.AreaId == area.Id &&
+                    t.Id != 1 &&
+                    !t.TableName.Contains("quầy") &&
+                    !t.TableName.Contains("Mang đi") &&
+                    (string.Equals(t.Status, "Có khách", StringComparison.OrdinalIgnoreCase) ||
+                     (string.Equals(t.Status, "Đặt trước", StringComparison.OrdinalIgnoreCase) && (!t.EndTime.HasValue || t.EndTime.Value > now))));
+
+                if (activeCustomerTable != null)
                 {
-                    message = $"Khu vực '{cleanName}' đang có bàn hoạt động, không thể xóa!";
+                    message = $"Khu vực '{cleanName}' đang có khách ({activeCustomerTable.TableName}) hoặc bàn đặt trước còn hiệu lực, không thể xóa!";
                     return false;
                 }
 
+                // Nếu bàn quầy (TableId = 1) đang trỏ vào khu vực này thì chuyển sang khu vực khác còn lại
+                var remainingArea = _fallbackAreas.FirstOrDefault(a => a.Id != area.Id);
+                int targetAreaId = remainingArea != null ? remainingArea.Id : 1;
+
+                foreach (var t in FallbackTables.Where(t => t.Id == 1 || t.TableName.Contains("quầy") || t.TableName.Contains("Mang đi")))
+                {
+                    if (t.AreaId == area.Id)
+                    {
+                        t.AreaId = targetAreaId;
+                    }
+                }
+
+                // Xóa các bàn khác thuộc khu vực này (ngoại trừ bàn quầy)
+                FallbackTables.RemoveAll(t => t.AreaId == area.Id && t.Id != 1 && !t.TableName.Contains("quầy") && !t.TableName.Contains("Mang đi"));
                 _fallbackAreas.Remove(area);
-                message = $"Đã xóa khu vực '{cleanName}' khỏi danh sách gợi ý!";
+                message = $"Đã xóa khu vực '{cleanName}' thành công!";
                 return true;
             }
 
@@ -208,17 +231,72 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.DAL
                     return false;
                 }
 
-                // Kiểm tra xem khu vực này có bàn đang hoạt động không
-                bool hasTables = db.Tables.Any(t => t.AreaId == area.Id);
-                if (hasTables)
+                var counter = db.Tables.FirstOrDefault(t =>
+                    t.TableName == "Khách tại quầy / Mang đi" ||
+                    t.TableName == "Khách tại quầy" ||
+                    t.TableName == "Mang đi");
+                int counterId = counter != null ? counter.Id : 1;
+
+                // Lấy tất cả các bàn thực của khách trong khu vực (loại trừ bàn quầy hệ thống)
+                var customerTables = db.Tables
+                    .Where(t => t.AreaId == area.Id && t.Id != counterId && !t.TableName.Contains("quầy") && !t.TableName.Contains("Mang đi"))
+                    .ToList();
+
+                // Kiểm tra xem có bàn nào đang thực sự có khách hoặc đặt trước chưa hết hạn hoặc có hóa đơn chưa thanh toán không
+                var activeTable = customerTables.FirstOrDefault(t =>
+                    string.Equals(t.Status, "Có khách", StringComparison.OrdinalIgnoreCase) ||
+                    (string.Equals(t.Status, "Đặt trước", StringComparison.OrdinalIgnoreCase) && (!t.EndTime.HasValue || t.EndTime.Value > now)) ||
+                    db.Orders.Any(o => o.TableId == t.Id && o.Status == "Chưa thanh toán"));
+
+                if (activeTable != null)
                 {
-                    message = $"Khu vực '{cleanName}' đang có bàn hoạt động, không thể xóa!";
+                    string info = !string.IsNullOrEmpty(activeTable.TableName) ? $" ({activeTable.TableName})" : string.Empty;
+                    message = $"Khu vực '{cleanName}' đang có khách{info} hoặc bàn đặt trước còn hiệu lực, không thể xóa!";
                     return false;
                 }
 
+                // Xác định khu vực thay thế nếu cần chuyển bàn quầy
+                var otherArea = db.Areas.FirstOrDefault(a => a.Id != area.Id);
+                if (otherArea == null)
+                {
+                    // Nếu đây là khu vực duy nhất, tạo một khu vực mặc định để giữ bàn quầy
+                    otherArea = new Area { AreaName = "Khu vực chung", Description = "Khu vực mặc định" };
+                    db.Areas.InsertOnSubmit(otherArea);
+                    db.SubmitChanges();
+                }
+
+                // Nếu bàn quầy đang liên kết với khu vực này, chuyển sang otherArea
+                var countersInArea = db.Tables.Where(t => (t.Id == counterId || t.TableName.Contains("quầy") || t.TableName.Contains("Mang đi")) && t.AreaId == area.Id).ToList();
+                foreach (var c in countersInArea)
+                {
+                    c.AreaId = otherArea.Id;
+                }
+                db.SubmitChanges();
+
+                // Dọn dẹp các bàn trống/hết hạn của khu vực này:
+                // Nếu bàn có dính lịch sử hóa đơn trong db.Orders thì chỉ chuyển AreaId sang otherArea và reset trạng thái về Trống (tránh lỗi khóa ngoại FK_Orders_Tables)
+                // Nếu bàn chưa từng có hóa đơn nào thì xóa hẳn khỏi bảng Tables
+                foreach (var t in customerTables)
+                {
+                    bool hasOrderHistory = db.Orders.Any(o => o.TableId == t.Id);
+                    if (hasOrderHistory)
+                    {
+                        t.AreaId = otherArea.Id;
+                        t.Status = "Trống";
+                        t.StartTime = null;
+                        t.EndTime = null;
+                    }
+                    else
+                    {
+                        db.Tables.DeleteOnSubmit(t);
+                    }
+                }
+                db.SubmitChanges();
+
+                // Xóa hẳn khu vực
                 db.Areas.DeleteOnSubmit(area);
                 db.SubmitChanges();
-                message = $"Đã xóa khu vực '{cleanName}' khỏi danh sách gợi ý!";
+                message = $"Đã xóa khu vực '{cleanName}' thành công!";
                 return true;
             }
         }

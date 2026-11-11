@@ -333,5 +333,79 @@ END;
                 return false;
             }
         }
+
+        /// <summary>
+        /// Tự động dò tìm SQL Server / LocalDB khả dụng, tự động tạo CSDL CoffeeShopDB và khởi tạo toàn bộ 15 bảng + dữ liệu mẫu.
+        /// Đảm bảo người dùng hoặc giảng viên mở app là chạy ngay (Zero-Config Deployment).
+        /// </summary>
+        public static bool AutoInitializeDatabase()
+        {
+            try
+            {
+                // Nếu máy sử dụng SQL Server LocalDB, đảm bảo instance MSSQLLocalDB đã được khởi động
+                try
+                {
+                    var psi = new System.Diagnostics.ProcessStartInfo("sqllocaldb", "start MSSQLLocalDB")
+                    {
+                        CreateNoWindow = true,
+                        UseShellExecute = false,
+                        WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden
+                    };
+                    using (var p = System.Diagnostics.Process.Start(psi))
+                    {
+                        p?.WaitForExit(2000);
+                    }
+                }
+                catch
+                {
+                    // Bỏ qua nếu máy không có sqllocaldb CLI
+                }
+
+                string[] candidateServers = new string[] { ".", "localhost", @".\SQLEXPRESS", @"(localdb)\MSSQLLocalDB" };
+                string workingServer = null;
+
+                foreach (var server in candidateServers)
+                {
+                    try
+                    {
+                        string masterConn = $"Data Source={server};Initial Catalog=master;Integrated Security=True;TrustServerCertificate=True;Connect Timeout=2;";
+                        using (var conn = new SqlConnection(masterConn))
+                        {
+                            conn.Open();
+                            workingServer = server;
+
+                            using (var cmd = conn.CreateCommand())
+                            {
+                                cmd.CommandText = @"
+IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'CoffeeShopDB')
+BEGIN
+    CREATE DATABASE [CoffeeShopDB];
+END";
+                                cmd.ExecuteNonQuery();
+                            }
+                            break;
+                        }
+                    }
+                    catch
+                    {
+                        // Thử máy chủ tiếp theo
+                    }
+                }
+
+                if (string.IsNullOrEmpty(workingServer))
+                {
+                    return false;
+                }
+
+                string appConn = $"Data Source={workingServer};Initial Catalog=CoffeeShopDB;Integrated Security=True;TrustServerCertificate=True;";
+                ConfigHelper.SetWorkingConnectionString("CoffeeShopDB", appConn);
+
+                return EnsureDatabaseSchema(out _);
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

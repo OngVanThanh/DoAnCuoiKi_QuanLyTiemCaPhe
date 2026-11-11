@@ -37,6 +37,7 @@
             this.lblEndTime = new System.Windows.Forms.Label();
             this.dtpStartTime = new System.Windows.Forms.DateTimePicker();
             this.lblStartTime = new System.Windows.Forms.Label();
+            this.btnManageAreas = new System.Windows.Forms.Button();
             this.cboReserveArea = new System.Windows.Forms.ComboBox();
             this.lblReserveArea = new System.Windows.Forms.Label();
             this.txtReserveCustomerName = new System.Windows.Forms.TextBox();
@@ -181,6 +182,7 @@
             // 
             this.grpQuickReserve.BackColor = System.Drawing.Color.White;
             this.grpQuickReserve.Controls.Add(this.btnAddReservedTable);
+            this.grpQuickReserve.Controls.Add(this.btnManageAreas);
             this.grpQuickReserve.Controls.Add(this.dtpEndTime);
             this.grpQuickReserve.Controls.Add(this.lblEndTime);
             this.grpQuickReserve.Controls.Add(this.dtpStartTime);
@@ -263,8 +265,24 @@
             this.cboReserveArea.FormattingEnabled = true;
             this.cboReserveArea.Location = new System.Drawing.Point(112, 58);
             this.cboReserveArea.Name = "cboReserveArea";
-            this.cboReserveArea.Size = new System.Drawing.Size(162, 28);
+            this.cboReserveArea.Size = new System.Drawing.Size(126, 28);
             this.cboReserveArea.TabIndex = 3;
+            // 
+            // btnManageAreas
+            // 
+            this.btnManageAreas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(235)))), ((int)(((byte)(226)))));
+            this.btnManageAreas.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnManageAreas.FlatAppearance.BorderSize = 0;
+            this.btnManageAreas.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnManageAreas.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnManageAreas.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(78)))), ((int)(((byte)(55)))));
+            this.btnManageAreas.Location = new System.Drawing.Point(242, 58);
+            this.btnManageAreas.Name = "btnManageAreas";
+            this.btnManageAreas.Size = new System.Drawing.Size(32, 28);
+            this.btnManageAreas.TabIndex = 4;
+            this.btnManageAreas.Text = "⚙️";
+            this.btnManageAreas.UseVisualStyleBackColor = false;
+            this.btnManageAreas.Click += new System.EventHandler(this.btnManageAreas_Click);
             // 
             // lblReserveArea
             // 
@@ -974,6 +992,7 @@
         private System.Windows.Forms.Label lblEndTime;
         private System.Windows.Forms.DateTimePicker dtpStartTime;
         private System.Windows.Forms.Label lblStartTime;
+        private System.Windows.Forms.Button btnManageAreas;
         private System.Windows.Forms.ComboBox cboReserveArea;
         private System.Windows.Forms.Label lblReserveArea;
         private System.Windows.Forms.TextBox txtReserveCustomerName;

@@ -96,6 +96,14 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe.Utilities
         /// <summary>
         /// Xóa cache chuỗi kết nối (dùng khi người dùng vừa đổi thông tin trên FrmAppConfig)
         /// </summary>
+        public static void SetWorkingConnectionString(string name, string connectionString)
+        {
+            if (!string.IsNullOrWhiteSpace(connectionString))
+            {
+                _workingConnectionStrings[name] = connectionString;
+            }
+        }
+
         public static void InvalidateCache()
         {
             _workingConnectionStrings.Clear();

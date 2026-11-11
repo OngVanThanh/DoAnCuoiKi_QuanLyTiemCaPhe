@@ -50,6 +50,9 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 LoadCategoriesToComboBox();
                 LoadProductsToMenu();
 
+                // Đăng ký sự kiện co giãn tự động cho lưới thẻ món (Responsive Grid 3-4 cột)
+                flpProductMenu.Resize += (s, ev) => UpdateProductCardSizes();
+
                 _tableService.AutoCleanupExpiredReservations();
                 SelectCounterMode();
             }
@@ -82,13 +85,17 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                     cboReserveArea.Items.Add(area.AreaName);
                 }
             }
-            if (!string.IsNullOrEmpty(currentText))
+            if (!string.IsNullOrEmpty(currentText) && cboReserveArea.Items.Contains(currentText))
             {
                 cboReserveArea.Text = currentText;
             }
             else if (cboReserveArea.Items.Count > 0)
             {
                 cboReserveArea.SelectedIndex = 0;
+            }
+            else
+            {
+                cboReserveArea.Text = string.Empty;
             }
         }
 
@@ -148,6 +155,16 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             flpProductMenu.SuspendLayout();
             flpProductMenu.Controls.Clear();
 
+            // Tính toán kích thước thẻ món thích ứng (Responsive Grid: 3 hoặc 4 cột tùy chiều rộng màn hình)
+            int availableWidth = flpProductMenu.ClientSize.Width - SystemInformation.VerticalScrollBarWidth - 16;
+            if (availableWidth < 300) availableWidth = 500;
+            int cols = availableWidth >= 680 ? 4 : (availableWidth >= 460 ? 3 : 2);
+            int cardMargin = 4;
+            int cardWidth = (availableWidth - (cols * cardMargin * 2)) / cols;
+            if (cardWidth < 135) cardWidth = 135;
+            int cardHeight = cardWidth + 128; // Thumbnail vuông + 128px cho thông tin & nút bấm không bao giờ bị cắt xén
+            Size targetSize = new Size(cardWidth, cardHeight);
+
             foreach (var prod in products)
             {
                 string catName = _categoryNameMap.ContainsKey(prod.CategoryId)
@@ -155,6 +172,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                     : "Thực đơn";
 
                 UcProductCard card = new UcProductCard();
+                card.Margin = new Padding(cardMargin);
+                card.Size = targetSize;
                 card.BindData(prod, catName);
                 card.SetSelected(prod.Id == _selectedProductId);
                 card.ProductSelected += UcProductCard_ProductSelected;
@@ -164,6 +183,232 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
 
             flpProductMenu.ResumeLayout();
+        }
+
+        // Tự động co giãn kích thước các thẻ món khi người dùng kéo giãn hoặc phóng to cửa sổ
+        private void UpdateProductCardSizes()
+        {
+            if (flpProductMenu.Controls.Count == 0) return;
+
+            int availableWidth = flpProductMenu.ClientSize.Width - SystemInformation.VerticalScrollBarWidth - 16;
+            if (availableWidth < 300) return;
+            int cols = availableWidth >= 680 ? 4 : (availableWidth >= 460 ? 3 : 2);
+            int cardMargin = 4;
+            int cardWidth = (availableWidth - (cols * cardMargin * 2)) / cols;
+            if (cardWidth < 135) cardWidth = 135;
+            int cardHeight = cardWidth + 128; // Thumbnail vuông + 128px cho thông tin & nút bấm không bao giờ bị cắt xén
+            Size targetSize = new Size(cardWidth, cardHeight);
+
+            flpProductMenu.SuspendLayout();
+            foreach (Control ctrl in flpProductMenu.Controls)
+            {
+                if (ctrl is UcProductCard card)
+                {
+                    card.Margin = new Padding(cardMargin);
+                    card.Size = targetSize;
+                }
+            }
+            flpProductMenu.ResumeLayout();
+        }
+
+        private void btnManageAreas_Click(object sender, EventArgs e)
+        {
+            ShowAreaYoutubeDropdown();
+        }
+
+        private ToolStripDropDown _areaDropDown;
+
+        // Hiển thị danh sách gợi ý khu vực có nút [✕] xóa từng dòng giống YouTube
+        private void ShowAreaYoutubeDropdown()
+        {
+            if (_areaDropDown != null)
+            {
+                _areaDropDown.Close();
+                _areaDropDown.Dispose();
+                _areaDropDown = null;
+            }
+
+            var areas = _tableService.GetAllAreaDTOs();
+            _areaDropDown = new ToolStripDropDown();
+            _areaDropDown.AutoClose = true;
+            _areaDropDown.Margin = Padding.Empty;
+            _areaDropDown.Padding = Padding.Empty;
+            _areaDropDown.BackColor = Color.White;
+
+            int popupWidth = Math.Max(260, cboReserveArea.Width + (btnManageAreas != null ? btnManageAreas.Width : 32) + 10);
+            Panel pnlOuter = new Panel();
+            pnlOuter.BackColor = Color.White;
+            pnlOuter.BorderStyle = BorderStyle.FixedSingle;
+            pnlOuter.Width = popupWidth;
+
+            // Header nhỏ
+            Label lblHeader = new Label();
+            lblHeader.Text = "  📍 KHU VỰC QUÁN (Bấm ✕ để xóa)";
+            lblHeader.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+            lblHeader.ForeColor = Color.FromArgb(120, 100, 90);
+            lblHeader.BackColor = Color.FromArgb(248, 245, 240);
+            lblHeader.Dock = DockStyle.Top;
+            lblHeader.Height = 26;
+            lblHeader.TextAlign = ContentAlignment.MiddleLeft;
+            pnlOuter.Controls.Add(lblHeader);
+
+            FlowLayoutPanel flpRows = new FlowLayoutPanel();
+            flpRows.FlowDirection = FlowDirection.TopDown;
+            flpRows.WrapContents = false;
+            flpRows.AutoScroll = true;
+            flpRows.Dock = DockStyle.Fill;
+            flpRows.Padding = new Padding(2);
+            flpRows.BackColor = Color.White;
+
+            int contentHeight = 28;
+
+            if (areas == null || areas.Count == 0)
+            {
+                Label lblEmpty = new Label();
+                lblEmpty.Text = "Chưa có khu vực nào";
+                lblEmpty.Font = new Font("Segoe UI", 8.5F, FontStyle.Italic);
+                lblEmpty.ForeColor = Color.Gray;
+                lblEmpty.Size = new Size(popupWidth - 14, 30);
+                lblEmpty.TextAlign = ContentAlignment.MiddleCenter;
+                flpRows.Controls.Add(lblEmpty);
+                contentHeight += 32;
+            }
+            else
+            {
+                foreach (var area in areas)
+                {
+                    string areaName = area.AreaName;
+                    Panel row = new Panel();
+                    row.Size = new Size(popupWidth - 14, 30);
+                    row.Margin = new Padding(0, 1, 0, 1);
+                    row.BackColor = Color.White;
+                    row.Cursor = Cursors.Hand;
+
+                    Label lblPin = new Label();
+                    lblPin.Text = "📍";
+                    lblPin.Font = new Font("Segoe UI", 8F);
+                    lblPin.ForeColor = Color.FromArgb(140, 100, 80);
+                    lblPin.Size = new Size(20, 24);
+                    lblPin.Location = new Point(2, 4);
+                    lblPin.Cursor = Cursors.Hand;
+
+                    Label lblName = new Label();
+                    lblName.Text = areaName;
+                    lblName.Font = new Font("Segoe UI", 9F);
+                    lblName.ForeColor = Color.FromArgb(40, 40, 40);
+                    lblName.Location = new Point(24, 4);
+                    lblName.Size = new Size(row.Width - 60, 24);
+                    lblName.Cursor = Cursors.Hand;
+
+                    Label btnDel = new Label();
+                    btnDel.Text = "✕";
+                    btnDel.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
+                    btnDel.ForeColor = Color.FromArgb(160, 160, 160);
+                    btnDel.TextAlign = ContentAlignment.MiddleCenter;
+                    btnDel.Location = new Point(row.Width - 28, 3);
+                    btnDel.Size = new Size(24, 24);
+                    btnDel.Cursor = Cursors.Hand;
+
+                    // Hover hiệu ứng giống YouTube
+                    Action highlightRow = () =>
+                    {
+                        row.BackColor = Color.FromArgb(248, 244, 238);
+                    };
+                    Action unhighlightRow = () =>
+                    {
+                        row.BackColor = Color.White;
+                    };
+
+                    row.MouseEnter += (s, ev) => highlightRow();
+                    row.MouseLeave += (s, ev) => unhighlightRow();
+                    lblPin.MouseEnter += (s, ev) => highlightRow();
+                    lblName.MouseEnter += (s, ev) => highlightRow();
+
+                    btnDel.MouseEnter += (s, ev) =>
+                    {
+                        btnDel.ForeColor = Color.FromArgb(192, 57, 43);
+                        btnDel.BackColor = Color.FromArgb(253, 237, 236);
+                    };
+                    btnDel.MouseLeave += (s, ev) =>
+                    {
+                        btnDel.ForeColor = Color.FromArgb(160, 160, 160);
+                        btnDel.BackColor = Color.Transparent;
+                    };
+
+                    // Chọn khu vực khi click vào dòng
+                    EventHandler selectArea = (s, ev) =>
+                    {
+                        cboReserveArea.Text = areaName;
+                        _areaDropDown.Close();
+                    };
+                    row.Click += selectArea;
+                    lblPin.Click += selectArea;
+                    lblName.Click += selectArea;
+
+                    // Xóa khu vực khi click nút [✕]
+                    btnDel.Click += (s, ev) =>
+                    {
+                        var confirm = MessageBox.Show(
+                            $"Bạn có chắc chắn muốn xóa khu vực '{areaName}' khỏi danh sách?",
+                            "Xác nhận xóa khu vực",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question);
+
+                        if (confirm == DialogResult.Yes)
+                        {
+                            if (_tableService.DeleteAreaByName(areaName, out string msg))
+                            {
+                                MessageBox.Show(msg, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                if (cboReserveArea.Text == areaName)
+                                {
+                                    cboReserveArea.Text = string.Empty;
+                                }
+                                LoadAreaComboBox();
+                                _areaDropDown.Close();
+                                BeginInvoke((MethodInvoker)delegate { ShowAreaYoutubeDropdown(); });
+                            }
+                            else
+                            {
+                                MessageBox.Show(msg, "Không thể xóa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
+                        }
+                    };
+
+                    row.Controls.Add(lblPin);
+                    row.Controls.Add(lblName);
+                    row.Controls.Add(btnDel);
+                    flpRows.Controls.Add(row);
+
+                    contentHeight += 32;
+                }
+            }
+
+            // Gợi ý tự thêm ở chân dropdown
+            Label lblFooter = new Label();
+            lblFooter.Text = "💡 Gõ tên mới vào ô để tự thêm khu vực";
+            lblFooter.Font = new Font("Segoe UI", 7.5F, FontStyle.Italic);
+            lblFooter.ForeColor = Color.FromArgb(140, 140, 140);
+            lblFooter.Dock = DockStyle.Bottom;
+            lblFooter.Height = 22;
+            lblFooter.TextAlign = ContentAlignment.MiddleCenter;
+            pnlOuter.Controls.Add(lblFooter);
+            contentHeight += 24;
+
+            pnlOuter.Controls.Add(flpRows);
+            flpRows.BringToFront();
+
+            int finalHeight = Math.Min(260, contentHeight);
+            pnlOuter.Height = finalHeight;
+
+            ToolStripControlHost host = new ToolStripControlHost(pnlOuter);
+            host.Margin = Padding.Empty;
+            host.Padding = Padding.Empty;
+            host.AutoSize = false;
+            host.Size = pnlOuter.Size;
+
+            _areaDropDown.Items.Clear();
+            _areaDropDown.Items.Add(host);
+            _areaDropDown.Show(cboReserveArea, 0, cboReserveArea.Height);
         }
 
         private void LoadReservedTableCards()

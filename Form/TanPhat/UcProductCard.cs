@@ -80,10 +80,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
         }
 
-        // 4. Vẽ hình minh họa ly cà phê / trà trái cây / sinh tố / bánh ngọt khi món chưa có file ảnh
+        // 4. Vẽ hình minh họa ly cà phê / trà trái cây / sinh tố / bánh ngọt khi món chưa có file ảnh (Tỉ lệ vuông 1:1)
         private Bitmap CreateDrinkIllustration(string productName, int categoryId)
         {
-            Bitmap bmp = new Bitmap(184, 112);
+            Bitmap bmp = new Bitmap(200, 200);
             using (Graphics g = Graphics.FromImage(bmp))
             {
                 g.SmoothingMode = SmoothingMode.AntiAlias;
@@ -113,19 +113,19 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 }
 
                 using (LinearGradientBrush bgBrush = new LinearGradientBrush(
-                    new Rectangle(0, 0, 184, 112), bgTop, bgBottom, LinearGradientMode.Vertical))
+                    new Rectangle(0, 0, 200, 200), bgTop, bgBottom, LinearGradientMode.Vertical))
                 {
-                    g.FillRectangle(bgBrush, 0, 0, 184, 112);
+                    g.FillRectangle(bgBrush, 0, 0, 200, 200);
                 }
 
-                // Vẽ hình tròn trang trí phía sau
+                // Vẽ hình tròn trang trí phía sau ở chính giữa
                 using (SolidBrush circleBrush = new SolidBrush(Color.FromArgb(45, accent)))
                 {
-                    g.FillEllipse(circleBrush, 52, 18, 80, 80);
+                    g.FillEllipse(circleBrush, 40, 40, 120, 120);
                 }
 
                 // Vẽ biểu tượng ly/bánh ở trung tâm
-                using (Pen cupPen = new Pen(accent, 2.5f))
+                using (Pen cupPen = new Pen(accent, 3.0f))
                 using (SolidBrush cupFill = new SolidBrush(Color.FromArgb(210, accent)))
                 {
                     if (categoryId == 4)
@@ -133,35 +133,61 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                         // Hình bánh ngọt
                         Point[] cakePoints =
                         {
-                            new Point(64, 78),
-                            new Point(120, 78),
-                            new Point(112, 46),
-                            new Point(72, 46)
+                            new Point(60, 140),
+                            new Point(140, 140),
+                            new Point(130, 90),
+                            new Point(70, 90)
                         };
                         g.FillPolygon(cupFill, cakePoints);
                         g.DrawPolygon(cupPen, cakePoints);
-                        g.FillEllipse(Brushes.Crimson, 87, 36, 10, 10);
+                        g.FillEllipse(Brushes.Crimson, 93, 76, 14, 14);
                     }
                     else
                     {
                         // Hình ly đồ uống
                         Point[] cupPoints =
                         {
-                            new Point(70, 42),
-                            new Point(114, 42),
-                            new Point(107, 88),
-                            new Point(77, 88)
+                            new Point(70, 80),
+                            new Point(130, 80),
+                            new Point(120, 146),
+                            new Point(80, 146)
                         };
                         g.FillPolygon(cupFill, cupPoints);
                         g.DrawPolygon(cupPen, cupPoints);
 
                         // Nắp ly & ống hút
-                        g.DrawLine(cupPen, 66, 42, 118, 42);
-                        g.DrawLine(cupPen, 96, 42, 106, 24);
+                        g.DrawLine(cupPen, 64, 80, 136, 80);
+                        g.DrawLine(cupPen, 105, 80, 120, 52);
                     }
                 }
             }
             return bmp;
+        }
+
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+
+            // Thumbnail hình vuông tỉ lệ 1:1 chính xác
+            int squareSize = this.Width;
+            pnlImageArea.Height = squareSize;
+
+            lblProductName.Top = squareSize + 6;
+            lblProductName.Left = 6;
+            lblProductName.Width = Math.Max(10, this.Width - 12);
+            lblProductName.Height = 36;
+
+            lblProductDesc.Top = lblProductName.Bottom + 2;
+            lblProductDesc.Left = 6;
+            lblProductDesc.Width = Math.Max(10, this.Width - 12);
+            lblProductDesc.Height = 16;
+
+            int bottomY = this.Height - 38;
+            lblPrice.Top = bottomY;
+            lblPrice.Left = 6;
+
+            btnQuickAdd.Top = bottomY - 2;
+            btnQuickAdd.Left = Math.Max(50, this.Width - btnQuickAdd.Width - 8);
         }
 
         // 5. Sự kiện click chọn thẻ món

@@ -16,6 +16,14 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            // Tự động dò tìm SQL Server/LocalDB, tạo CSDL CoffeeShopDB và nạp toàn bộ 15 bảng + dữ liệu mẫu (Zero-Config Setup)
+            try
+            {
+                Utilities.DatabaseMigrationHelper.AutoInitializeDatabase();
+            }
+            catch { }
+
             Application.Run(new FrmLogin());
         }
     }
