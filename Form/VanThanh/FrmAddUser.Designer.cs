@@ -229,7 +229,6 @@
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtRole;
-        private CoffeeShopDBDataSet coffeeShopDBDataSet1;
         private System.Windows.Forms.Button btnTogglePassword;
         private System.Windows.Forms.Button btnTogglePasswordChange;
     }

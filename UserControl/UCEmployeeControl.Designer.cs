@@ -68,7 +68,5 @@
 
         private System.Windows.Forms.Button btnShowDetail;
         private System.Windows.Forms.Button btnDelete;
-        private CoffeeShopDBDataSet1TableAdapters.EmployeesTableAdapter employeesTableAdapter1;
-        private CoffeeShopDBDataSet1TableAdapters.EmployeesTableAdapter employeesTableAdapter2;
     }
 }

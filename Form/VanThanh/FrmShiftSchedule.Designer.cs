@@ -146,7 +146,6 @@
         #endregion
 
         private System.Windows.Forms.DataGridView dgvSchedule;
-        private CoffeeShopDBDataSet coffeeShopDBDataSet1;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.DataGridViewTextBoxColumn Date;
