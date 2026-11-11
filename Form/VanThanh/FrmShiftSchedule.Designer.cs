@@ -54,7 +54,7 @@
             this.dgvSchedule.RowHeadersWidth = 51;
             this.dgvSchedule.RowTemplate.Height = 24;
             this.dgvSchedule.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvSchedule.Size = new System.Drawing.Size(859, 276);
+            this.dgvSchedule.Size = new System.Drawing.Size(1032, 276);
             this.dgvSchedule.TabIndex = 0;
             // 
             // Date
@@ -127,10 +127,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(947, 450);
+            this.ClientSize = new System.Drawing.Size(1089, 450);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.dgvSchedule);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmShiftSchedule";

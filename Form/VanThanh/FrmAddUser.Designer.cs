@@ -184,6 +184,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CausesValidation = false;
             this.ClientSize = new System.Drawing.Size(606, 361);
             this.Controls.Add(this.btnTogglePasswordChange);
             this.Controls.Add(this.btnTogglePassword);
@@ -200,7 +201,10 @@
             this.Controls.Add(this.lblPassword);
             this.Controls.Add(this.lblUserName);
             this.Controls.Add(this.txtUsername);
+            this.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "FrmAddUser";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FrmAddUser";
