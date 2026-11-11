@@ -223,11 +223,11 @@
             this.btnAdd.FlatAppearance.BorderSize = 0;
             this.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAdd.ForeColor = System.Drawing.Color.White;
-            this.btnAdd.Location = new System.Drawing.Point(20, 315);
+            this.btnAdd.Location = new System.Drawing.Point(20, 320);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(102, 38);
+            this.btnAdd.Size = new System.Drawing.Size(102, 40);
             this.btnAdd.TabIndex = 11;
-            this.btnAdd.Text = "+ Thêm";
+            this.btnAdd.Text = "Thêm";
             this.btnAdd.UseVisualStyleBackColor = false;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
@@ -238,11 +238,11 @@
             this.btnEdit.FlatAppearance.BorderSize = 0;
             this.btnEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnEdit.ForeColor = System.Drawing.Color.White;
-            this.btnEdit.Location = new System.Drawing.Point(136, 315);
+            this.btnEdit.Location = new System.Drawing.Point(136, 320);
             this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(102, 38);
+            this.btnEdit.Size = new System.Drawing.Size(102, 40);
             this.btnEdit.TabIndex = 12;
-            this.btnEdit.Text = "✎ Sửa";
+            this.btnEdit.Text = "Sửa";
             this.btnEdit.UseVisualStyleBackColor = false;
             this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
             // 
@@ -253,27 +253,28 @@
             this.btnDelete.FlatAppearance.BorderSize = 0;
             this.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDelete.ForeColor = System.Drawing.Color.White;
-            this.btnDelete.Location = new System.Drawing.Point(253, 315);
+            this.btnDelete.Location = new System.Drawing.Point(253, 320);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(102, 38);
+            this.btnDelete.Size = new System.Drawing.Size(102, 40);
             this.btnDelete.TabIndex = 13;
-            this.btnDelete.Text = "✖ Xóa";
+            this.btnDelete.Text = "Xóa";
             this.btnDelete.UseVisualStyleBackColor = false;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // btnSave
             // 
-            this.btnSave.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(128)))), ((int)(((byte)(185)))));
+            this.btnSave.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(174)))), ((int)(((byte)(96)))));
             this.btnSave.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnSave.FlatAppearance.BorderSize = 0;
             this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSave.ForeColor = System.Drawing.Color.White;
-            this.btnSave.Location = new System.Drawing.Point(70, 368);
+            this.btnSave.Location = new System.Drawing.Point(20, 320);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(110, 38);
+            this.btnSave.Size = new System.Drawing.Size(160, 40);
             this.btnSave.TabIndex = 14;
-            this.btnSave.Text = "💾 Lưu";
+            this.btnSave.Text = "Lưu mã KM";
             this.btnSave.UseVisualStyleBackColor = false;
+            this.btnSave.Visible = false;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // btnCancel
@@ -283,12 +284,13 @@
             this.btnCancel.FlatAppearance.BorderSize = 0;
             this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCancel.ForeColor = System.Drawing.Color.White;
-            this.btnCancel.Location = new System.Drawing.Point(195, 368);
+            this.btnCancel.Location = new System.Drawing.Point(195, 320);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(110, 38);
+            this.btnCancel.Size = new System.Drawing.Size(160, 40);
             this.btnCancel.TabIndex = 15;
-            this.btnCancel.Text = "↺ Hủy";
+            this.btnCancel.Text = "Hủy bỏ";
             this.btnCancel.UseVisualStyleBackColor = false;
+            this.btnCancel.Visible = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // dgvPromotion

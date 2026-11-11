@@ -39,8 +39,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 _isLoading = true;
                 LoadRoleFilter();
                 LoadMissionFilter();
-                LoadEmployeeData();
-                LoadDailyShifts();
                 InitActionPopup();
             }
             catch (Exception ex)
@@ -51,6 +49,10 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             {
                 _isLoading = false;
             }
+
+            // Nạp danh sách nhân viên và ca làm việc ngay khi mở form (sau khi _isLoading đã tắt)
+            LoadEmployeeData();
+            LoadDailyShifts();
         }
 
         // 1. Nạp danh sách vai trò vào ComboBox cboFilter (Phục vụ tìm kiếm 1.a)

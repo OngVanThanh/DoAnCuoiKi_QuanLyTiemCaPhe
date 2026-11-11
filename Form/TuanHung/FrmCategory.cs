@@ -3,6 +3,7 @@ using DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
 using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
 using System;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace DoAnCuoiKi_QuanLyTiemCaPhe
 {
@@ -19,8 +20,9 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         private void FrmCategory_Load(object sender, EventArgs e)
         {
             dgvCategory.AutoGenerateColumns = false;
-            UIHelper.SetFormState(grpCategoryInfo, false, btnAdd, btnEdit, btnDelete, btnSave, btnCancel);
+            UIHelper.StyleDataGridView(dgvCategory);
             LoadCategoryList();
+            SetMode(false);
         }
 
         private void LoadCategoryList()
@@ -28,6 +30,61 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             dgvCategory.AutoGenerateColumns = false;
             dgvCategory.DataSource = null;
             dgvCategory.DataSource = _productService.GetAllCategories();
+        }
+        /// <summary>
+        /// Đổi màu nút động: Active thì có màu rực rỡ, Inactive thì mất màu (xám nhạt phẳng).
+        /// </summary>
+        private void SetButtonActive(Button btn, bool isActive, Color activeColor)
+        {
+            btn.Enabled = isActive;
+            if (isActive)
+            {
+                btn.BackColor = activeColor;
+                btn.ForeColor = Color.White;
+                btn.Cursor = Cursors.Hand;
+            }
+            else
+            {
+                btn.BackColor = Color.FromArgb(220, 220, 220); // Mất màu
+                btn.ForeColor = Color.FromArgb(150, 150, 150); // Chữ mờ
+                btn.Cursor = Cursors.Default;
+            }
+        }
+
+        /// <summary>
+        /// Điều khiển trạng thái CRUD: Ẩn/Hiện thông minh cụm nút và khóa/mở các ô nhập.
+        /// </summary>
+        private void SetMode(bool isEditing)
+        {
+            txtCategoryName.ReadOnly = !isEditing;
+            txtCategoryName.BackColor = isEditing ? Color.White : Color.FromArgb(245, 245, 245);
+
+            txtDescription.ReadOnly = !isEditing;
+            txtDescription.BackColor = isEditing ? Color.White : Color.FromArgb(245, 245, 245);
+
+            // Ẩn / Hiện cụm nút
+            btnAdd.Visible = !isEditing;
+            btnEdit.Visible = !isEditing;
+            btnDelete.Visible = !isEditing;
+
+            btnSave.Visible = isEditing;
+            btnCancel.Visible = isEditing;
+
+            // Khóa bảng khi đang thêm/sửa
+            dgvCategory.Enabled = !isEditing;
+
+            if (isEditing)
+            {
+                SetButtonActive(btnSave, true, Color.FromArgb(39, 174, 96));
+                SetButtonActive(btnCancel, true, Color.FromArgb(127, 140, 141));
+            }
+            else
+            {
+                SetButtonActive(btnAdd, true, Color.FromArgb(39, 174, 96));
+                bool hasSelection = !string.IsNullOrEmpty(txtCategoryId.Text);
+                SetButtonActive(btnEdit, hasSelection, Color.FromArgb(211, 84, 0));
+                SetButtonActive(btnDelete, hasSelection, Color.FromArgb(192, 57, 43));
+            }
         }
 
         private void ClearCategoryInputs()
@@ -45,6 +102,9 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 txtCategoryId.Text = row.Cells["colCatId"].Value?.ToString();
                 txtCategoryName.Text = row.Cells["colCatName"].Value?.ToString();
                 txtDescription.Text = row.Cells["colCatDesc"].Value?.ToString();
+
+                SetButtonActive(btnEdit, true, Color.FromArgb(211, 84, 0));
+                SetButtonActive(btnDelete, true, Color.FromArgb(192, 57, 43));
             }
         }
 
@@ -52,8 +112,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         {
             _isAdding = true;
             ClearCategoryInputs();
-            UIHelper.SetFormState(grpCategoryInfo, true, btnAdd, btnEdit, btnDelete, btnSave, btnCancel);
-            txtCategoryId.Enabled = false;
+            SetMode(true);
             txtCategoryName.Focus();
         }
 
@@ -66,8 +125,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
 
             _isAdding = false;
-            UIHelper.SetFormState(grpCategoryInfo, true, btnAdd, btnEdit, btnDelete, btnSave, btnCancel);
-            txtCategoryId.Enabled = false;
+            SetMode(true);
             txtCategoryName.Focus();
         }
 
@@ -92,6 +150,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                     MessageBox.Show("Xóa nhóm sản phẩm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LoadCategoryList();
                     ClearCategoryInputs();
+                    ClearCategoryInputs();
+                    SetMode(false);
                 }
                 else
                 {
@@ -123,7 +183,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             {
                 MessageBox.Show(_isAdding ? "Thêm mới thành công!" : "Cập nhật thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LoadCategoryList();
-                UIHelper.SetFormState(grpCategoryInfo, false, btnAdd, btnEdit, btnDelete, btnSave, btnCancel);
+                SetMode(false);
             }
             else
             {
@@ -134,7 +194,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         private void btnCancel_Click(object sender, EventArgs e)
         {
             ClearCategoryInputs();
-            UIHelper.SetFormState(grpCategoryInfo, false, btnAdd, btnEdit, btnDelete, btnSave, btnCancel);
+            SetMode(false);
         }
     }
 }

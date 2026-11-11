@@ -34,32 +34,46 @@
             // 
             // btnShowDetail
             // 
-            this.btnShowDetail.Location = new System.Drawing.Point(12, 13);
+            this.btnShowDetail.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(78)))), ((int)(((byte)(55)))));
+            this.btnShowDetail.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnShowDetail.FlatAppearance.BorderSize = 0;
+            this.btnShowDetail.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShowDetail.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnShowDetail.ForeColor = System.Drawing.Color.White;
+            this.btnShowDetail.Location = new System.Drawing.Point(10, 10);
             this.btnShowDetail.Name = "btnShowDetail";
-            this.btnShowDetail.Size = new System.Drawing.Size(150, 38);
+            this.btnShowDetail.Size = new System.Drawing.Size(155, 36);
             this.btnShowDetail.TabIndex = 0;
-            this.btnShowDetail.Text = "Xem thông tin đầy đủ";
-            this.btnShowDetail.UseVisualStyleBackColor = true;
+            this.btnShowDetail.Text = "👁 Xem chi tiết";
+            this.btnShowDetail.UseVisualStyleBackColor = false;
             this.btnShowDetail.Click += new System.EventHandler(this.btnDetail_Click);
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(12, 57);
+            this.btnDelete.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(57)))), ((int)(((byte)(43)))));
+            this.btnDelete.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnDelete.FlatAppearance.BorderSize = 0;
+            this.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDelete.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnDelete.ForeColor = System.Drawing.Color.White;
+            this.btnDelete.Location = new System.Drawing.Point(10, 52);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(75, 39);
+            this.btnDelete.Size = new System.Drawing.Size(155, 36);
             this.btnDelete.TabIndex = 1;
-            this.btnDelete.Text = "Xóa";
-            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Text = "🗑 Xóa nhân sự";
+            this.btnDelete.UseVisualStyleBackColor = false;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
-            //
+            // 
             // UCEmployeeControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
+            this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnShowDetail);
             this.Name = "UCEmployeeControl";
-            this.Size = new System.Drawing.Size(175, 99);
+            this.Size = new System.Drawing.Size(175, 98);
             this.ResumeLayout(false);
 
         }

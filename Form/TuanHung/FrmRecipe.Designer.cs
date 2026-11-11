@@ -484,77 +484,84 @@
             // 
             // btnAddIng
             // 
-            this.btnAddIng.BackColor = System.Drawing.Color.FromArgb(52, 152, 219);
+            this.btnAddIng.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(174)))), ((int)(((byte)(96)))));
+            this.btnAddIng.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnAddIng.FlatAppearance.BorderSize = 0;
             this.btnAddIng.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAddIng.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnAddIng.ForeColor = System.Drawing.Color.White;
-            this.btnAddIng.Location = new System.Drawing.Point(102, 78);
+            this.btnAddIng.Location = new System.Drawing.Point(102, 76);
             this.btnAddIng.Name = "btnAddIng";
-            this.btnAddIng.Size = new System.Drawing.Size(102, 33);
+            this.btnAddIng.Size = new System.Drawing.Size(110, 36);
             this.btnAddIng.TabIndex = 9;
-            this.btnAddIng.Text = "Thêm NL";
+            this.btnAddIng.Text = "+ Thêm NL";
             this.btnAddIng.UseVisualStyleBackColor = false;
             this.btnAddIng.Click += new System.EventHandler(this.btnAddIng_Click);
             // 
             // btnEditIng
             // 
-            this.btnEditIng.BackColor = System.Drawing.Color.FromArgb(243, 156, 18);
+            this.btnEditIng.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(211)))), ((int)(((byte)(84)))), ((int)(((byte)(0)))));
+            this.btnEditIng.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnEditIng.FlatAppearance.BorderSize = 0;
             this.btnEditIng.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnEditIng.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnEditIng.ForeColor = System.Drawing.Color.White;
-            this.btnEditIng.Location = new System.Drawing.Point(214, 78);
+            this.btnEditIng.Location = new System.Drawing.Point(222, 76);
             this.btnEditIng.Name = "btnEditIng";
-            this.btnEditIng.Size = new System.Drawing.Size(102, 33);
+            this.btnEditIng.Size = new System.Drawing.Size(110, 36);
             this.btnEditIng.TabIndex = 10;
-            this.btnEditIng.Text = "Sửa NL";
+            this.btnEditIng.Text = "✎ Sửa NL";
             this.btnEditIng.UseVisualStyleBackColor = false;
             this.btnEditIng.Click += new System.EventHandler(this.btnEditIng_Click);
             // 
             // btnDeleteIng
             // 
-            this.btnDeleteIng.BackColor = System.Drawing.Color.FromArgb(231, 76, 60);
+            this.btnDeleteIng.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(57)))), ((int)(((byte)(43)))));
+            this.btnDeleteIng.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnDeleteIng.FlatAppearance.BorderSize = 0;
             this.btnDeleteIng.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDeleteIng.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnDeleteIng.ForeColor = System.Drawing.Color.White;
-            this.btnDeleteIng.Location = new System.Drawing.Point(326, 78);
+            this.btnDeleteIng.Location = new System.Drawing.Point(342, 76);
             this.btnDeleteIng.Name = "btnDeleteIng";
-            this.btnDeleteIng.Size = new System.Drawing.Size(102, 33);
+            this.btnDeleteIng.Size = new System.Drawing.Size(110, 36);
             this.btnDeleteIng.TabIndex = 11;
-            this.btnDeleteIng.Text = "Xóa NL";
+            this.btnDeleteIng.Text = "✖ Xóa NL";
             this.btnDeleteIng.UseVisualStyleBackColor = false;
             this.btnDeleteIng.Click += new System.EventHandler(this.btnDeleteIng_Click);
             // 
             // btnSaveIng
             // 
-            this.btnSaveIng.BackColor = System.Drawing.Color.FromArgb(46, 204, 113);
+            this.btnSaveIng.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(174)))), ((int)(((byte)(96)))));
+            this.btnSaveIng.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnSaveIng.FlatAppearance.BorderSize = 0;
             this.btnSaveIng.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSaveIng.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnSaveIng.ForeColor = System.Drawing.Color.White;
-            this.btnSaveIng.Location = new System.Drawing.Point(438, 78);
+            this.btnSaveIng.Location = new System.Drawing.Point(102, 76);
             this.btnSaveIng.Name = "btnSaveIng";
-            this.btnSaveIng.Size = new System.Drawing.Size(108, 33);
+            this.btnSaveIng.Size = new System.Drawing.Size(150, 36);
             this.btnSaveIng.TabIndex = 12;
-            this.btnSaveIng.Text = "Lưu NL";
+            this.btnSaveIng.Text = "💾 Lưu nguyên liệu";
             this.btnSaveIng.UseVisualStyleBackColor = false;
+            this.btnSaveIng.Visible = false;
             this.btnSaveIng.Click += new System.EventHandler(this.btnSaveIng_Click);
             // 
             // btnCancelIng
             // 
-            this.btnCancelIng.BackColor = System.Drawing.Color.FromArgb(149, 165, 166);
+            this.btnCancelIng.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(140)))), ((int)(((byte)(141)))));
+            this.btnCancelIng.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCancelIng.FlatAppearance.BorderSize = 0;
             this.btnCancelIng.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCancelIng.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnCancelIng.ForeColor = System.Drawing.Color.White;
-            this.btnCancelIng.Location = new System.Drawing.Point(555, 78);
+            this.btnCancelIng.Location = new System.Drawing.Point(262, 76);
             this.btnCancelIng.Name = "btnCancelIng";
-            this.btnCancelIng.Size = new System.Drawing.Size(102, 33);
+            this.btnCancelIng.Size = new System.Drawing.Size(150, 36);
             this.btnCancelIng.TabIndex = 13;
-            this.btnCancelIng.Text = "Hủy";
+            this.btnCancelIng.Text = "↺ Hủy bỏ";
             this.btnCancelIng.UseVisualStyleBackColor = false;
+            this.btnCancelIng.Visible = false;
             this.btnCancelIng.Click += new System.EventHandler(this.btnCancelIng_Click);
             // 
             // dgvRecipeIngredients

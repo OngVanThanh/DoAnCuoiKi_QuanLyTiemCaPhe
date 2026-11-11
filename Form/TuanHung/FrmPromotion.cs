@@ -3,6 +3,7 @@ using DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
 using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
 using System;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace DoAnCuoiKi_QuanLyTiemCaPhe
 {
@@ -15,11 +16,49 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         {
             InitializeComponent();
         }
+        private void SetButtonActive(Button btn, bool isActive, Color activeColor)
+        {
+            btn.Enabled = isActive;
+            if (isActive)
+            {
+                btn.BackColor = activeColor;
+                btn.ForeColor = Color.White;
+            }
+            else
+            {
+                btn.BackColor = Color.FromArgb(220, 220, 220);
+                btn.ForeColor = Color.FromArgb(150, 150, 150);
+            }
+        }
 
+        private void SetMode(bool isEditing)
+        {
+            // Bật/tắt các ô nhập liệu
+            txtPromoCode.Enabled = isEditing;
+            txtDiscountPercent.Enabled = isEditing;
+            dtpStartDate.Enabled = isEditing;
+            dtpEndDate.Enabled = isEditing;
+            chkIsActive.Enabled = isEditing;
+
+            // Chuyển đổi hiển thị nhóm nút
+            btnAdd.Visible = !isEditing;
+            btnEdit.Visible = !isEditing;
+            btnDelete.Visible = !isEditing;
+
+            btnSave.Visible = isEditing;
+            btnCancel.Visible = isEditing;
+
+            if (!isEditing)
+            {
+                SetButtonActive(btnAdd, true, Color.FromArgb(39, 174, 96));
+                SetButtonActive(btnEdit, false, Color.FromArgb(211, 84, 0));
+                SetButtonActive(btnDelete, false, Color.FromArgb(192, 57, 43));
+            }
+        }
         private void FrmPromotion_Load(object sender, EventArgs e)
         {
             dgvPromotion.AutoGenerateColumns = false;
-            UIHelper.SetFormState(grpPromotionInfo, false, btnAdd, btnEdit, btnDelete, btnSave, btnCancel);
+            SetMode(false);
             LoadPromotionList();
         }
 
@@ -46,6 +85,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                     dtpEndDate.Value = endDate;
 
                 chkIsActive.Checked = Convert.ToBoolean(row.Cells["colIsActive"].Value ?? true);
+                SetButtonActive(btnEdit, true, Color.FromArgb(211, 84, 0));
+                SetButtonActive(btnDelete, true, Color.FromArgb(192, 57, 43));
             }
         }
 
@@ -60,7 +101,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             dtpEndDate.Value = DateTime.Now.AddMonths(1);
             chkIsActive.Checked = true;
 
-            UIHelper.SetFormState(grpPromotionInfo, true, btnAdd, btnEdit, btnDelete, btnSave, btnCancel);
+            SetMode(true);
             txtPromoCode.Focus();
         }
 
@@ -73,13 +114,13 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
 
             _isAdding = false;
-            UIHelper.SetFormState(grpPromotionInfo, true, btnAdd, btnEdit, btnDelete, btnSave, btnCancel);
+            SetMode(true);
             txtPromoCode.Focus();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            UIHelper.SetFormState(grpPromotionInfo, false, btnAdd, btnEdit, btnDelete, btnSave, btnCancel);
+            SetMode(false);
             if (dgvPromotion.CurrentRow != null)
             {
                 dgvPromotion_CellClick(null, new DataGridViewCellEventArgs(0, dgvPromotion.CurrentRow.Index));
@@ -118,7 +159,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             {
                 MessageBox.Show(_isAdding ? "Tạo mã khuyến mãi thành công!" : "Cập nhật khuyến mãi thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LoadPromotionList();
-                UIHelper.SetFormState(grpPromotionInfo, false, btnAdd, btnEdit, btnDelete, btnSave, btnCancel);
+                SetMode(false);
             }
             else
             {
@@ -151,6 +192,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                     txtPromoId.Clear();
                     txtPromoCode.Clear();
                     txtDiscountPercent.Clear();
+                    SetMode(false);
                 }
                 else
                 {

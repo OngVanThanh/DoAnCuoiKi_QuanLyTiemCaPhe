@@ -3,6 +3,7 @@ using DoAnCuoiKi_QuanLyTiemCaPhe.DTO;
 using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
 using System;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace DoAnCuoiKi_QuanLyTiemCaPhe
 {
@@ -19,12 +20,48 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         {
             InitializeComponent();
         }
+        private void SetButtonActive(Button btn, bool isActive, Color activeColor)
+        {
+            btn.Enabled = isActive;
+            if (isActive)
+            {
+                btn.BackColor = activeColor;
+                btn.ForeColor = Color.White;
+            }
+            else
+            {
+                btn.BackColor = Color.FromArgb(220, 220, 220);
+                btn.ForeColor = Color.FromArgb(150, 150, 150);
+            }
+        }
 
+        private void SetIngredientMode(bool isEditing)
+        {
+            txtIngredientName.Enabled = isEditing;
+            txtQuantity.Enabled = isEditing;
+            cboUnit.Enabled = isEditing;
+            txtNote.Enabled = isEditing;
+
+            btnAddIng.Visible = !isEditing;
+            btnEditIng.Visible = !isEditing;
+            btnDeleteIng.Visible = !isEditing;
+
+            btnSaveIng.Visible = isEditing;
+            btnCancelIng.Visible = isEditing;
+
+            if (!isEditing)
+            {
+                SetButtonActive(btnAddIng, true, Color.FromArgb(39, 174, 96));
+                bool hasSelection = !string.IsNullOrEmpty(txtRecipeId.Text);
+                SetButtonActive(btnEditIng, hasSelection, Color.FromArgb(211, 84, 0));
+                SetButtonActive(btnDeleteIng, hasSelection, Color.FromArgb(192, 57, 43));
+            }
+        }
         private void FrmRecipe_Load(object sender, EventArgs e)
         {
             dgvProducts.AutoGenerateColumns = false;
             dgvRecipeIngredients.AutoGenerateColumns = false;
-            UIHelper.SetFormState(pnlIngredientEditor, false, btnAddIng, btnEditIng, btnDeleteIng, btnSaveIng, btnCancelIng);
+            SetIngredientMode(false);
             LoadCategoryFilter();
             LoadProductList();
         }
@@ -74,8 +111,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
             txtPreparationSteps.Text = _recipeService.GetPreparationSteps(productId);
             ClearIngredientInputs();
-            UIHelper.SetFormState(pnlIngredientEditor, false, btnAddIng, btnEditIng, btnDeleteIng, btnSaveIng, btnCancelIng);
-
+            SetIngredientMode(false);
             if (dgvRecipeIngredients.Rows.Count > 0)
             {
                 PopulateIngredientFromRow(0);
@@ -92,6 +128,8 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             txtQuantity.Text = row.Cells["colQuantity"].Value?.ToString();
             cboUnit.Text = row.Cells["colRecUnit"].Value?.ToString();
             txtNote.Text = row.Cells["colNote"].Value?.ToString();
+            SetButtonActive(btnEditIng, true, Color.FromArgb(211, 84, 0));
+            SetButtonActive(btnDeleteIng, true, Color.FromArgb(192, 57, 43));
         }
 
         private void ClearIngredientInputs()
@@ -152,7 +190,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             _isAddingIngredient = true;
             ClearIngredientInputs();
             cboUnit.SelectedIndex = 0; // Mặc định "ml"
-            UIHelper.SetFormState(pnlIngredientEditor, true, btnAddIng, btnEditIng, btnDeleteIng, btnSaveIng, btnCancelIng);
+            SetIngredientMode(true);
             txtIngredientName.Focus();
         }
 
@@ -165,7 +203,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             }
 
             _isAddingIngredient = false;
-            UIHelper.SetFormState(pnlIngredientEditor, true, btnAddIng, btnEditIng, btnDeleteIng, btnSaveIng, btnCancelIng);
+            SetIngredientMode(true);
             txtIngredientName.Focus();
         }
 
@@ -215,6 +253,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 MessageBox.Show(_isAddingIngredient ? "Đã thêm nguyên liệu vào công thức!" : "Đã cập nhật định lượng nguyên liệu!",
                     "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LoadRecipeDetails(_selectedProductId);
+                SetIngredientMode(false);
             }
             else
             {
@@ -225,7 +264,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         private void btnCancelIng_Click(object sender, EventArgs e)
         {
             ClearIngredientInputs();
-            UIHelper.SetFormState(pnlIngredientEditor, false, btnAddIng, btnEditIng, btnDeleteIng, btnSaveIng, btnCancelIng);
+            SetIngredientMode(false);
             if (dgvRecipeIngredients.Rows.Count > 0)
             {
                 PopulateIngredientFromRow(0);

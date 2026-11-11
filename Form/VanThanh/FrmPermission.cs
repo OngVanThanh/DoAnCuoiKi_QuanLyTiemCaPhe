@@ -32,7 +32,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             {
                 _isLoading = true;
                 LoadRolesToFilter();
-                FilterUsers();
                 InitActionPopup();
             }
             catch (Exception ex)
@@ -43,6 +42,9 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             {
                 _isLoading = false;
             }
+
+            // Nạp danh sách tài khoản ngay khi mở form (sau khi _isLoading đã tắt)
+            FilterUsers();
         }
         private void LoadRolesToFilter()
         {
@@ -269,22 +271,55 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         {
             using (Form prompt = new Form())
             {
-                prompt.Width = 420;
-                prompt.Height = 260;
+                prompt.Width = 440;
+                prompt.Height = 290;
                 prompt.FormBorderStyle = FormBorderStyle.FixedDialog;
                 prompt.Text = "Đặt lại mật khẩu nhân viên";
                 prompt.StartPosition = FormStartPosition.CenterParent;
                 prompt.MaximizeBox = false;
                 prompt.MinimizeBox = false;
+                prompt.BackColor = Color.FromArgb(250, 248, 245);
 
-                Label lblTitle = new Label() { Left = 25, Top = 15, Width = 350, Text = $"Đặt lại mật khẩu cho tài khoản: [{username}]", Font = new Font("Segoe UI", 9.5f, FontStyle.Bold) };
-                Label lblNew = new Label() { Left = 25, Top = 48, Width = 350, Text = "Mật khẩu mới (tối thiểu 6 ký tự):" };
-                TextBox txtNew = new TextBox() { Left = 25, Top = 70, Width = 350, PasswordChar = '*', UseSystemPasswordChar = true };
-                Label lblConfirm = new Label() { Left = 25, Top = 103, Width = 350, Text = "Xác nhận mật khẩu mới:" };
-                TextBox txtConfirm = new TextBox() { Left = 25, Top = 125, Width = 350, PasswordChar = '*', UseSystemPasswordChar = true };
+                Panel pnlHeader = new Panel() { Dock = DockStyle.Top, Height = 42, BackColor = Color.FromArgb(74, 44, 42) };
+                Label lblTitle = new Label() { Dock = DockStyle.Fill, Text = $"🔑 ĐẶT LẠI MẬT KHẨU: [{username}]", Font = new Font("Segoe UI", 10f, FontStyle.Bold), ForeColor = Color.White, TextAlign = ContentAlignment.MiddleCenter };
+                pnlHeader.Controls.Add(lblTitle);
 
-                Button btnSave = new Button() { Text = "Xác nhận", Left = 175, Top = 168, Width = 95, Height = 32, DialogResult = DialogResult.None };
-                Button btnCancel = new Button() { Text = "Hủy bỏ", Left = 280, Top = 168, Width = 95, Height = 32, DialogResult = DialogResult.Cancel };
+                Label lblNew = new Label() { Left = 30, Top = 58, Width = 360, Text = "Mật khẩu mới (tối thiểu 6 ký tự):", Font = new Font("Segoe UI", 9.5f, FontStyle.Regular) };
+                TextBox txtNew = new TextBox() { Left = 30, Top = 82, Width = 360, Font = new Font("Segoe UI", 9.5f), PasswordChar = '*', UseSystemPasswordChar = true };
+
+                Label lblConfirm = new Label() { Left = 30, Top = 120, Width = 360, Text = "Xác nhận lại mật khẩu mới:", Font = new Font("Segoe UI", 9.5f, FontStyle.Regular) };
+                TextBox txtConfirm = new TextBox() { Left = 30, Top = 144, Width = 360, Font = new Font("Segoe UI", 9.5f), PasswordChar = '*', UseSystemPasswordChar = true };
+
+                Button btnSave = new Button()
+                {
+                    Text = "💾 Lưu mật khẩu",
+                    Left = 140,
+                    Top = 192,
+                    Width = 140,
+                    Height = 36,
+                    BackColor = Color.FromArgb(39, 174, 96),
+                    ForeColor = Color.White,
+                    FlatStyle = FlatStyle.Flat,
+                    Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
+                    Cursor = Cursors.Hand
+                };
+                btnSave.FlatAppearance.BorderSize = 0;
+
+                Button btnCancel = new Button()
+                {
+                    Text = "✕ Hủy bỏ",
+                    Left = 290,
+                    Top = 192,
+                    Width = 100,
+                    Height = 36,
+                    BackColor = Color.FromArgb(127, 140, 141),
+                    ForeColor = Color.White,
+                    FlatStyle = FlatStyle.Flat,
+                    Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
+                    Cursor = Cursors.Hand,
+                    DialogResult = DialogResult.Cancel
+                };
+                btnCancel.FlatAppearance.BorderSize = 0;
 
                 btnSave.Click += (sender, e) =>
                 {
@@ -325,7 +360,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                     }
                 };
 
-                prompt.Controls.Add(lblTitle);
+                prompt.Controls.Add(pnlHeader);
                 prompt.Controls.Add(lblNew);
                 prompt.Controls.Add(txtNew);
                 prompt.Controls.Add(lblConfirm);

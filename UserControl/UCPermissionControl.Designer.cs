@@ -34,36 +34,47 @@
             // 
             // btnChangePassword
             // 
-            this.btnChangePassword.AutoSize = true;
-            this.btnChangePassword.Location = new System.Drawing.Point(17, 58);
+            this.btnChangePassword.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(128)))), ((int)(((byte)(185)))));
+            this.btnChangePassword.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnChangePassword.FlatAppearance.BorderSize = 0;
+            this.btnChangePassword.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChangePassword.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnChangePassword.ForeColor = System.Drawing.Color.White;
+            this.btnChangePassword.Location = new System.Drawing.Point(10, 10);
             this.btnChangePassword.Name = "btnChangePassword";
-            this.btnChangePassword.Size = new System.Drawing.Size(170, 40);
-            this.btnChangePassword.TabIndex = 11;
-            this.btnChangePassword.Text = "Đổi mật khẩu";
-            this.btnChangePassword.UseVisualStyleBackColor = true;
+            this.btnChangePassword.Size = new System.Drawing.Size(165, 36);
+            this.btnChangePassword.TabIndex = 10;
+            this.btnChangePassword.Text = "🔑 Đặt lại mật khẩu";
+            this.btnChangePassword.UseVisualStyleBackColor = false;
             this.btnChangePassword.Click += new System.EventHandler(this.btnChangePassword_Click);
             // 
             // btnDeleteUser
             // 
-            this.btnDeleteUser.AutoSize = true;
-            this.btnDeleteUser.Location = new System.Drawing.Point(17, 13);
+            this.btnDeleteUser.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(57)))), ((int)(((byte)(43)))));
+            this.btnDeleteUser.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnDeleteUser.FlatAppearance.BorderSize = 0;
+            this.btnDeleteUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDeleteUser.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnDeleteUser.ForeColor = System.Drawing.Color.White;
+            this.btnDeleteUser.Location = new System.Drawing.Point(10, 52);
             this.btnDeleteUser.Name = "btnDeleteUser";
-            this.btnDeleteUser.Size = new System.Drawing.Size(170, 40);
-            this.btnDeleteUser.TabIndex = 10;
-            this.btnDeleteUser.Text = "Xóa tài khoản";
-            this.btnDeleteUser.UseVisualStyleBackColor = true;
+            this.btnDeleteUser.Size = new System.Drawing.Size(165, 36);
+            this.btnDeleteUser.TabIndex = 11;
+            this.btnDeleteUser.Text = "🗑 Xóa tài khoản";
+            this.btnDeleteUser.UseVisualStyleBackColor = false;
             this.btnDeleteUser.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // UCPermissionControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
+            this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.btnChangePassword);
             this.Controls.Add(this.btnDeleteUser);
             this.Name = "UCPermissionControl";
-            this.Size = new System.Drawing.Size(203, 113);
+            this.Size = new System.Drawing.Size(185, 98);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

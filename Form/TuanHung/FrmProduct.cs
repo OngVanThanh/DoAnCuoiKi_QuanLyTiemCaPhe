@@ -4,6 +4,7 @@ using DoAnCuoiKi_QuanLyTiemCaPhe.Utilities;
 using System;
 using System.IO;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace DoAnCuoiKi_QuanLyTiemCaPhe
 {
@@ -21,11 +22,89 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
         private void FrmProduct_Load(object sender, EventArgs e)
         {
             dgvProduct.AutoGenerateColumns = false;
-            UIHelper.SetFormState(grpProductInfo, false, btnAdd, btnEdit, btnDelete, btnSave, btnCancel);
-            btnBrowseImage.Enabled = false;
+            UIHelper.StyleDataGridView(dgvProduct);
+
+            // Định dạng hiển thị tiền tệ cho cột giá trên DataGridView
+            if (dgvProduct.Columns["colPrice"] != null)
+            {
+                dgvProduct.Columns["colPrice"].DefaultCellStyle.Format = "#,##0 đ";
+                dgvProduct.Columns["colPrice"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            }
 
             LoadCategoriesToComboBox();
             LoadProductList();
+
+            // Khởi tạo trạng thái Xem ban đầu
+            SetMode(false);
+        }
+
+        /// <summary>
+        /// Điều khiển trạng thái CRUD: Ẩn/Hiện thông minh cụm nút và khóa/mở các ô nhập liệu.
+        /// </summary>
+        /// <param name="isEditing">true: Đang Thêm mới hoặc Sửa; false: Đang Xem bình thường</param>
+        private void SetMode(bool isEditing)
+        {
+            // 1. Khóa / Mở khóa các ô nhập liệu
+            txtProductName.ReadOnly = !isEditing;
+            txtProductName.BackColor = isEditing ? Color.White : Color.FromArgb(245, 245, 245);
+
+            cboCategory.Enabled = isEditing;
+
+            txtPrice.ReadOnly = !isEditing;
+            txtPrice.BackColor = isEditing ? Color.White : Color.FromArgb(245, 245, 245);
+
+            txtUnit.ReadOnly = !isEditing;
+            txtUnit.BackColor = isEditing ? Color.White : Color.FromArgb(245, 245, 245);
+
+            btnBrowseImage.Enabled = isEditing;
+
+            // 2. Ẩn / Hiện cụm nút theo chế độ
+            btnAdd.Visible = !isEditing;
+            btnEdit.Visible = !isEditing;
+            btnDelete.Visible = !isEditing;
+
+            btnSave.Visible = isEditing;
+            btnCancel.Visible = isEditing;
+
+            // 3. Khóa bảng khi đang chỉnh sửa
+            dgvProduct.Enabled = !isEditing;
+
+            if (isEditing)
+            {
+                // Khi Thêm / Sửa: Lưu (Xanh) và Hủy (Xám đậm) đều Active có màu
+                SetButtonActive(btnSave, true, Color.FromArgb(39, 174, 96));
+                SetButtonActive(btnCancel, true, Color.FromArgb(127, 140, 141));
+            }
+            else
+            {
+                // Khi Xem: Nút Thêm luôn Active (Xanh lá)
+                SetButtonActive(btnAdd, true, Color.FromArgb(39, 174, 96));
+
+                // Sửa và Xóa: CHỈ CÓ MÀU khi đã chọn một món hợp lệ, ngược lại MẤT MÀU
+                bool hasSelection = !string.IsNullOrEmpty(txtProductId.Text);
+                SetButtonActive(btnEdit, hasSelection, Color.FromArgb(211, 84, 0));
+                SetButtonActive(btnDelete, hasSelection, Color.FromArgb(192, 57, 43));
+            }
+        }
+
+        /// <summary>
+        /// Đổi màu nút động theo trạng thái: Active thì có màu rực rỡ, Inactive thì mất màu (xám nhạt mờ).
+        /// </summary>
+        private void SetButtonActive(Button btn, bool isActive, Color activeColor)
+        {
+            btn.Enabled = isActive;
+            if (isActive)
+            {
+                btn.BackColor = activeColor;
+                btn.ForeColor = Color.White;
+                btn.Cursor = Cursors.Hand;
+            }
+            else
+            {
+                btn.BackColor = Color.FromArgb(220, 220, 220); // Nền xám nhạt mất màu
+                btn.ForeColor = Color.FromArgb(150, 150, 150); // Chữ xám mờ
+                btn.Cursor = Cursors.Default;
+            }
         }
 
         private void LoadCategoriesToComboBox()
@@ -67,6 +146,9 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 string relativePath = row.Cells["colImagePath"].Value?.ToString();
                 UIHelper.LoadImageToPictureBox(picProductImage, relativePath);
                 _selectedImagePath = "";
+
+                SetButtonActive(btnEdit, true, Color.FromArgb(211, 84, 0));
+                SetButtonActive(btnDelete, true, Color.FromArgb(192, 57, 43));
             }
         }
 
@@ -96,8 +178,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             txtUnit.Text = "Ly";
             picProductImage.Image = null;
 
-            UIHelper.SetFormState(grpProductInfo, true, btnAdd, btnEdit, btnDelete, btnSave, btnCancel);
-            btnBrowseImage.Enabled = true;
+            SetMode(true);
             txtProductName.Focus();
         }
 
@@ -111,15 +192,13 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
 
             _isAdding = false;
             _selectedImagePath = "";
-            UIHelper.SetFormState(grpProductInfo, true, btnAdd, btnEdit, btnDelete, btnSave, btnCancel);
-            btnBrowseImage.Enabled = true;
+            SetMode(true);
             txtProductName.Focus();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            UIHelper.SetFormState(grpProductInfo, false, btnAdd, btnEdit, btnDelete, btnSave, btnCancel);
-            btnBrowseImage.Enabled = false;
+            SetMode(false);
 
             if (dgvProduct.CurrentRow != null)
             {
@@ -160,7 +239,7 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
             {
                 MessageBox.Show(_isAdding ? "Thêm món mới thành công!" : "Cập nhật món thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LoadProductList();
-                UIHelper.SetFormState(grpProductInfo, false, btnAdd, btnEdit, btnDelete, btnSave, btnCancel);
+                SetMode(false);
                 btnBrowseImage.Enabled = false;
             }
             else
@@ -195,6 +274,12 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                     txtProductName.Clear();
                     txtPrice.Clear();
                     picProductImage.Image = null;
+                    txtProductId.Clear();
+                    txtProductName.Clear();
+                    txtPrice.Clear();
+                    picProductImage.Image = null;
+                    SetButtonActive(btnEdit, false, Color.FromArgb(211, 84, 0));
+                    SetButtonActive(btnDelete, false, Color.FromArgb(192, 57, 43));
                 }
                 else
                 {
