@@ -43,8 +43,6 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 _isLoading = false;
             }
         }
-
-        // Nạp danh sách vai trò vào ComboBox bộ lọc
         private void LoadRolesToFilter()
         {
             var filterList = new List<RoleDTO>
@@ -52,31 +50,26 @@ namespace DoAnCuoiKi_QuanLyTiemCaPhe
                 new RoleDTO(0, "Tất cả vai trò")
             };
 
-            try
+            var roles = _permissionService.GetAllRoles();
+            if (roles != null && roles.Count > 0)
             {
-                var roles = _permissionService.GetAllRoles();
-                if (roles != null && roles.Count > 0)
+                foreach (var r in roles)
                 {
-                    foreach (var r in roles)
-                    {
-                        filterList.Add(new RoleDTO(r.Id, r.RoleName));
-                    }
+                    filterList.Add(new RoleDTO(r.Id, r.RoleName));
                 }
-            }
-            catch
-            {
-                filterList.Add(new RoleDTO(1, "Quản lý"));
-                filterList.Add(new RoleDTO(2, "Thu ngân"));
-                filterList.Add(new RoleDTO(3, "Pha chế"));
-                filterList.Add(new RoleDTO(4, "Phục vụ"));
             }
 
             cboFilter.DropDownStyle = ComboBoxStyle.DropDownList;
             cboFilter.DisplayMember = "RoleName";
             cboFilter.ValueMember = "Id";
             cboFilter.DataSource = filterList;
-            cboFilter.SelectedIndex = 0;
+
+            if (cboFilter.Items.Count > 0)
+            {
+                cboFilter.SelectedIndex = 0;
+            }
         }
+
 
         // Lọc người dùng theo Username / Họ và tên và Vai trò
         private void FilterUsers()
