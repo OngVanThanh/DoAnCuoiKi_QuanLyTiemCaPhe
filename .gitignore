@@ -7,3 +7,24 @@
 *.suo
 *.userosscache
 *.sln.docstates
+
+## Tests & Test Artifacts
+tests/
+[Tt]est[Rr]esults/
+*.TestResults.json
+TestResults.json
+
+## AI Agents, Automation & Work Process Files
+.agents/
+.gemini/
+.claude/
+.cursor/
+KIEM_DINH_*.md
+ORIGINAL_REQUEST.md
+PROJECT.md
+TEST_INFRA.md
+TEST_READY.md
+
+## Logs & Temp
+*.log
+*.tmp
