@@ -115,114 +115,6 @@
             this.grpShopInfo.TabStop = false;
             this.grpShopInfo.Text = "Thông tin Thương hiệu & Bộ nhận diện cửa hàng";
             // 
-            // lblShopname
-            // 
-            this.lblShopname.AutoSize = true;
-            this.lblShopname.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblShopname.Location = new System.Drawing.Point(20, 36);
-            this.lblShopname.Name = "lblShopname";
-            this.lblShopname.Size = new System.Drawing.Size(126, 21);
-            this.lblShopname.TabIndex = 0;
-            this.lblShopname.Text = "Tên quán / Brand:";
-            // 
-            // txtShopName
-            // 
-            this.txtShopName.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.txtShopName.Location = new System.Drawing.Point(165, 33);
-            this.txtShopName.Name = "txtShopName";
-            this.txtShopName.Size = new System.Drawing.Size(380, 29);
-            this.txtShopName.TabIndex = 1;
-            // 
-            // lblShopSlogan
-            // 
-            this.lblShopSlogan.AutoSize = true;
-            this.lblShopSlogan.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblShopSlogan.Location = new System.Drawing.Point(20, 76);
-            this.lblShopSlogan.Name = "lblShopSlogan";
-            this.lblShopSlogan.Size = new System.Drawing.Size(120, 21);
-            this.lblShopSlogan.TabIndex = 2;
-            this.lblShopSlogan.Text = "Khẩu hiệu/Phụ:";
-            // 
-            // txtShopSlogan
-            // 
-            this.txtShopSlogan.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.txtShopSlogan.Location = new System.Drawing.Point(165, 73);
-            this.txtShopSlogan.Name = "txtShopSlogan";
-            this.txtShopSlogan.Size = new System.Drawing.Size(380, 29);
-            this.txtShopSlogan.TabIndex = 3;
-            // 
-            // lblAddress
-            // 
-            this.lblAddress.AutoSize = true;
-            this.lblAddress.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblAddress.Location = new System.Drawing.Point(20, 116);
-            this.lblAddress.Name = "lblAddress";
-            this.lblAddress.Size = new System.Drawing.Size(60, 21);
-            this.lblAddress.TabIndex = 4;
-            this.lblAddress.Text = "Địa chỉ:";
-            // 
-            // txtShopAddress
-            // 
-            this.txtShopAddress.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.txtShopAddress.Location = new System.Drawing.Point(165, 113);
-            this.txtShopAddress.Name = "txtShopAddress";
-            this.txtShopAddress.Size = new System.Drawing.Size(380, 29);
-            this.txtShopAddress.TabIndex = 5;
-            // 
-            // lblSdt
-            // 
-            this.lblSdt.AutoSize = true;
-            this.lblSdt.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblSdt.Location = new System.Drawing.Point(20, 156);
-            this.lblSdt.Name = "lblSdt";
-            this.lblSdt.Size = new System.Drawing.Size(104, 21);
-            this.lblSdt.TabIndex = 6;
-            this.lblSdt.Text = "Số điện thoại:";
-            // 
-            // txtShopPhone
-            // 
-            this.txtShopPhone.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.txtShopPhone.Location = new System.Drawing.Point(165, 153);
-            this.txtShopPhone.Name = "txtShopPhone";
-            this.txtShopPhone.Size = new System.Drawing.Size(155, 29);
-            this.txtShopPhone.TabIndex = 7;
-            // 
-            // lblVAT
-            // 
-            this.lblVAT.AutoSize = true;
-            this.lblVAT.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblVAT.Location = new System.Drawing.Point(340, 156);
-            this.lblVAT.Name = "lblVAT";
-            this.lblVAT.Size = new System.Drawing.Size(95, 21);
-            this.lblVAT.TabIndex = 8;
-            this.lblVAT.Text = "Thuế VAT %:";
-            // 
-            // txtVAT
-            // 
-            this.txtVAT.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.txtVAT.Location = new System.Drawing.Point(445, 153);
-            this.txtVAT.Name = "txtVAT";
-            this.txtVAT.Size = new System.Drawing.Size(100, 29);
-            this.txtVAT.TabIndex = 9;
-            // 
-            // lblWifi
-            // 
-            this.lblWifi.AutoSize = true;
-            this.lblWifi.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblWifi.Location = new System.Drawing.Point(20, 196);
-            this.lblWifi.Name = "lblWifi";
-            this.lblWifi.Size = new System.Drawing.Size(109, 21);
-            this.lblWifi.TabIndex = 10;
-            this.lblWifi.Text = "Thông tin Wifi:";
-            // 
-            // txtWifiInfo
-            // 
-            this.txtWifiInfo.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.txtWifiInfo.Location = new System.Drawing.Point(165, 193);
-            this.txtWifiInfo.Name = "txtWifiInfo";
-            this.txtWifiInfo.Size = new System.Drawing.Size(380, 29);
-            this.txtWifiInfo.TabIndex = 11;
-            // 
             // btnSaveBrand
             // 
             this.btnSaveBrand.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(78)))), ((int)(((byte)(52)))), ((int)(((byte)(46)))));
@@ -237,6 +129,114 @@
             this.btnSaveBrand.Text = "💾  Lưu Bộ Nhận Diện Thương Hiệu";
             this.btnSaveBrand.UseVisualStyleBackColor = false;
             this.btnSaveBrand.Click += new System.EventHandler(this.btnSaveBrand_Click);
+            // 
+            // txtWifiInfo
+            // 
+            this.txtWifiInfo.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.txtWifiInfo.Location = new System.Drawing.Point(165, 193);
+            this.txtWifiInfo.Name = "txtWifiInfo";
+            this.txtWifiInfo.Size = new System.Drawing.Size(380, 29);
+            this.txtWifiInfo.TabIndex = 11;
+            // 
+            // lblWifi
+            // 
+            this.lblWifi.AutoSize = true;
+            this.lblWifi.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.lblWifi.Location = new System.Drawing.Point(20, 196);
+            this.lblWifi.Name = "lblWifi";
+            this.lblWifi.Size = new System.Drawing.Size(111, 21);
+            this.lblWifi.TabIndex = 10;
+            this.lblWifi.Text = "Thông tin Wifi:";
+            // 
+            // txtVAT
+            // 
+            this.txtVAT.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.txtVAT.Location = new System.Drawing.Point(445, 153);
+            this.txtVAT.Name = "txtVAT";
+            this.txtVAT.Size = new System.Drawing.Size(100, 29);
+            this.txtVAT.TabIndex = 9;
+            // 
+            // lblVAT
+            // 
+            this.lblVAT.AutoSize = true;
+            this.lblVAT.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.lblVAT.Location = new System.Drawing.Point(340, 156);
+            this.lblVAT.Name = "lblVAT";
+            this.lblVAT.Size = new System.Drawing.Size(94, 21);
+            this.lblVAT.TabIndex = 8;
+            this.lblVAT.Text = "Thuế VAT %:";
+            // 
+            // txtShopPhone
+            // 
+            this.txtShopPhone.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.txtShopPhone.Location = new System.Drawing.Point(165, 153);
+            this.txtShopPhone.Name = "txtShopPhone";
+            this.txtShopPhone.Size = new System.Drawing.Size(155, 29);
+            this.txtShopPhone.TabIndex = 7;
+            // 
+            // lblSdt
+            // 
+            this.lblSdt.AutoSize = true;
+            this.lblSdt.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.lblSdt.Location = new System.Drawing.Point(20, 156);
+            this.lblSdt.Name = "lblSdt";
+            this.lblSdt.Size = new System.Drawing.Size(104, 21);
+            this.lblSdt.TabIndex = 6;
+            this.lblSdt.Text = "Số điện thoại:";
+            // 
+            // txtShopAddress
+            // 
+            this.txtShopAddress.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.txtShopAddress.Location = new System.Drawing.Point(165, 113);
+            this.txtShopAddress.Name = "txtShopAddress";
+            this.txtShopAddress.Size = new System.Drawing.Size(380, 29);
+            this.txtShopAddress.TabIndex = 5;
+            // 
+            // lblAddress
+            // 
+            this.lblAddress.AutoSize = true;
+            this.lblAddress.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.lblAddress.Location = new System.Drawing.Point(20, 116);
+            this.lblAddress.Name = "lblAddress";
+            this.lblAddress.Size = new System.Drawing.Size(60, 21);
+            this.lblAddress.TabIndex = 4;
+            this.lblAddress.Text = "Địa chỉ:";
+            // 
+            // txtShopSlogan
+            // 
+            this.txtShopSlogan.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.txtShopSlogan.Location = new System.Drawing.Point(165, 73);
+            this.txtShopSlogan.Name = "txtShopSlogan";
+            this.txtShopSlogan.Size = new System.Drawing.Size(380, 29);
+            this.txtShopSlogan.TabIndex = 3;
+            // 
+            // lblShopSlogan
+            // 
+            this.lblShopSlogan.AutoSize = true;
+            this.lblShopSlogan.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.lblShopSlogan.Location = new System.Drawing.Point(20, 76);
+            this.lblShopSlogan.Name = "lblShopSlogan";
+            this.lblShopSlogan.Size = new System.Drawing.Size(115, 21);
+            this.lblShopSlogan.TabIndex = 2;
+            this.lblShopSlogan.Text = "Khẩu hiệu/Phụ:";
+            // 
+            // txtShopName
+            // 
+            this.txtShopName.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.txtShopName.Location = new System.Drawing.Point(165, 33);
+            this.txtShopName.Name = "txtShopName";
+            this.txtShopName.Size = new System.Drawing.Size(380, 29);
+            this.txtShopName.TabIndex = 1;
+            // 
+            // lblShopname
+            // 
+            this.lblShopname.AutoSize = true;
+            this.lblShopname.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.lblShopname.Location = new System.Drawing.Point(20, 36);
+            this.lblShopname.Name = "lblShopname";
+            this.lblShopname.Size = new System.Drawing.Size(130, 21);
+            this.lblShopname.TabIndex = 0;
+            this.lblShopname.Text = "Tên quán / Brand:";
             // 
             // tabDatabase
             // 
@@ -275,124 +275,20 @@
             this.grpDatabase.TabStop = false;
             this.grpDatabase.Text = "Kết nối Máy chủ SQL Server (Độc lập với nhận diện)";
             // 
-            // lblServer
+            // btnSaveDatabase
             // 
-            this.lblServer.AutoSize = true;
-            this.lblServer.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblServer.Location = new System.Drawing.Point(20, 32);
-            this.lblServer.Name = "lblServer";
-            this.lblServer.Size = new System.Drawing.Size(104, 21);
-            this.lblServer.TabIndex = 0;
-            this.lblServer.Text = "Server Name:";
-            // 
-            // txtServer
-            // 
-            this.txtServer.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.txtServer.Location = new System.Drawing.Point(155, 29);
-            this.txtServer.Name = "txtServer";
-            this.txtServer.Size = new System.Drawing.Size(390, 29);
-            this.txtServer.TabIndex = 1;
-            // 
-            // lblDatabase
-            // 
-            this.lblDatabase.AutoSize = true;
-            this.lblDatabase.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblDatabase.Location = new System.Drawing.Point(20, 70);
-            this.lblDatabase.Name = "lblDatabase";
-            this.lblDatabase.Size = new System.Drawing.Size(124, 21);
-            this.lblDatabase.TabIndex = 2;
-            this.lblDatabase.Text = "Database Name:";
-            // 
-            // txtDatabase
-            // 
-            this.txtDatabase.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.txtDatabase.Location = new System.Drawing.Point(155, 67);
-            this.txtDatabase.Name = "txtDatabase";
-            this.txtDatabase.Size = new System.Drawing.Size(390, 29);
-            this.txtDatabase.TabIndex = 3;
-            // 
-            // chkIntegratedSecurity
-            // 
-            this.chkIntegratedSecurity.AutoSize = true;
-            this.chkIntegratedSecurity.Checked = true;
-            this.chkIntegratedSecurity.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkIntegratedSecurity.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Italic);
-            this.chkIntegratedSecurity.Location = new System.Drawing.Point(155, 105);
-            this.chkIntegratedSecurity.Name = "chkIntegratedSecurity";
-            this.chkIntegratedSecurity.Size = new System.Drawing.Size(262, 25);
-            this.chkIntegratedSecurity.TabIndex = 4;
-            this.chkIntegratedSecurity.Text = "Sử dụng Windows Authentication";
-            this.chkIntegratedSecurity.UseVisualStyleBackColor = true;
-            this.chkIntegratedSecurity.CheckedChanged += new System.EventHandler(this.chkIntegratedSecurity_CheckedChanged);
-            // 
-            // lblUsernameSql
-            // 
-            this.lblUsernameSql.AutoSize = true;
-            this.lblUsernameSql.Enabled = false;
-            this.lblUsernameSql.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblUsernameSql.Location = new System.Drawing.Point(20, 140);
-            this.lblUsernameSql.Name = "lblUsernameSql";
-            this.lblUsernameSql.Size = new System.Drawing.Size(84, 21);
-            this.lblUsernameSql.TabIndex = 5;
-            this.lblUsernameSql.Text = "Username:";
-            // 
-            // txtUsername
-            // 
-            this.txtUsername.Enabled = false;
-            this.txtUsername.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.txtUsername.Location = new System.Drawing.Point(155, 137);
-            this.txtUsername.Name = "txtUsername";
-            this.txtUsername.Size = new System.Drawing.Size(140, 29);
-            this.txtUsername.TabIndex = 6;
-            // 
-            // lblPasswordSql
-            // 
-            this.lblPasswordSql.AutoSize = true;
-            this.lblPasswordSql.Enabled = false;
-            this.lblPasswordSql.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblPasswordSql.Location = new System.Drawing.Point(310, 140);
-            this.lblPasswordSql.Name = "lblPasswordSql";
-            this.lblPasswordSql.Size = new System.Drawing.Size(79, 21);
-            this.lblPasswordSql.TabIndex = 7;
-            this.lblPasswordSql.Text = "Password:";
-            // 
-            // txtPassword
-            // 
-            this.txtPassword.Enabled = false;
-            this.txtPassword.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.txtPassword.Location = new System.Drawing.Point(395, 137);
-            this.txtPassword.Name = "txtPassword";
-            this.txtPassword.PasswordChar = '●';
-            this.txtPassword.Size = new System.Drawing.Size(150, 29);
-            this.txtPassword.TabIndex = 8;
-            // 
-            // chkTrustServerCertificate
-            // 
-            this.chkTrustServerCertificate.AutoSize = true;
-            this.chkTrustServerCertificate.Checked = true;
-            this.chkTrustServerCertificate.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkTrustServerCertificate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular);
-            this.chkTrustServerCertificate.Location = new System.Drawing.Point(155, 175);
-            this.chkTrustServerCertificate.Name = "chkTrustServerCertificate";
-            this.chkTrustServerCertificate.Size = new System.Drawing.Size(349, 24);
-            this.chkTrustServerCertificate.TabIndex = 9;
-            this.chkTrustServerCertificate.Text = "Tin cậy chứng chỉ máy chủ (TrustServerCertificate)";
-            this.chkTrustServerCertificate.UseVisualStyleBackColor = true;
-            // 
-            // btnTestConnection
-            // 
-            this.btnTestConnection.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(110)))), ((int)(((byte)(99)))));
-            this.btnTestConnection.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnTestConnection.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTestConnection.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnTestConnection.ForeColor = System.Drawing.Color.White;
-            this.btnTestConnection.Location = new System.Drawing.Point(155, 212);
-            this.btnTestConnection.Name = "btnTestConnection";
-            this.btnTestConnection.Size = new System.Drawing.Size(185, 36);
-            this.btnTestConnection.TabIndex = 10;
-            this.btnTestConnection.Text = "🔍 Thử kết nối CSDL";
-            this.btnTestConnection.UseVisualStyleBackColor = false;
-            this.btnTestConnection.Click += new System.EventHandler(this.btnTestConnection_Click);
+            this.btnSaveDatabase.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(57)))), ((int)(((byte)(43)))));
+            this.btnSaveDatabase.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSaveDatabase.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSaveDatabase.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
+            this.btnSaveDatabase.ForeColor = System.Drawing.Color.White;
+            this.btnSaveDatabase.Location = new System.Drawing.Point(155, 260);
+            this.btnSaveDatabase.Name = "btnSaveDatabase";
+            this.btnSaveDatabase.Size = new System.Drawing.Size(390, 42);
+            this.btnSaveDatabase.TabIndex = 12;
+            this.btnSaveDatabase.Text = "💾  Lưu Cấu Hình Kết Nối CSDL";
+            this.btnSaveDatabase.UseVisualStyleBackColor = false;
+            this.btnSaveDatabase.Click += new System.EventHandler(this.btnSaveDatabase_Click);
             // 
             // btnSyncSchema
             // 
@@ -409,20 +305,124 @@
             this.btnSyncSchema.UseVisualStyleBackColor = false;
             this.btnSyncSchema.Click += new System.EventHandler(this.btnSyncSchema_Click);
             // 
-            // btnSaveDatabase
+            // btnTestConnection
             // 
-            this.btnSaveDatabase.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(57)))), ((int)(((byte)(43)))));
-            this.btnSaveDatabase.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnSaveDatabase.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSaveDatabase.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.btnSaveDatabase.ForeColor = System.Drawing.Color.White;
-            this.btnSaveDatabase.Location = new System.Drawing.Point(155, 260);
-            this.btnSaveDatabase.Name = "btnSaveDatabase";
-            this.btnSaveDatabase.Size = new System.Drawing.Size(390, 42);
-            this.btnSaveDatabase.TabIndex = 12;
-            this.btnSaveDatabase.Text = "💾  Lưu Cấu Hình Kết Nối CSDL";
-            this.btnSaveDatabase.UseVisualStyleBackColor = false;
-            this.btnSaveDatabase.Click += new System.EventHandler(this.btnSaveDatabase_Click);
+            this.btnTestConnection.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(110)))), ((int)(((byte)(99)))));
+            this.btnTestConnection.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnTestConnection.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTestConnection.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnTestConnection.ForeColor = System.Drawing.Color.White;
+            this.btnTestConnection.Location = new System.Drawing.Point(155, 212);
+            this.btnTestConnection.Name = "btnTestConnection";
+            this.btnTestConnection.Size = new System.Drawing.Size(185, 36);
+            this.btnTestConnection.TabIndex = 10;
+            this.btnTestConnection.Text = "🔍 Thử kết nối CSDL";
+            this.btnTestConnection.UseVisualStyleBackColor = false;
+            this.btnTestConnection.Click += new System.EventHandler(this.btnTestConnection_Click);
+            // 
+            // chkTrustServerCertificate
+            // 
+            this.chkTrustServerCertificate.AutoSize = true;
+            this.chkTrustServerCertificate.Checked = true;
+            this.chkTrustServerCertificate.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkTrustServerCertificate.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.chkTrustServerCertificate.Location = new System.Drawing.Point(155, 175);
+            this.chkTrustServerCertificate.Name = "chkTrustServerCertificate";
+            this.chkTrustServerCertificate.Size = new System.Drawing.Size(358, 24);
+            this.chkTrustServerCertificate.TabIndex = 9;
+            this.chkTrustServerCertificate.Text = "Tin cậy chứng chỉ máy chủ (TrustServerCertificate)";
+            this.chkTrustServerCertificate.UseVisualStyleBackColor = true;
+            // 
+            // txtPassword
+            // 
+            this.txtPassword.Enabled = false;
+            this.txtPassword.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.txtPassword.Location = new System.Drawing.Point(395, 137);
+            this.txtPassword.Name = "txtPassword";
+            this.txtPassword.PasswordChar = '●';
+            this.txtPassword.Size = new System.Drawing.Size(150, 29);
+            this.txtPassword.TabIndex = 8;
+            // 
+            // lblPasswordSql
+            // 
+            this.lblPasswordSql.AutoSize = true;
+            this.lblPasswordSql.Enabled = false;
+            this.lblPasswordSql.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.lblPasswordSql.Location = new System.Drawing.Point(310, 140);
+            this.lblPasswordSql.Name = "lblPasswordSql";
+            this.lblPasswordSql.Size = new System.Drawing.Size(79, 21);
+            this.lblPasswordSql.TabIndex = 7;
+            this.lblPasswordSql.Text = "Password:";
+            // 
+            // txtUsername
+            // 
+            this.txtUsername.Enabled = false;
+            this.txtUsername.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.txtUsername.Location = new System.Drawing.Point(155, 137);
+            this.txtUsername.Name = "txtUsername";
+            this.txtUsername.Size = new System.Drawing.Size(140, 29);
+            this.txtUsername.TabIndex = 6;
+            // 
+            // lblUsernameSql
+            // 
+            this.lblUsernameSql.AutoSize = true;
+            this.lblUsernameSql.Enabled = false;
+            this.lblUsernameSql.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.lblUsernameSql.Location = new System.Drawing.Point(20, 140);
+            this.lblUsernameSql.Name = "lblUsernameSql";
+            this.lblUsernameSql.Size = new System.Drawing.Size(84, 21);
+            this.lblUsernameSql.TabIndex = 5;
+            this.lblUsernameSql.Text = "Username:";
+            // 
+            // chkIntegratedSecurity
+            // 
+            this.chkIntegratedSecurity.AutoSize = true;
+            this.chkIntegratedSecurity.Checked = true;
+            this.chkIntegratedSecurity.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkIntegratedSecurity.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Italic);
+            this.chkIntegratedSecurity.Location = new System.Drawing.Point(155, 105);
+            this.chkIntegratedSecurity.Name = "chkIntegratedSecurity";
+            this.chkIntegratedSecurity.Size = new System.Drawing.Size(263, 25);
+            this.chkIntegratedSecurity.TabIndex = 4;
+            this.chkIntegratedSecurity.Text = "Sử dụng Windows Authentication";
+            this.chkIntegratedSecurity.UseVisualStyleBackColor = true;
+            this.chkIntegratedSecurity.CheckedChanged += new System.EventHandler(this.chkIntegratedSecurity_CheckedChanged);
+            // 
+            // txtDatabase
+            // 
+            this.txtDatabase.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.txtDatabase.Location = new System.Drawing.Point(155, 67);
+            this.txtDatabase.Name = "txtDatabase";
+            this.txtDatabase.Size = new System.Drawing.Size(390, 29);
+            this.txtDatabase.TabIndex = 3;
+            // 
+            // lblDatabase
+            // 
+            this.lblDatabase.AutoSize = true;
+            this.lblDatabase.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.lblDatabase.Location = new System.Drawing.Point(20, 70);
+            this.lblDatabase.Name = "lblDatabase";
+            this.lblDatabase.Size = new System.Drawing.Size(123, 21);
+            this.lblDatabase.TabIndex = 2;
+            this.lblDatabase.Text = "Database Name:";
+            // 
+            // txtServer
+            // 
+            this.txtServer.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.txtServer.Location = new System.Drawing.Point(155, 29);
+            this.txtServer.Name = "txtServer";
+            this.txtServer.Size = new System.Drawing.Size(390, 29);
+            this.txtServer.TabIndex = 1;
+            // 
+            // lblServer
+            // 
+            this.lblServer.AutoSize = true;
+            this.lblServer.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.lblServer.Location = new System.Drawing.Point(20, 32);
+            this.lblServer.Name = "lblServer";
+            this.lblServer.Size = new System.Drawing.Size(104, 21);
+            this.lblServer.TabIndex = 0;
+            this.lblServer.Text = "Server Name:";
             // 
             // btnExit
             // 

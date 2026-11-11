@@ -178,21 +178,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CoffeeShopDataContext.dbml</DependentUpon>
     </Compile>
-    <Compile Include="CoffeeShopDBDataSet1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CoffeeShopDBDataSet1.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CoffeeShopDBDataSet11.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CoffeeShopDBDataSet11.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CoffeeShopDBDataSet2.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CoffeeShopDBDataSet2.xsd</DependentUpon>
-    </Compile>
     <Compile Include="CoffeeShopReportDataSet2.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -273,6 +258,12 @@
     </Compile>
     <Compile Include="Form\TanPhat\FrmOrder.Designer.cs">
       <DependentUpon>FrmOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\TanPhat\FrmQuickAddCustomer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\TanPhat\FrmQuickAddCustomer.Designer.cs">
+      <DependentUpon>FrmQuickAddCustomer.cs</DependentUpon>
     </Compile>
     <Compile Include="Form\TanPhat\FrmPrintReview.cs">
       <SubType>Form</SubType>
@@ -357,7 +348,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DAL\ShiftRepository.cs" />
     <Compile Include="BLL\ShiftService.cs" />
-    <Compile Include="ShiftReportDTO.cs" />
+    <Compile Include="DTO\ShiftReportDTO.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="UserControl\UCEmployeeAdd.cs">
       <SubType>UserControl</SubType>
@@ -493,39 +484,6 @@
     </None>
     <None Include="CoffeeShopDataContext.dbml.layout">
       <DependentUpon>CoffeeShopDataContext.dbml</DependentUpon>
-    </None>
-    <None Include="CoffeeShopDBDataSet1.xsc">
-      <DependentUpon>CoffeeShopDBDataSet1.xsd</DependentUpon>
-    </None>
-    <None Include="CoffeeShopDBDataSet1.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>CoffeeShopDBDataSet1.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="CoffeeShopDBDataSet1.xss">
-      <DependentUpon>CoffeeShopDBDataSet1.xsd</DependentUpon>
-    </None>
-    <None Include="CoffeeShopDBDataSet11.xsc">
-      <DependentUpon>CoffeeShopDBDataSet11.xsd</DependentUpon>
-    </None>
-    <None Include="CoffeeShopDBDataSet11.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>CoffeeShopDBDataSet11.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="CoffeeShopDBDataSet11.xss">
-      <DependentUpon>CoffeeShopDBDataSet11.xsd</DependentUpon>
-    </None>
-    <None Include="CoffeeShopDBDataSet2.xsc">
-      <DependentUpon>CoffeeShopDBDataSet2.xsd</DependentUpon>
-    </None>
-    <None Include="CoffeeShopDBDataSet2.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>CoffeeShopDBDataSet2.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="CoffeeShopDBDataSet2.xss">
-      <DependentUpon>CoffeeShopDBDataSet2.xsd</DependentUpon>
     </None>
     <None Include="DoAnCuoiKi_QuanLyTiemCaPhe_TemporaryKey.pfx" />
     <None Include="packages.config" />

@@ -30,7 +30,6 @@
             this.lblHeaderTitle = new System.Windows.Forms.Label();
             this.pnlLeftTables = new System.Windows.Forms.Panel();
             this.flpTableList = new System.Windows.Forms.FlowLayoutPanel();
-            this.lblEmptyReservedNotice = new System.Windows.Forms.Label();
             this.lblReservedListHeader = new System.Windows.Forms.Label();
             this.grpQuickReserve = new System.Windows.Forms.GroupBox();
             this.btnAddReservedTable = new System.Windows.Forms.Button();
@@ -43,6 +42,7 @@
             this.txtReserveCustomerName = new System.Windows.Forms.TextBox();
             this.lblReserveName = new System.Windows.Forms.Label();
             this.btnCounterOrder = new System.Windows.Forms.Button();
+            this.lblEmptyReservedNotice = new System.Windows.Forms.Label();
             this.pnlRightOrder = new System.Windows.Forms.Panel();
             this.dgvOrderDetails = new System.Windows.Forms.DataGridView();
             this.colDetailProductId = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -62,15 +62,15 @@
             this.txtCashTendered = new System.Windows.Forms.TextBox();
             this.lblCashTendered = new System.Windows.Forms.Label();
             this.lstCustomerSuggest = new System.Windows.Forms.ListBox();
-            this.lstPromoSuggest = new System.Windows.Forms.ListBox();
             this.btnPayAndPrint = new System.Windows.Forms.Button();
             this.pnlSummaryBox = new System.Windows.Forms.Panel();
             this.lblFinalAmount = new System.Windows.Forms.Label();
             this.lblTotalAmount = new System.Windows.Forms.Label();
             this.btnRemoveProduct = new System.Windows.Forms.Button();
-            this.txtDiscount = new System.Windows.Forms.TextBox();
+            this.cboPromotion = new System.Windows.Forms.ComboBox();
             this.lblDiscount = new System.Windows.Forms.Label();
             this.lblCustomerInfo = new System.Windows.Forms.Label();
+            this.btnAddCustomer = new System.Windows.Forms.Button();
             this.txtCustomerPhone = new System.Windows.Forms.TextBox();
             this.lblCustomerPhone = new System.Windows.Forms.Label();
             this.pnlOrderHeader = new System.Windows.Forms.Panel();
@@ -164,17 +164,6 @@
             this.flpTableList.Size = new System.Drawing.Size(285, 362);
             this.flpTableList.TabIndex = 3;
             this.flpTableList.WrapContents = false;
-            // 
-            // lblEmptyReservedNotice
-            // 
-            this.lblEmptyReservedNotice.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic);
-            this.lblEmptyReservedNotice.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(140)))), ((int)(((byte)(141)))));
-            this.lblEmptyReservedNotice.Location = new System.Drawing.Point(5, 10);
-            this.lblEmptyReservedNotice.Name = "lblEmptyReservedNotice";
-            this.lblEmptyReservedNotice.Size = new System.Drawing.Size(265, 80);
-            this.lblEmptyReservedNotice.TabIndex = 0;
-            this.lblEmptyReservedNotice.Text = "Chưa có bàn đặt trước nào.\r\nNhập thông tin bên trên và bấm \"+ Thêm bàn đặt trước\" khi có yêu cầu.";
-            this.lblEmptyReservedNotice.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblReservedListHeader
             // 
@@ -322,6 +311,18 @@
             this.btnCounterOrder.UseVisualStyleBackColor = false;
             this.btnCounterOrder.Click += new System.EventHandler(this.btnCounterOrder_Click);
             // 
+            // lblEmptyReservedNotice
+            // 
+            this.lblEmptyReservedNotice.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic);
+            this.lblEmptyReservedNotice.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(140)))), ((int)(((byte)(141)))));
+            this.lblEmptyReservedNotice.Location = new System.Drawing.Point(5, 10);
+            this.lblEmptyReservedNotice.Name = "lblEmptyReservedNotice";
+            this.lblEmptyReservedNotice.Size = new System.Drawing.Size(265, 80);
+            this.lblEmptyReservedNotice.TabIndex = 0;
+            this.lblEmptyReservedNotice.Text = "Chưa có bàn đặt trước nào.\r\nNhập thông tin bên trên và bấm \"+ Thêm bàn đặt trước\"" +
+    " khi có yêu cầu.";
+            this.lblEmptyReservedNotice.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // pnlRightOrder
             // 
             this.pnlRightOrder.BackColor = System.Drawing.Color.White;
@@ -382,7 +383,7 @@
             this.dgvOrderDetails.RowHeadersWidth = 51;
             this.dgvOrderDetails.RowTemplate.Height = 32;
             this.dgvOrderDetails.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvOrderDetails.Size = new System.Drawing.Size(395, 364);
+            this.dgvOrderDetails.Size = new System.Drawing.Size(395, 294);
             this.dgvOrderDetails.TabIndex = 1;
             // 
             // colDetailProductId
@@ -462,13 +463,13 @@
             this.pnlOrderFooter.Controls.Add(this.txtCashTendered);
             this.pnlOrderFooter.Controls.Add(this.lblCashTendered);
             this.pnlOrderFooter.Controls.Add(this.lstCustomerSuggest);
-            this.pnlOrderFooter.Controls.Add(this.lstPromoSuggest);
             this.pnlOrderFooter.Controls.Add(this.btnPayAndPrint);
             this.pnlOrderFooter.Controls.Add(this.pnlSummaryBox);
             this.pnlOrderFooter.Controls.Add(this.btnRemoveProduct);
-            this.pnlOrderFooter.Controls.Add(this.txtDiscount);
+            this.pnlOrderFooter.Controls.Add(this.cboPromotion);
             this.pnlOrderFooter.Controls.Add(this.lblDiscount);
             this.pnlOrderFooter.Controls.Add(this.lblCustomerInfo);
+            this.pnlOrderFooter.Controls.Add(this.btnAddCustomer);
             this.pnlOrderFooter.Controls.Add(this.txtCustomerPhone);
             this.pnlOrderFooter.Controls.Add(this.lblCustomerPhone);
             this.pnlOrderFooter.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -478,132 +479,27 @@
             this.pnlOrderFooter.Size = new System.Drawing.Size(395, 300);
             this.pnlOrderFooter.TabIndex = 2;
             // 
-            // lstCustomerSuggest
+            // lblChangeDue
             // 
-            this.lstCustomerSuggest.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(253)))), ((int)(((byte)(248)))));
-            this.lstCustomerSuggest.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lstCustomerSuggest.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lstCustomerSuggest.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(44)))), ((int)(((byte)(42)))));
-            this.lstCustomerSuggest.FormattingEnabled = true;
-            this.lstCustomerSuggest.ItemHeight = 19;
-            this.lstCustomerSuggest.Location = new System.Drawing.Point(80, 35);
-            this.lstCustomerSuggest.Name = "lstCustomerSuggest";
-            this.lstCustomerSuggest.Size = new System.Drawing.Size(306, 78);
-            this.lstCustomerSuggest.TabIndex = 9;
-            this.lstCustomerSuggest.Visible = false;
-            this.lstCustomerSuggest.Click += new System.EventHandler(this.lstCustomerSuggest_Click);
+            this.lblChangeDue.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.lblChangeDue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(174)))), ((int)(((byte)(96)))));
+            this.lblChangeDue.Location = new System.Drawing.Point(125, 219);
+            this.lblChangeDue.Name = "lblChangeDue";
+            this.lblChangeDue.Size = new System.Drawing.Size(261, 25);
+            this.lblChangeDue.TabIndex = 19;
+            this.lblChangeDue.Text = "0 đ";
+            this.lblChangeDue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // lstPromoSuggest
+            // lblChangeDueTitle
             // 
-            this.lstPromoSuggest.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(253)))), ((int)(((byte)(248)))));
-            this.lstPromoSuggest.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lstPromoSuggest.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lstPromoSuggest.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(44)))), ((int)(((byte)(42)))));
-            this.lstPromoSuggest.FormattingEnabled = true;
-            this.lstPromoSuggest.ItemHeight = 19;
-            this.lstPromoSuggest.Location = new System.Drawing.Point(80, 87);
-            this.lstPromoSuggest.Name = "lstPromoSuggest";
-            this.lstPromoSuggest.Size = new System.Drawing.Size(210, 59);
-            this.lstPromoSuggest.TabIndex = 10;
-            this.lstPromoSuggest.Visible = false;
-            this.lstPromoSuggest.Click += new System.EventHandler(this.lstPromoSuggest_Click);
-            // 
-            // 
-            // pnlSummaryBox
-            // 
-            this.pnlSummaryBox.BackColor = System.Drawing.Color.White;
-            this.pnlSummaryBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlSummaryBox.Controls.Add(this.lblFinalAmount);
-            this.pnlSummaryBox.Controls.Add(this.lblTotalAmount);
-            this.pnlSummaryBox.Location = new System.Drawing.Point(8, 93);
-            this.pnlSummaryBox.Name = "pnlSummaryBox";
-            this.pnlSummaryBox.Padding = new System.Windows.Forms.Padding(8, 4, 8, 4);
-            this.pnlSummaryBox.Size = new System.Drawing.Size(378, 60);
-            this.pnlSummaryBox.TabIndex = 7;
-            // 
-            // lblCashTendered
-            // 
-            this.lblCashTendered.AutoSize = true;
-            this.lblCashTendered.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
-            this.lblCashTendered.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(44)))), ((int)(((byte)(42)))));
-            this.lblCashTendered.Location = new System.Drawing.Point(8, 161);
-            this.lblCashTendered.Name = "lblCashTendered";
-            this.lblCashTendered.Size = new System.Drawing.Size(117, 20);
-            this.lblCashTendered.TabIndex = 11;
-            this.lblCashTendered.Text = "Tiền khách đưa:";
-            // 
-            // txtCashTendered
-            // 
-            this.txtCashTendered.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.txtCashTendered.Location = new System.Drawing.Point(125, 157);
-            this.txtCashTendered.Name = "txtCashTendered";
-            this.txtCashTendered.Size = new System.Drawing.Size(155, 29);
-            this.txtCashTendered.TabIndex = 12;
-            this.txtCashTendered.TextChanged += new System.EventHandler(this.txtCashTendered_TextChanged);
-            // 
-            // btnCashExact
-            // 
-            this.btnCashExact.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(152)))), ((int)(((byte)(219)))));
-            this.btnCashExact.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnCashExact.FlatAppearance.BorderSize = 0;
-            this.btnCashExact.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCashExact.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
-            this.btnCashExact.ForeColor = System.Drawing.Color.White;
-            this.btnCashExact.Location = new System.Drawing.Point(286, 157);
-            this.btnCashExact.Name = "btnCashExact";
-            this.btnCashExact.Size = new System.Drawing.Size(46, 29);
-            this.btnCashExact.TabIndex = 13;
-            this.btnCashExact.Text = "Đủ";
-            this.btnCashExact.UseVisualStyleBackColor = false;
-            this.btnCashExact.Click += new System.EventHandler(this.btnCashExact_Click);
-            // 
-            // btnCash50k
-            // 
-            this.btnCash50k.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(224)))), ((int)(((byte)(230)))));
-            this.btnCash50k.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnCash50k.FlatAppearance.BorderSize = 0;
-            this.btnCash50k.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCash50k.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
-            this.btnCash50k.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-            this.btnCash50k.Location = new System.Drawing.Point(336, 157);
-            this.btnCash50k.Name = "btnCash50k";
-            this.btnCash50k.Size = new System.Drawing.Size(50, 29);
-            this.btnCash50k.TabIndex = 14;
-            this.btnCash50k.Text = "50k";
-            this.btnCash50k.UseVisualStyleBackColor = false;
-            this.btnCash50k.Click += new System.EventHandler(this.btnCashQuick_Click);
-            // 
-            // btnCash100k
-            // 
-            this.btnCash100k.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(224)))), ((int)(((byte)(230)))));
-            this.btnCash100k.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnCash100k.FlatAppearance.BorderSize = 0;
-            this.btnCash100k.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCash100k.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
-            this.btnCash100k.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-            this.btnCash100k.Location = new System.Drawing.Point(125, 190);
-            this.btnCash100k.Name = "btnCash100k";
-            this.btnCash100k.Size = new System.Drawing.Size(60, 26);
-            this.btnCash100k.TabIndex = 15;
-            this.btnCash100k.Text = "100k";
-            this.btnCash100k.UseVisualStyleBackColor = false;
-            this.btnCash100k.Click += new System.EventHandler(this.btnCashQuick_Click);
-            // 
-            // btnCash200k
-            // 
-            this.btnCash200k.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(224)))), ((int)(((byte)(230)))));
-            this.btnCash200k.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnCash200k.FlatAppearance.BorderSize = 0;
-            this.btnCash200k.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCash200k.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
-            this.btnCash200k.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-            this.btnCash200k.Location = new System.Drawing.Point(191, 190);
-            this.btnCash200k.Name = "btnCash200k";
-            this.btnCash200k.Size = new System.Drawing.Size(60, 26);
-            this.btnCash200k.TabIndex = 16;
-            this.btnCash200k.Text = "200k";
-            this.btnCash200k.UseVisualStyleBackColor = false;
-            this.btnCash200k.Click += new System.EventHandler(this.btnCashQuick_Click);
+            this.lblChangeDueTitle.AutoSize = true;
+            this.lblChangeDueTitle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.lblChangeDueTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(44)))), ((int)(((byte)(42)))));
+            this.lblChangeDueTitle.Location = new System.Drawing.Point(8, 222);
+            this.lblChangeDueTitle.Name = "lblChangeDueTitle";
+            this.lblChangeDueTitle.Size = new System.Drawing.Size(95, 20);
+            this.lblChangeDueTitle.TabIndex = 18;
+            this.lblChangeDueTitle.Text = "Tiền thối lại:";
             // 
             // btnCash500k
             // 
@@ -621,27 +517,104 @@
             this.btnCash500k.UseVisualStyleBackColor = false;
             this.btnCash500k.Click += new System.EventHandler(this.btnCashQuick_Click);
             // 
-            // lblChangeDueTitle
+            // btnCash200k
             // 
-            this.lblChangeDueTitle.AutoSize = true;
-            this.lblChangeDueTitle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblChangeDueTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(44)))), ((int)(((byte)(42)))));
-            this.lblChangeDueTitle.Location = new System.Drawing.Point(8, 222);
-            this.lblChangeDueTitle.Name = "lblChangeDueTitle";
-            this.lblChangeDueTitle.Size = new System.Drawing.Size(95, 20);
-            this.lblChangeDueTitle.TabIndex = 18;
-            this.lblChangeDueTitle.Text = "Tiền thối lại:";
+            this.btnCash200k.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(224)))), ((int)(((byte)(230)))));
+            this.btnCash200k.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCash200k.FlatAppearance.BorderSize = 0;
+            this.btnCash200k.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCash200k.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.btnCash200k.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.btnCash200k.Location = new System.Drawing.Point(191, 190);
+            this.btnCash200k.Name = "btnCash200k";
+            this.btnCash200k.Size = new System.Drawing.Size(60, 26);
+            this.btnCash200k.TabIndex = 16;
+            this.btnCash200k.Text = "200k";
+            this.btnCash200k.UseVisualStyleBackColor = false;
+            this.btnCash200k.Click += new System.EventHandler(this.btnCashQuick_Click);
             // 
-            // lblChangeDue
+            // btnCash100k
             // 
-            this.lblChangeDue.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.lblChangeDue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(174)))), ((int)(((byte)(96)))));
-            this.lblChangeDue.Location = new System.Drawing.Point(125, 219);
-            this.lblChangeDue.Name = "lblChangeDue";
-            this.lblChangeDue.Size = new System.Drawing.Size(261, 25);
-            this.lblChangeDue.TabIndex = 19;
-            this.lblChangeDue.Text = "0 đ";
-            this.lblChangeDue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCash100k.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(224)))), ((int)(((byte)(230)))));
+            this.btnCash100k.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCash100k.FlatAppearance.BorderSize = 0;
+            this.btnCash100k.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCash100k.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.btnCash100k.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.btnCash100k.Location = new System.Drawing.Point(125, 190);
+            this.btnCash100k.Name = "btnCash100k";
+            this.btnCash100k.Size = new System.Drawing.Size(60, 26);
+            this.btnCash100k.TabIndex = 15;
+            this.btnCash100k.Text = "100k";
+            this.btnCash100k.UseVisualStyleBackColor = false;
+            this.btnCash100k.Click += new System.EventHandler(this.btnCashQuick_Click);
+            // 
+            // btnCash50k
+            // 
+            this.btnCash50k.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(224)))), ((int)(((byte)(230)))));
+            this.btnCash50k.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCash50k.FlatAppearance.BorderSize = 0;
+            this.btnCash50k.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCash50k.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.btnCash50k.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.btnCash50k.Location = new System.Drawing.Point(336, 157);
+            this.btnCash50k.Name = "btnCash50k";
+            this.btnCash50k.Size = new System.Drawing.Size(50, 29);
+            this.btnCash50k.TabIndex = 14;
+            this.btnCash50k.Text = "50k";
+            this.btnCash50k.UseVisualStyleBackColor = false;
+            this.btnCash50k.Click += new System.EventHandler(this.btnCashQuick_Click);
+            // 
+            // btnCashExact
+            // 
+            this.btnCashExact.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(152)))), ((int)(((byte)(219)))));
+            this.btnCashExact.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCashExact.FlatAppearance.BorderSize = 0;
+            this.btnCashExact.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCashExact.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.btnCashExact.ForeColor = System.Drawing.Color.White;
+            this.btnCashExact.Location = new System.Drawing.Point(286, 157);
+            this.btnCashExact.Name = "btnCashExact";
+            this.btnCashExact.Size = new System.Drawing.Size(46, 29);
+            this.btnCashExact.TabIndex = 13;
+            this.btnCashExact.Text = "Đủ";
+            this.btnCashExact.UseVisualStyleBackColor = false;
+            this.btnCashExact.Click += new System.EventHandler(this.btnCashExact_Click);
+            // 
+            // txtCashTendered
+            // 
+            this.txtCashTendered.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
+            this.txtCashTendered.Location = new System.Drawing.Point(125, 157);
+            this.txtCashTendered.Name = "txtCashTendered";
+            this.txtCashTendered.Size = new System.Drawing.Size(155, 29);
+            this.txtCashTendered.TabIndex = 12;
+            this.txtCashTendered.TextChanged += new System.EventHandler(this.txtCashTendered_TextChanged);
+            // 
+            // lblCashTendered
+            // 
+            this.lblCashTendered.AutoSize = true;
+            this.lblCashTendered.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
+            this.lblCashTendered.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(44)))), ((int)(((byte)(42)))));
+            this.lblCashTendered.Location = new System.Drawing.Point(8, 161);
+            this.lblCashTendered.Name = "lblCashTendered";
+            this.lblCashTendered.Size = new System.Drawing.Size(119, 20);
+            this.lblCashTendered.TabIndex = 11;
+            this.lblCashTendered.Text = "Tiền khách đưa:";
+            // 
+            // lstCustomerSuggest
+            // 
+            this.lstCustomerSuggest.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(253)))), ((int)(((byte)(248)))));
+            this.lstCustomerSuggest.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstCustomerSuggest.Font = new System.Drawing.Font("Segoe UI", 8.5F);
+            this.lstCustomerSuggest.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(44)))), ((int)(((byte)(42)))));
+            this.lstCustomerSuggest.FormattingEnabled = true;
+            this.lstCustomerSuggest.ItemHeight = 19;
+            this.lstCustomerSuggest.Location = new System.Drawing.Point(80, 35);
+            this.lstCustomerSuggest.Name = "lstCustomerSuggest";
+            this.lstCustomerSuggest.Size = new System.Drawing.Size(225, 78);
+            this.lstCustomerSuggest.TabIndex = 9;
+            this.lstCustomerSuggest.Visible = false;
+            this.lstCustomerSuggest.Click += new System.EventHandler(this.lstCustomerSuggest_Click);
             // 
             // btnPayAndPrint
             // 
@@ -660,12 +633,24 @@
             this.btnPayAndPrint.UseVisualStyleBackColor = false;
             this.btnPayAndPrint.Click += new System.EventHandler(this.btnPayAndPrint_Click);
             // 
+            // pnlSummaryBox
+            // 
+            this.pnlSummaryBox.BackColor = System.Drawing.Color.White;
+            this.pnlSummaryBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlSummaryBox.Controls.Add(this.lblFinalAmount);
+            this.pnlSummaryBox.Controls.Add(this.lblTotalAmount);
+            this.pnlSummaryBox.Location = new System.Drawing.Point(8, 93);
+            this.pnlSummaryBox.Name = "pnlSummaryBox";
+            this.pnlSummaryBox.Padding = new System.Windows.Forms.Padding(8, 4, 8, 4);
+            this.pnlSummaryBox.Size = new System.Drawing.Size(378, 60);
+            this.pnlSummaryBox.TabIndex = 7;
+            // 
             // lblFinalAmount
             // 
             this.lblFinalAmount.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.lblFinalAmount.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.lblFinalAmount.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(57)))), ((int)(((byte)(43)))));
-            this.lblFinalAmount.Location = new System.Drawing.Point(8, 30);
+            this.lblFinalAmount.Location = new System.Drawing.Point(8, 22);
             this.lblFinalAmount.Name = "lblFinalAmount";
             this.lblFinalAmount.Size = new System.Drawing.Size(360, 32);
             this.lblFinalAmount.TabIndex = 1;
@@ -697,16 +682,17 @@
             this.btnRemoveProduct.UseVisualStyleBackColor = false;
             this.btnRemoveProduct.Click += new System.EventHandler(this.btnRemoveProduct_Click);
             // 
-            // txtDiscount
+            // cboPromotion
             // 
-            this.txtDiscount.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.txtDiscount.Location = new System.Drawing.Point(80, 60);
-            this.txtDiscount.Name = "txtDiscount";
-            this.txtDiscount.Size = new System.Drawing.Size(210, 27);
-            this.txtDiscount.TabIndex = 5;
-            this.txtDiscount.TextChanged += new System.EventHandler(this.txtDiscount_TextChanged);
-            this.txtDiscount.Enter += new System.EventHandler(this.txtDiscount_Enter);
-            this.txtDiscount.Leave += new System.EventHandler(this.txtDiscount_Leave);
+            this.cboPromotion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboPromotion.DropDownWidth = 320;
+            this.cboPromotion.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cboPromotion.FormattingEnabled = true;
+            this.cboPromotion.Location = new System.Drawing.Point(80, 60);
+            this.cboPromotion.Name = "cboPromotion";
+            this.cboPromotion.Size = new System.Drawing.Size(210, 28);
+            this.cboPromotion.TabIndex = 5;
+            this.cboPromotion.SelectedIndexChanged += new System.EventHandler(this.cboPromotion_SelectedIndexChanged);
             // 
             // lblDiscount
             // 
@@ -715,9 +701,9 @@
             this.lblDiscount.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(44)))), ((int)(((byte)(42)))));
             this.lblDiscount.Location = new System.Drawing.Point(8, 64);
             this.lblDiscount.Name = "lblDiscount";
-            this.lblDiscount.Size = new System.Drawing.Size(74, 20);
+            this.lblDiscount.Size = new System.Drawing.Size(96, 20);
             this.lblDiscount.TabIndex = 4;
-            this.lblDiscount.Text = "Mã giảm:";
+            this.lblDiscount.Text = "Khuyến mãi:";
             // 
             // lblCustomerInfo
             // 
@@ -730,12 +716,28 @@
             this.lblCustomerInfo.TabIndex = 3;
             this.lblCustomerInfo.Text = "Khách lẻ (Gõ SĐT hoặc tên khách để gợi ý)";
             // 
+            // btnAddCustomer
+            // 
+            this.btnAddCustomer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(174)))), ((int)(((byte)(96)))));
+            this.btnAddCustomer.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnAddCustomer.FlatAppearance.BorderSize = 0;
+            this.btnAddCustomer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAddCustomer.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.btnAddCustomer.ForeColor = System.Drawing.Color.White;
+            this.btnAddCustomer.Location = new System.Drawing.Point(310, 7);
+            this.btnAddCustomer.Name = "btnAddCustomer";
+            this.btnAddCustomer.Size = new System.Drawing.Size(76, 29);
+            this.btnAddCustomer.TabIndex = 2;
+            this.btnAddCustomer.Text = "➕ Thêm";
+            this.btnAddCustomer.UseVisualStyleBackColor = false;
+            this.btnAddCustomer.Click += new System.EventHandler(this.btnAddCustomer_Click);
+            // 
             // txtCustomerPhone
             // 
             this.txtCustomerPhone.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.txtCustomerPhone.Location = new System.Drawing.Point(80, 8);
             this.txtCustomerPhone.Name = "txtCustomerPhone";
-            this.txtCustomerPhone.Size = new System.Drawing.Size(306, 27);
+            this.txtCustomerPhone.Size = new System.Drawing.Size(225, 27);
             this.txtCustomerPhone.TabIndex = 1;
             this.txtCustomerPhone.TextChanged += new System.EventHandler(this.txtCustomerPhone_TextChanged);
             this.txtCustomerPhone.Leave += new System.EventHandler(this.txtCustomerPhone_Leave);
@@ -987,13 +989,13 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colDetailTotalPrice;
         private System.Windows.Forms.Panel pnlOrderFooter;
         private System.Windows.Forms.ListBox lstCustomerSuggest;
-        private System.Windows.Forms.ListBox lstPromoSuggest;
         private System.Windows.Forms.Button btnPayAndPrint;
         private System.Windows.Forms.Panel pnlSummaryBox;
         private System.Windows.Forms.Label lblFinalAmount;
         private System.Windows.Forms.Label lblTotalAmount;
         private System.Windows.Forms.Button btnRemoveProduct;
-        private System.Windows.Forms.TextBox txtDiscount;
+        private System.Windows.Forms.ComboBox cboPromotion;
+        private System.Windows.Forms.Button btnAddCustomer;
         private System.Windows.Forms.Label lblDiscount;
         private System.Windows.Forms.Label lblCustomerInfo;
         private System.Windows.Forms.TextBox txtCustomerPhone;

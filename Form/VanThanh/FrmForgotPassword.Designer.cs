@@ -152,7 +152,8 @@
             this.Controls.Add(this.btnSaveNewPassword);
             this.Controls.Add(this.txtPhone);
             this.Controls.Add(this.lblPhone);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.MaximizeBox = false;
             this.Name = "FrmForgotPassword";
             this.Text = "FrmForgotPassword";
             this.ResumeLayout(false);
